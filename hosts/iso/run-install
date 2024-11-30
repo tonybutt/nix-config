@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+host=$1
+echo -n "password" > /tmp/secret.key
+nixos-generate-config --root "/iso/cfg/hosts/$host" --no-filesystems
+disko-install --write-efi-boot-entries --flake "/iso/cfg#$host"
+# mkdir -p /mnt/home/anthony/.dotfiles 
+# rsync --chown=anthony:users /iso/cfg /mnt/home/anthony/.dotfiles
