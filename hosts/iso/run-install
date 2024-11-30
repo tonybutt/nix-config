@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 host=$1
 echo -n "password" > /tmp/secret.key
-nixos-generate-config --root "/iso/cfg/hosts/$host" --no-filesystems
-disko-install --write-efi-boot-entries --flake "/iso/cfg#$host"
+cp -R /iso/cfg /tmp/cfg
+nixos-generate-config --dir "/tmp/cfg/hosts/$host" --no-filesystems
+disko-install --write-efi-boot-entries --flake "/tmp/cfg#$host" --disk /dev/nvme0n1
+# chown anthony:users "/tmp/cfg/hosts/$host/hardware-configuration.nix"
 # mkdir -p /mnt/home/anthony/.dotfiles 
 # rsync --chown=anthony:users /iso/cfg /mnt/home/anthony/.dotfiles
