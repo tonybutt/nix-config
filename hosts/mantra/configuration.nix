@@ -19,8 +19,6 @@ in
     loader.grub = {
       enable = true;
       efiSupport = true;
-      efiInstallAsRemovable = true;
-      useOSProber = true;
     };
 
     # Plymouth (Theming for booting screen and drive unlock screen)
@@ -45,7 +43,7 @@ in
       "vfio-pci"
     ];
 
-    extraModulePackages = [ config.boot.kernalPackages.v4l2loopback.out ];
+    extraModulePackages = [ config.boot.kernelPackages.v4l2loopback.out ];
     extraModprobeConfig = ''
       options v4l2loopback exclusive_caps=1 card_label="OBS Camera"
       options snd_usb_audio vid=0x1235 pid=0x8212 device_setup=1
@@ -252,14 +250,6 @@ in
       substituters = [ "https://hyprland.cachix.org" ];
       trusted-public-keys = [ "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc=" ];
 
-      allowedUsers = [
-        "root"
-        "${user}"
-      ];
-      trustedUsers = [
-        "root"
-        "${user}"
-      ];
       experimental-features = [
         "nix-command"
         "flakes"

@@ -5,7 +5,9 @@ host=$1
 echo -n "password" > /tmp/secret.key
 cp -R /iso/cfg /tmp/cfg
 nixos-generate-config --dir "/tmp/cfg/hosts/$host" --no-filesystems
-disko-install --write-efi-boot-entries --flake "/tmp/cfg#$host" --disk /dev/nvme0n1
+disko --mode disko --flake "/tmp/cfg#$host"
+nixos-install --flake "/tmp/cfg#$host" --no-channel-copy --cores 0 --no-root-password
+nixos-enter -c 'passwd anthony'
 # chown anthony:users "/tmp/cfg/hosts/$host/hardware-configuration.nix"
 # mkdir -p /mnt/home/anthony/.dotfiles 
 # rsync --chown=anthony:users /iso/cfg /mnt/home/anthony/.dotfiles
