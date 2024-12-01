@@ -64,8 +64,8 @@
       };
       homeConfigurations = {
         anthony = home-manager.lib.homeManagerConfiguration {
+          pkgs = nixpkgsCfg;
           extraSpecialArgs = {
-            pkgs = nixpkgsCfg;
             inherit user system hyprland;
           };
           modules = [
