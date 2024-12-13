@@ -67,6 +67,9 @@ in
     fuzzel.enable = true;
     # Terminal
     foot.enable = true;
+    kitty = {
+      enable = true;
+    };
     fzf = {
       enable = true;
       enableZshIntegration = true;
