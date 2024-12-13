@@ -51,6 +51,17 @@
             disko.nixosModules.disko
           ];
         };
+        lapnix = nixpkgs.lib.nixosSystem {
+          specialArgs = {
+            pkgs = nixpkgsCfg;
+            inherit user system hyprland;
+          };
+          modules = [
+            ./hosts/lapnix/configuration.nix
+            stylix.nixosModules.stylix
+            disko.nixosModules.disko
+          ];
+        };
         # Minimal Installation ISO.
         iso = nixpkgs.lib.nixosSystem {
           specialArgs = {
