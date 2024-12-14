@@ -24,7 +24,7 @@ in
     # Plymouth (Theming for booting screen and drive unlock screen)
     plymouth.enable = true;
 
-    # Disable(quiet) most of the logging that happens during boot 
+    # Disable(quiet) most of the logging that happens during boot
     initrd = {
       verbose = false;
       systemd.enable = true;

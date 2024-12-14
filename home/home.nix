@@ -30,7 +30,11 @@ in
   home = {
     username = "${user.name}";
     homeDirectory = "/home/${user.name}";
-    packages = with pkgs; [ patched-opensc ];
+    packages = with pkgs; [
+      patched-opensc
+      vim
+      signal-desktop
+    ];
     stateVersion = "25.05";
   };
 
@@ -60,6 +64,55 @@ in
   };
 
   programs = {
+    direnv = {
+      enable = true;
+      nix-direnv.enable = true;
+      config = {
+        global = {
+          hide_env_diff = true;
+        };
+      };
+    };
+    zed-editor = {
+      enable = true;
+      extraPackages = [
+        pkgs.nixd
+        pkgs.nil
+      ];
+      extensions = [ "nix" ];
+      userSettings = {
+        vim_mode = true;
+        autosave = "on_focus_change";
+      };
+    };
+    zsh = {
+      enable = true;
+      enableCompletion = true;
+      autosuggestion.enable = true;
+      autocd = true;
+      syntaxHighlighting.enable = true;
+      history = {
+        append = true;
+      };
+      shellAliases =
+        let
+          flakeDir = "$HOME/nix-config";
+        in
+        {
+          rb = "nh os switch ${flakeDir}";
+          rbh = "nh home switch ${flakeDir}";
+        };
+      historySubstringSearch.enable = true;
+      oh-my-zsh = {
+        theme = "robbyrussell";
+        enable = true;
+        plugins = [
+          "git"
+          "kubectl"
+          "z"
+        ];
+      };
+    };
     obs-studio.enable = true;
     btop.enable = true;
     fastfetch.enable = true;
@@ -318,7 +371,7 @@ in
       "$mainMod" = "SUPER";
 
       monitor = [
-        ",preferred,auto,1"
+        ",preferred,auto,2"
       ];
       xwayland = {
         force_zero_scaling = true;
@@ -459,7 +512,7 @@ in
         "$mainMod, M, exit,"
         "$mainMod, E, exec, thunar"
         "$mainMod, F, togglefloating,"
-        "$mainMod, SPACE, exec, wofiopen"
+        "$mainMod, SPACE, exec, fuzzel"
         "$mainMod, P, pseudo, # dwindle"
         "$mainMod, S, togglesplit, # dwindle"
         ",F11,fullscreen"

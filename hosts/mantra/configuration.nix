@@ -24,7 +24,7 @@ in
     # Plymouth (Theming for booting screen and drive unlock screen)
     plymouth.enable = true;
 
-    # Disable(quiet) most of the logging that happens during boot 
+    # Disable(quiet) most of the logging that happens during boot
     initrd = {
       verbose = false;
       systemd.enable = true;
@@ -130,7 +130,7 @@ in
       dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
       localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
     };
-    
+
     hyprland = {
       enable = true;
       package = hypr-pkgs.hyprland;
