@@ -2,10 +2,10 @@
   pkgs,
   config,
   hyprland,
+  user,
   ...
 }:
 let
-  user = "anthony";
   hypr-pkgs = hyprland.packages.${pkgs.stdenv.hostPlatform.system};
   hypr-nixpkgs = hyprland.inputs.nixpkgs.legacyPackages.${pkgs.stdenv.hostPlatform.system};
 in
@@ -94,7 +94,7 @@ in
       settings = {
         default_session = {
           command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --remember --remember-session --sessions ${pkgs.hyprland}/share/wayland-sessions";
-          user = "greeter";
+          user = user.name;
         };
       };
     };
@@ -136,7 +136,7 @@ in
       enable = true;
       clean.enable = true;
       clean.extraArgs = "--keep-since 4d --keep 3";
-      flake = "/home/${user}/nix-config";
+      flake = "/home/${user.name}/nix-config";
     };
 
     gnupg.agent = {
@@ -250,9 +250,9 @@ in
 
   users = {
     defaultUserShell = pkgs.zsh;
-    users.${user} = {
+    users.${user.name} = {
       isNormalUser = true;
-      home = "/home/${user}";
+      home = "/home/${user.name}";
       extraGroups = [
         "wheel"
         "networkmanager"
