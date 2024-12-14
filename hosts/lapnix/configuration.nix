@@ -59,6 +59,7 @@ in
       xdg-utils
       seatd
       pavucontrol
+      kitty
     ];
     sessionVariables.NIXOS_OZONE_WL = "1";
   };
@@ -124,13 +125,6 @@ in
     ssh.startAgent = false;
     seahorse.enable = true;
 
-    steam = {
-      enable = true;
-      remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
-      dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
-      localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
-    };
-    
     hyprland = {
       enable = true;
       package = hypr-pkgs.hyprland;
