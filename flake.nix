@@ -1,9 +1,5 @@
 {
   description = "My personal flake";
-  nixConfig = {
-    extra-substituters = [ "https://hyprland.cachix.org" ];
-    extra-trusted-public-keys = [ "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc=" ];
-  };
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-unstable";
     home-manager = {
@@ -54,7 +50,7 @@
             disko.nixosModules.disko
           ];
         };
-        lapnix = nixpkgs.lib.nixosSystem {
+        nixdesk = nixpkgs.lib.nixosSystem {
           specialArgs = {
             pkgs = nixpkgsCfg;
             inherit user system hyprland;

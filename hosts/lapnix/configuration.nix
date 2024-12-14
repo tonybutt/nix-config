@@ -72,12 +72,6 @@ in
     powerline-fonts
     powerline-symbols
     cascadia-code
-    (nerdfonts.override {
-      fonts = [
-        "NerdFontsSymbolsOnly"
-        "FiraCode"
-      ];
-    })
   ];
 
   services = {
@@ -266,7 +260,7 @@ in
   };
 
   networking = {
-    hostName = "nixdesk";
+    hostName = "lapnix";
     firewall = {
       enable = true;
       trustedInterfaces = [
