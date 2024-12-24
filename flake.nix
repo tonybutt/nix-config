@@ -1,6 +1,7 @@
 {
   description = "My personal flake";
   inputs = {
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     nixpkgs.url = "nixpkgs/nixos-unstable";
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -22,6 +23,7 @@
       home-manager,
       hyprland,
       disko,
+      nixos-hardware,
       ...
     }:
     let
@@ -50,12 +52,13 @@
             disko.nixosModules.disko
           ];
         };
-        nixdesk = nixpkgs.lib.nixosSystem {
+        lapnix = nixpkgs.lib.nixosSystem {
           specialArgs = {
             pkgs = nixpkgsCfg;
             inherit user system hyprland;
           };
           modules = [
+            nixos-hardware.nixosModules.framework-13-7040-amd
             ./hosts/lapnix/configuration.nix
             stylix.nixosModules.stylix
             disko.nixosModules.disko

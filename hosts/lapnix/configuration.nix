@@ -13,6 +13,7 @@ in
   imports = [
     ./hardware-configuration.nix
     ./disko.nix
+    ../../style
   ];
 
   boot = {
@@ -64,17 +65,8 @@ in
     sessionVariables.NIXOS_OZONE_WL = "1";
   };
 
-  fonts.packages = with pkgs; [
-    noto-fonts
-    noto-fonts-emoji
-    twemoji-color-font
-    font-awesome
-    powerline-fonts
-    powerline-symbols
-    cascadia-code
-  ];
-
   services = {
+    fwupd.enable = true;
     devmon.enable = true;
     gvfs.enable = true;
     udisks2.enable = true;
@@ -87,7 +79,7 @@ in
       enable = true;
       settings = {
         default_session = {
-          command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --remember --remember-session --sessions ${pkgs.hyprland}/share/wayland-sessions";
+          command = "${pkgs.greetd.tuigreet}/bin/tuigreet --asterisks --time --remember --remember-session --sessions ${pkgs.hyprland}/share/wayland-sessions";
           user = user.name;
         };
       };

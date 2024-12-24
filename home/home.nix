@@ -27,10 +27,17 @@ let
   hypr-pkgs = hyprland.packages.${pkgs.stdenv.hostPlatform.system};
 in
 {
+  imports = [ ../style ];
+  stylix.targets.hyprlock.enable = false;
   home = {
     username = "${user.name}";
     homeDirectory = "/home/${user.name}";
     packages = with pkgs; [
+      grim
+      slurp
+      swappy
+      wl-clipboard-rs
+      hyprpicker
       patched-opensc
       vim
       signal-desktop
@@ -39,6 +46,10 @@ in
   };
 
   services = {
+    cliphist = {
+      enable = true;
+      allowImages = true;
+    };
     mako = {
       enable = true;
       # Set timeout to 5 seconds
@@ -79,8 +90,9 @@ in
         pkgs.nixd
         pkgs.nil
       ];
-      extensions = [ "nix" ];
+      extensions = [ "nix" "base16" ];
       userSettings = {
+        theme = "Base16 Catppuccin Mocha";
         vim_mode = true;
         autosave = "on_focus_change";
       };
@@ -119,7 +131,9 @@ in
     # Launcher
     fuzzel.enable = true;
     # Terminal
-    foot.enable = true;
+    foot = {
+      enable = true;
+    };
     kitty = {
       enable = true;
     };
@@ -323,7 +337,7 @@ in
             inner_color = "rgba(0, 0, 0, 0.5)";
             font_color = "rgb(200, 200, 200)";
             fade_on_empty = false;
-            font_family = "JetBrains Mono Nerd Font Mono";
+            font_family = "Fira Mono";
             placeholder_text = ''<i><span foreground="##cdd6f4">Input Password...</span></i>'';
             hide_input = false;
             position = "0, -120";
@@ -337,7 +351,7 @@ in
             text = ''cmd[update:1000] echo "$(date +"%-I:%M%p")"'';
             color = "rgba(255, 255, 255, 0.6)";
             font_size = 120;
-            font_family = "Fira Code";
+            font_family = "Fira Mono";
             position = "0, -300";
             halign = "center";
             valign = "top";
@@ -488,8 +502,6 @@ in
         "hyprpaper"
         "hypridle"
         "waybar"
-        "wl-paste --type text --watch cliphist store"
-        "wl-paste --type image --watch cliphist store"
         "[workspace special:chat silent] slack"
         "[workspace special:chat silent] discord"
         "[workspace special:chat silent] signal-desktop"
@@ -504,7 +516,7 @@ in
         "$mainMod, Z, togglespecialworkspace, spotify"
         "$mainMod, O, togglespecialworkspace, obs"
         "$mainMod, C, togglespecialworkspace, chat"
-        "$mainMod, V, exec, cliphist list | wofi --dmenu | cliphist decode | wl-copy"
+        "$mainMod, V, exec, cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"
         "$mainMod, G, togglegroup"
         "$mainMod, Return, exec, foot"
         "$mainMod, Y, exec, ykmanoath"
