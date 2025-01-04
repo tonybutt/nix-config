@@ -9,6 +9,7 @@
     };
     stylix.url = "github:danth/stylix";
     hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
+    hyprpanel.url = "github:Jas-SinghFSU/HyprPanel";
     disko = {
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -24,6 +25,7 @@
       hyprland,
       disko,
       nixos-hardware,
+      hyprpanel,
       ...
     }:
     let
@@ -31,6 +33,7 @@
       nixpkgsCfg = import nixpkgs {
         inherit system;
         config.allowUnfree = true;
+        overlays = [ hyprpanel.overlay ];
       };
       user = {
         name = "anthony";

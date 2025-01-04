@@ -33,6 +33,10 @@ in
     username = "${user.name}";
     homeDirectory = "/home/${user.name}";
     packages = with pkgs; [
+      libnotify
+      yubioath-flutter
+      nerd-fonts.jetbrains-mono
+      hyprpanel
       grim
       slurp
       swappy
@@ -51,7 +55,7 @@ in
       allowImages = true;
     };
     mako = {
-      enable = true;
+      enable = false;
       # Set timeout to 5 seconds
       defaultTimeout = 5000;
     };
@@ -90,11 +94,21 @@ in
         pkgs.nixd
         pkgs.nil
       ];
-      extensions = [ "nix" "base16" ];
+      extensions = [ "nix" "base16" "toml" "git-firefly" ];
       userSettings = {
         theme = "Base16 Catppuccin Mocha";
         vim_mode = true;
         autosave = "on_focus_change";
+        relative_line_numbers = true;
+        project_panel = {
+          dock = "right";
+        };
+        collaboration_panel = {
+          dock = "right";
+        };
+        outline_panel = {
+          dock = "right";
+        };
       };
     };
     zsh = {
@@ -385,7 +399,7 @@ in
       "$mainMod" = "SUPER";
 
       monitor = [
-        ",preferred,auto,2"
+        ",preferred,auto,1.25"
       ];
       xwayland = {
         force_zero_scaling = true;
@@ -396,7 +410,6 @@ in
       };
 
       env = [
-        "GDK_SCALE,2"
         "XDG_CURRENT_DESKTOP,Hyprland"
         "XDG_SESSION_TYPE,wayland"
         "XDG_SESSION_DESKTOP,Hyprland"
@@ -501,15 +514,11 @@ in
         "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
         "hyprpaper"
         "hypridle"
-        "waybar"
+        "hyprpanel"
         "[workspace special:chat silent] slack"
         "[workspace special:chat silent] discord"
         "[workspace special:chat silent] signal-desktop"
-        "[workspace special:spotify silent] spotify"
-        "[workspace special:obs silent] obs --portable --disable-shutdown-check --startvirtualcam"
         "[workspace 1 silent] hyprctl dispatch togglespecialworkspace chat"
-        "[workspace 2 silent] nvidia-offload kitty"
-        "[workspace 3 silent] chromium"
       ];
 
       bind = [
@@ -527,6 +536,7 @@ in
         "$mainMod, SPACE, exec, fuzzel"
         "$mainMod, P, pseudo, # dwindle"
         "$mainMod, S, togglesplit, # dwindle"
+        "$mainMod, TAB, workspace, previous"
         ",F11,fullscreen"
 
         # Move focus with mainMod + arrow keys

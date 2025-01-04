@@ -15,7 +15,7 @@ in
     ./disko.nix
     ../../style
   ];
-
+  fonts.packages = [ pkgs.nerd-fonts.jetbrains-mono ];
   boot = {
     loader.grub = {
       enable = true;
@@ -66,6 +66,7 @@ in
   };
 
   services = {
+    upower.enable = true;
     fwupd.enable = true;
     devmon.enable = true;
     gvfs.enable = true;
@@ -161,6 +162,7 @@ in
   };
 
   hardware = {
+    keyboard.zsa.enable = true;
     gpgSmartcards.enable = true;
     graphics = {
       enable = true;
