@@ -1,0 +1,23 @@
+device_serial=""
+if [[ -n $1 ]]; then
+    device_serial="--device $1"
+fi
+accounts=$(ykman "$device_serial" oath accounts code)
+
+if [[ -z "$accounts" ]]; then
+    notify-send "Error" "No OTP accounts found."
+    exit 1
+fi
+
+selected=$(echo "$accounts" | fuzzel --dmenu --prompt "Select OTP Account:")
+
+if [[ -z "$selected" ]]; then
+    notify-send "Info" "No selection made."
+    exit 0
+fi
+
+code=$(echo "$selected" | awk '{print $NF}') # The last field is the OTP code
+account=${selected//$code$///sed "s/ $code$//")} # Remove the OTP code from the end to get the account name
+
+echo -n "$code" | wl-copy
+notify-send "OTP Copied" "The OTP code for \"$account\" has been copied to the clipboard."

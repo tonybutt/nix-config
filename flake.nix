@@ -1,4 +1,4 @@
-{
+x{
   description = "My personal flake";
   inputs = {
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
@@ -9,12 +9,15 @@
     };
     stylix.url = "github:danth/stylix";
     hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
-    hyprpanel.url = "github:Jas-SinghFSU/HyprPanel";
     disko = {
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
+    nixConfig = {
+      substituters = ["https://hyprland.cachix.org"];
+      trusted-public-keys = ["hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="];
+    };
 
   outputs =
     {
@@ -25,7 +28,6 @@
       hyprland,
       disko,
       nixos-hardware,
-      hyprpanel,
       ...
     }:
     let
@@ -33,7 +35,6 @@
       nixpkgsCfg = import nixpkgs {
         inherit system;
         config.allowUnfree = true;
-        overlays = [ hyprpanel.overlay ];
       };
       user = {
         name = "anthony";
@@ -45,9 +46,10 @@
       formatter.${system} = nixpkgs.legacyPackages.${system}.nixfmt-rfc-style;
       nixosConfigurations = {
         mantra = nixpkgs.lib.nixosSystem {
+          inherit system;
+          pkgs = nixpkgsCfg;
           specialArgs = {
-            pkgs = nixpkgsCfg;
-            inherit user system hyprland;
+            inherit user hyprland;
           };
           modules = [
             ./hosts/mantra/configuration.nix
@@ -56,9 +58,11 @@
           ];
         };
         lapnix = nixpkgs.lib.nixosSystem {
+          inherit system;
+          pkgs = nixpkgsCfg;
+
           specialArgs = {
-            pkgs = nixpkgsCfg;
-            inherit user system hyprland;
+            inherit user hyprland;
           };
           modules = [
             nixos-hardware.nixosModules.framework-13-7040-amd
@@ -69,10 +73,8 @@
         };
         # Minimal Installation ISO.
         iso = nixpkgs.lib.nixosSystem {
-          specialArgs = {
-            pkgs = nixpkgsCfg;
-            inherit system;
-          };
+          inherit system;
+          pkgs = nixpkgsCfg;
           modules = [
             ./hosts/iso/configuration.nix
           ];
@@ -82,7 +84,7 @@
         anthony = home-manager.lib.homeManagerConfiguration {
           pkgs = nixpkgsCfg;
           extraSpecialArgs = {
-            inherit user system hyprland;
+            inherit user hyprland;
           };
           modules = [
             ./home/home.nix

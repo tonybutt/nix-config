@@ -27,7 +27,7 @@ let
   hypr-pkgs = hyprland.packages.${pkgs.stdenv.hostPlatform.system};
 in
 {
-  imports = [ ../style ];
+  imports = [ ../style ./tools/oath.nix ];
   stylix.targets.hyprlock.enable = false;
   home = {
     username = "${user.name}";
@@ -36,7 +36,6 @@ in
       libnotify
       yubioath-flutter
       nerd-fonts.jetbrains-mono
-      hyprpanel
       grim
       slurp
       swappy
@@ -96,7 +95,6 @@ in
       ];
       extensions = [ "nix" "base16" "toml" "git-firefly" ];
       userSettings = {
-        theme = "Base16 Catppuccin Mocha";
         vim_mode = true;
         autosave = "on_focus_change";
         relative_line_numbers = true;
@@ -399,7 +397,7 @@ in
       "$mainMod" = "SUPER";
 
       monitor = [
-        ",preferred,auto,1.25"
+        ",preferred,auto,1.5"
       ];
       xwayland = {
         force_zero_scaling = true;
@@ -497,6 +495,7 @@ in
         "special:spotify"
         "special:obs"
         "special:chat"
+        "special:browser"
       ];
       windowrule = [
         "float, ^(imv)$"
@@ -518,12 +517,13 @@ in
         "[workspace special:chat silent] slack"
         "[workspace special:chat silent] discord"
         "[workspace special:chat silent] signal-desktop"
+        "[workspace special:browser silent] firefox"
         "[workspace 1 silent] hyprctl dispatch togglespecialworkspace chat"
       ];
 
       bind = [
+        "$mainMod, B, togglespecialworkspace, browser"
         "$mainMod, Z, togglespecialworkspace, spotify"
-        "$mainMod, O, togglespecialworkspace, obs"
         "$mainMod, C, togglespecialworkspace, chat"
         "$mainMod, V, exec, cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"
         "$mainMod, G, togglegroup"
