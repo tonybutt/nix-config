@@ -1,4 +1,4 @@
-x{
+{
   description = "My personal flake";
   inputs = {
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
@@ -15,8 +15,8 @@ x{
     };
   };
     nixConfig = {
-      substituters = ["https://hyprland.cachix.org"];
-      trusted-public-keys = ["hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="];
+      extra-substituters = ["https://hyprland.cachix.org"];
+      extra-trusted-public-keys = ["hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="];
     };
 
   outputs =
