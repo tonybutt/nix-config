@@ -33,6 +33,7 @@ in
     username = "${user.name}";
     homeDirectory = "/home/${user.name}";
     packages = with pkgs; [
+      yubikey-manager
       libnotify
       yubioath-flutter
       nerd-fonts.jetbrains-mono
@@ -228,11 +229,11 @@ in
       userName = user.name;
       userEmail = user.email;
       signing = {
-        key = user.signingkey;
+        key = "~/.ssh/id_ed25519_sk.pub";
         signByDefault = true;
-        gpgPath = "gpg";
       };
       extraConfig = {
+        gpg.format = "ssh";
         core.askPass = "";
         core.editor = "vim";
         init.defaultBranch = "main";
