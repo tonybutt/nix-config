@@ -27,12 +27,16 @@ let
   hypr-pkgs = hyprland.packages.${pkgs.stdenv.hostPlatform.system};
 in
 {
-  imports = [ ../style ./tools/oath.nix ];
+  imports = [
+    ../style
+    ./tools/oath.nix
+  ];
   stylix.targets.hyprlock.enable = false;
   home = {
     username = "${user.name}";
     homeDirectory = "/home/${user.name}";
     packages = with pkgs; [
+      spotify
       yubikey-manager
       libnotify
       yubioath-flutter
@@ -94,8 +98,15 @@ in
         pkgs.nixd
         pkgs.nil
       ];
-      extensions = [ "nix" "base16" "toml" "git-firefly" ];
+      extensions = [
+        "nix"
+        "base16"
+        "toml"
+        "git-firefly"
+      ];
       userSettings = {
+        ui_font_size = lib.mkForce 20;
+        buffer_font_size = lib.mkForce 20;
         vim_mode = true;
         autosave = "on_focus_change";
         relative_line_numbers = true;
@@ -111,6 +122,18 @@ in
       };
     };
     zsh = {
+      plugins = [
+        {
+          file = "p10k.zsh";
+          src = ./p10k-config;
+          name = "powerlevel10k-config";
+        }
+        {
+          name = "zsh-powerlevel10k";
+          src = "${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/";
+          file = "powerlevel10k.zsh-theme";
+        }
+      ];
       enable = true;
       enableCompletion = true;
       autosuggestion.enable = true;
@@ -129,11 +152,13 @@ in
         };
       historySubstringSearch.enable = true;
       oh-my-zsh = {
-        theme = "robbyrussell";
         enable = true;
         plugins = [
           "git"
           "kubectl"
+          "docker"
+          "docker-compose"
+          "alias-finder"
           "z"
         ];
       };

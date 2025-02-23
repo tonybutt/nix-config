@@ -229,7 +229,7 @@ in
   nix = {
     channel.enable = false;
     settings = {
-      trusted-users = [user.name];
+      trusted-users = [ user.name ];
       experimental-features = [
         "nix-command"
         "flakes"
