@@ -30,12 +30,36 @@ in
   imports = [
     ../style
     ./tools/oath.nix
+    ./waybar.nix
   ];
   stylix.targets.hyprlock.enable = false;
+  stylix.targets.firefox.profileNames = [ "anthony" ];
   home = {
     username = "${user.name}";
     homeDirectory = "/home/${user.name}";
     packages = with pkgs; [
+      code-cursor
+      cloudflared
+      twofctl
+      awscli2
+      rustup
+      nodejs_23
+      typescript
+      gcc
+      pkg-config
+      rustls-libssl
+      nodePackages.vscode-langservers-extracted
+      discord
+      openssl
+      kind
+      tree
+      fluxcd
+      slack
+      kubectl
+      kubernetes-helm
+      kustomize
+      jq
+      istioctl
       spotify
       yubikey-manager
       libnotify
@@ -83,6 +107,7 @@ in
   };
 
   programs = {
+    k9s.enable = true;
     direnv = {
       enable = true;
       nix-direnv.enable = true;
@@ -94,17 +119,45 @@ in
     };
     zed-editor = {
       enable = true;
-      extraPackages = [
-        pkgs.nixd
-        pkgs.nil
+      extraPackages = with pkgs; [
+        nixd
+        nil
+        yaml-language-server
+        nodePackages.vscode-json-languageserver
       ];
       extensions = [
         "nix"
         "base16"
         "toml"
-        "git-firefly"
+        "docker"
+        "docker compose"
+        "git firefly"
       ];
       userSettings = {
+        languages = {
+          Nix = {
+            language_servers = [
+              "!nixd"
+              "nil"
+            ];
+            formatter = {
+              external = {
+                command = "nixfmt";
+              };
+            };
+          };
+
+        };
+        assistant = {
+          enabled = true;
+          version = "2";
+          default_open_ai_model = null;
+          default_model = {
+            provider = "zed.dev";
+            model = "claude-3-5-sonnet-latest";
+          };
+        };
+        auto_update = false;
         ui_font_size = lib.mkForce 20;
         buffer_font_size = lib.mkForce 20;
         vim_mode = true;
@@ -149,12 +202,14 @@ in
         {
           rb = "nh os switch ${flakeDir}";
           rbh = "nh home switch ${flakeDir}";
+          zed = "zeditor";
         };
       historySubstringSearch.enable = true;
       oh-my-zsh = {
         enable = true;
         plugins = [
           "git"
+          "helm"
           "kubectl"
           "docker"
           "docker-compose"
@@ -251,8 +306,8 @@ in
     git = {
       package = pkgs.gitFull;
       enable = true;
-      userName = user.name;
-      userEmail = user.email;
+      userName = "Anthony Butt";
+      userEmail = "anthony.butt@secondfront.com";
       signing = {
         key = "~/.ssh/id_ed25519_sk.pub";
         signByDefault = true;
@@ -273,6 +328,12 @@ in
         "de"
         "en-US"
       ];
+
+      profiles = {
+        anthony = {
+
+        };
+      };
       # ---- POLICIES ----
       # Check about:policies#documentation for options.
       policies = {
@@ -420,232 +481,246 @@ in
       enable = true;
       variables = [ "--all" ];
     };
-    settings = {
-      "$mainMod" = "SUPER";
+    settings =
+      let
+        inherit (config.lib.stylix) colors;
+        rgb = color: "rgb(${color})";
+      in
+      {
+        "$mainMod" = "SUPER";
 
-      monitor = [
-        ",preferred,auto,1.5"
-      ];
-      xwayland = {
-        force_zero_scaling = true;
-      };
-
-      cursor = {
-        no_hardware_cursors = true;
-      };
-
-      env = [
-        "XDG_CURRENT_DESKTOP,Hyprland"
-        "XDG_SESSION_TYPE,wayland"
-        "XDG_SESSION_DESKTOP,Hyprland"
-        "XCURSOR_SIZE,36"
-        "HYPRCURSOR_SIZE,24"
-        "QT_QPA_PLATFORM,wayland"
-        "XDG_SCREENSHOTS_DIR,~/screens"
-      ];
-
-      debug = {
-        disable_logs = false;
-        enable_stdout_logs = true;
-      };
-
-      input = {
-        kb_layout = "us";
-        numlock_by_default = true;
-        follow_mouse = 1;
-
-        touchpad = {
-          natural_scroll = false;
+        monitor = [
+          ",preferred,auto,1.5"
+        ];
+        xwayland = {
+          force_zero_scaling = true;
         };
 
-        sensitivity = 0; # -1.0 - 1.0, 0 means no modification.
-      };
-
-      general = {
-        gaps_in = 1;
-        gaps_out = 5;
-        border_size = 2;
-
-        layout = "dwindle";
-      };
-
-      decoration = {
-        rounding = 6;
-
-        blur = {
-          enabled = false;
-          size = 16;
-          passes = 2;
-          new_optimizations = true;
+        cursor = {
+          no_hardware_cursors = true;
         };
-        shadow = lib.mkForce { };
-      };
 
-      animations = {
-        enabled = true;
+        env = [
+          "XDG_CURRENT_DESKTOP,Hyprland"
+          "XDG_SESSION_TYPE,wayland"
+          "XDG_SESSION_DESKTOP,Hyprland"
+          "XCURSOR_SIZE,36"
+          "HYPRCURSOR_SIZE,24"
+          "QT_QPA_PLATFORM,wayland"
+          "XDG_SCREENSHOTS_DIR,~/screens"
+        ];
 
-        bezier = "myBezier, 0.05, 0.9, 0.1, 1.05";
-        # bezier = "myBezier, 0.33, 0.82, 0.9, -0.08";
+        debug = {
+          disable_logs = false;
+          enable_stdout_logs = true;
+        };
 
-        animation = [
-          "windows,     1, 7,  myBezier"
-          "windowsOut,  1, 7,  default, popin 80%"
-          "border,      1, 10, default"
-          "borderangle, 1, 8,  default"
-          "fade,        1, 7,  default"
-          "workspaces,  1, 6,  default"
+        input = {
+          kb_layout = "us";
+          numlock_by_default = true;
+          follow_mouse = 1;
+
+          touchpad = {
+            natural_scroll = false;
+          };
+
+          sensitivity = 0; # -1.0 - 1.0, 0 means no modification.
+        };
+
+        general = {
+          gaps_in = 1;
+          gaps_out = 5;
+          border_size = 2;
+
+          layout = "dwindle";
+        };
+
+        decoration = {
+          rounding = 6;
+
+          blur = {
+            enabled = false;
+            size = 16;
+            passes = 2;
+            new_optimizations = true;
+          };
+          shadow = lib.mkForce { };
+        };
+
+        animations = {
+          enabled = true;
+
+          bezier = "myBezier, 0.05, 0.9, 0.1, 1.05";
+          # bezier = "myBezier, 0.33, 0.82, 0.9, -0.08";
+
+          animation = [
+            "windows,     1, 7,  myBezier"
+            "windowsOut,  1, 7,  default, popin 80%"
+            "border,      1, 10, default"
+            "borderangle, 1, 8,  default"
+            "fade,        1, 7,  default"
+            "workspaces,  1, 6,  default"
+          ];
+        };
+
+        dwindle = {
+          pseudotile = true; # master switch for pseudotiling. Enabling is bound to mainMod + P in the keybinds section below
+          preserve_split = true; # you probably want this
+        };
+        group = {
+          groupbar = {
+            gradients = true;
+            font_family = "OpenSans Bold";
+            text_color = lib.mkForce (rgb colors.base0B);
+            font_size = 28;
+            height = 28;
+            indicator_height = 1;
+          };
+        };
+        gestures = {
+          workspace_swipe = true;
+          workspace_swipe_fingers = 3;
+          workspace_swipe_invert = false;
+          workspace_swipe_distance = 200;
+          workspace_swipe_forever = true;
+        };
+
+        misc = {
+          animate_manual_resizes = true;
+          animate_mouse_windowdragging = true;
+          enable_swallow = true;
+          render_ahead_of_time = false;
+          disable_hyprland_logo = true;
+        };
+
+        workspace = [
+          "special:spotify"
+          "special:obs"
+          "special:chat"
+          "special:browser"
+        ];
+        windowrule = [
+          "float, ^(imv)$"
+          "float, ^(mpv)$"
+          "float, title:^(Sign in to Security Device)$"
+          "move 0 -60,title:^(app.gather.town is sharing your).*$"
+        ];
+        windowrulev2 = [
+          "float,title:^()$,class:^(dev.zed.Zed)$"
+          "size 20% 20%,title:^()$,class:(dev.zed.Zed)"
+          "move 0 0,title:^()$,class:(dev.zed.Zed)"
+        ];
+
+        exec-once = [
+          "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
+          "hyprpaper"
+          "hypridle"
+          "hyprpanel"
+          "[workspace special:chat silent] slack"
+          "[workspace special:chat silent] discord"
+          "[workspace special:chat silent] signal-desktop"
+          "[workspace special:browser silent] firefox"
+          "[workspace 1 silent] hyprctl dispatch togglespecialworkspace chat"
+        ];
+
+        bind = [
+          "$mainMod, B, togglespecialworkspace, browser"
+          "$mainMod, Z, togglespecialworkspace, spotify"
+          "$mainMod, C, togglespecialworkspace, chat"
+          "$mainMod, V, exec, cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"
+          "$mainMod, G, togglegroup"
+          "$mainMod, Return, exec, foot"
+          "$mainMod, Y, exec, ykmanoath"
+          "$mainMod, Q, killactive,"
+          "$mainMod, M, exit,"
+          "$mainMod, E, exec, thunar"
+          "$mainMod, F, togglefloating,"
+          "$mainMod, SPACE, exec, fuzzel"
+          "$mainMod, P, pseudo, # dwindle"
+          "$mainMod, S, togglesplit, # dwindle"
+          "$mainMod, TAB, workspace, previous"
+          ",F11,fullscreen"
+
+          # Move focus with mainMod + arrow keys
+          "$mainMod, h, movefocus, l"
+          "$mainMod, l, movefocus, r"
+          "$mainMod, k, movefocus, u"
+          "$mainMod, j, movefocus, d"
+
+          # Move tabs within group with vim motion
+          "$mainMod ALT, J, changegroupactive, f"
+          "$mainMod ALT, K, changegroupactive, b"
+
+          # Moving windows
+          "$mainMod SHIFT, h, movewindoworgroup, l"
+          "$mainMod SHIFT, l, movewindoworgroup, r"
+          "$mainMod SHIFT, k, movewindoworgroup, u"
+          "$mainMod SHIFT, j, movewindoworgroup, d"
+
+          # Window resizing                 X  Y
+          "$mainMod CTRL, h, resizeactive, -60 0"
+          "$mainMod CTRL, l, resizeactive,  60 0"
+          "$mainMod CTRL, k, resizeactive,  0 -60"
+          "$mainMod CTRL, j, resizeactive,  0  60"
+
+          # Switch workspaces with mainMod + [0-9]
+          "$mainMod, 1, workspace, 1"
+          "$mainMod, 2, workspace, 2"
+          "$mainMod, 3, workspace, 3"
+          "$mainMod, 4, workspace, 4"
+          "$mainMod, 5, workspace, 5"
+          "$mainMod, 6, workspace, 6"
+          "$mainMod, 7, workspace, 7"
+          "$mainMod, 8, workspace, 8"
+          "$mainMod, 9, workspace, 9"
+          "$mainMod, 0, workspace, 10"
+
+          # Move active window to a workspace with mainMod + SHIFT + [0-9]
+          "$mainMod SHIFT, 1, movetoworkspacesilent, 1"
+          "$mainMod SHIFT, 2, movetoworkspacesilent, 2"
+          "$mainMod SHIFT, 3, movetoworkspacesilent, 3"
+          "$mainMod SHIFT, 4, movetoworkspacesilent, 4"
+          "$mainMod SHIFT, 5, movetoworkspacesilent, 5"
+          "$mainMod SHIFT, 6, movetoworkspacesilent, 6"
+          "$mainMod SHIFT, 7, movetoworkspacesilent, 7"
+          "$mainMod SHIFT, 8, movetoworkspacesilent, 8"
+          "$mainMod SHIFT, 9, movetoworkspacesilent, 9"
+          "$mainMod SHIFT, 0, movetoworkspacesilent, 10"
+
+          # Scroll through existing workspaces with mainMod + scroll
+          "$mainMod, mouse_down, workspace, e+1"
+          "$mainMod, mouse_up, workspace, e-1"
+
+          # Keyboard backlight
+          "$mainMod, F3, exec, brightnessctl -d *::kbd_backlight set +33%"
+          "$mainMod, F2, exec, brightnessctl -d *::kbd_backlight set 33%-"
+
+          # Volume and Media Control
+          ", XF86AudioRaiseVolume, exec, pamixer -i 5 "
+          ", XF86AudioLowerVolume, exec, pamixer -d 5 "
+          ", XF86AudioMute, exec, pamixer -t"
+          ", XF86AudioMicMute, exec, pamixer --default-source -m"
+
+          # Brightness control
+          ", XF86MonBrightnessDown, exec, brightnessctl set 5%- "
+          ", XF86MonBrightnessUp, exec, brightnessctl set +5% "
+
+          # Configuration files
+          '', Print, exec, grim -g "$(slurp)" - | swappy -f -''
+
+          # Waybar
+          "$mainMod, B, exec, pkill -SIGUSR1 waybar"
+          "$mainMod, W, exec, pkill -SIGUSR2 waybar"
+
+          # Disable all effects
+        ];
+
+        # Move/resize windows with mainMod + LMB/RMB and dragging
+        bindm = [
+          "$mainMod, mouse:272, movewindow"
+          "$mainMod, mouse:273, resizewindow"
         ];
       };
-
-      dwindle = {
-        pseudotile = true; # master switch for pseudotiling. Enabling is bound to mainMod + P in the keybinds section below
-        preserve_split = true; # you probably want this
-      };
-
-      gestures = {
-        workspace_swipe = true;
-        workspace_swipe_fingers = 3;
-        workspace_swipe_invert = false;
-        workspace_swipe_distance = 200;
-        workspace_swipe_forever = true;
-      };
-
-      misc = {
-        animate_manual_resizes = true;
-        animate_mouse_windowdragging = true;
-        enable_swallow = true;
-        render_ahead_of_time = false;
-        disable_hyprland_logo = true;
-      };
-
-      workspace = [
-        "special:spotify"
-        "special:obs"
-        "special:chat"
-        "special:browser"
-      ];
-      windowrule = [
-        "float, ^(imv)$"
-        "float, ^(mpv)$"
-        "float, title:^(Sign in to Security Device)$"
-        "move 0 -60,title:^(app.gather.town is sharing your).*$"
-      ];
-      windowrulev2 = [
-        "float,title:^()$,class:^(dev.zed.Zed)$"
-        "size 20% 20%,title:^()$,class:(dev.zed.Zed)"
-        "move 0 0,title:^()$,class:(dev.zed.Zed)"
-      ];
-
-      exec-once = [
-        "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
-        "hyprpaper"
-        "hypridle"
-        "hyprpanel"
-        "[workspace special:chat silent] slack"
-        "[workspace special:chat silent] discord"
-        "[workspace special:chat silent] signal-desktop"
-        "[workspace special:browser silent] firefox"
-        "[workspace 1 silent] hyprctl dispatch togglespecialworkspace chat"
-      ];
-
-      bind = [
-        "$mainMod, B, togglespecialworkspace, browser"
-        "$mainMod, Z, togglespecialworkspace, spotify"
-        "$mainMod, C, togglespecialworkspace, chat"
-        "$mainMod, V, exec, cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"
-        "$mainMod, G, togglegroup"
-        "$mainMod, Return, exec, foot"
-        "$mainMod, Y, exec, ykmanoath"
-        "$mainMod, Q, killactive,"
-        "$mainMod, M, exit,"
-        "$mainMod, E, exec, thunar"
-        "$mainMod, F, togglefloating,"
-        "$mainMod, SPACE, exec, fuzzel"
-        "$mainMod, P, pseudo, # dwindle"
-        "$mainMod, S, togglesplit, # dwindle"
-        "$mainMod, TAB, workspace, previous"
-        ",F11,fullscreen"
-
-        # Move focus with mainMod + arrow keys
-        "$mainMod, h, movefocus, l"
-        "$mainMod, l, movefocus, r"
-        "$mainMod, k, movefocus, u"
-        "$mainMod, j, movefocus, d"
-
-        # Move tabs within group with vim motion
-        "$mainMod ALT, J, changegroupactive, f"
-        "$mainMod ALT, K, changegroupactive, b"
-
-        # Moving windows
-        "$mainMod SHIFT, h, movewindoworgroup, l"
-        "$mainMod SHIFT, l, movewindoworgroup, r"
-        "$mainMod SHIFT, k, movewindoworgroup, u"
-        "$mainMod SHIFT, j, movewindoworgroup, d"
-
-        # Window resizing                 X  Y
-        "$mainMod CTRL, h, resizeactive, -60 0"
-        "$mainMod CTRL, l, resizeactive,  60 0"
-        "$mainMod CTRL, k, resizeactive,  0 -60"
-        "$mainMod CTRL, j, resizeactive,  0  60"
-
-        # Switch workspaces with mainMod + [0-9]
-        "$mainMod, 1, workspace, 1"
-        "$mainMod, 2, workspace, 2"
-        "$mainMod, 3, workspace, 3"
-        "$mainMod, 4, workspace, 4"
-        "$mainMod, 5, workspace, 5"
-        "$mainMod, 6, workspace, 6"
-        "$mainMod, 7, workspace, 7"
-        "$mainMod, 8, workspace, 8"
-        "$mainMod, 9, workspace, 9"
-        "$mainMod, 0, workspace, 10"
-
-        # Move active window to a workspace with mainMod + SHIFT + [0-9]
-        "$mainMod SHIFT, 1, movetoworkspacesilent, 1"
-        "$mainMod SHIFT, 2, movetoworkspacesilent, 2"
-        "$mainMod SHIFT, 3, movetoworkspacesilent, 3"
-        "$mainMod SHIFT, 4, movetoworkspacesilent, 4"
-        "$mainMod SHIFT, 5, movetoworkspacesilent, 5"
-        "$mainMod SHIFT, 6, movetoworkspacesilent, 6"
-        "$mainMod SHIFT, 7, movetoworkspacesilent, 7"
-        "$mainMod SHIFT, 8, movetoworkspacesilent, 8"
-        "$mainMod SHIFT, 9, movetoworkspacesilent, 9"
-        "$mainMod SHIFT, 0, movetoworkspacesilent, 10"
-
-        # Scroll through existing workspaces with mainMod + scroll
-        "$mainMod, mouse_down, workspace, e+1"
-        "$mainMod, mouse_up, workspace, e-1"
-
-        # Keyboard backlight
-        "$mainMod, F3, exec, brightnessctl -d *::kbd_backlight set +33%"
-        "$mainMod, F2, exec, brightnessctl -d *::kbd_backlight set 33%-"
-
-        # Volume and Media Control
-        ", XF86AudioRaiseVolume, exec, pamixer -i 5 "
-        ", XF86AudioLowerVolume, exec, pamixer -d 5 "
-        ", XF86AudioMute, exec, pamixer -t"
-        ", XF86AudioMicMute, exec, pamixer --default-source -m"
-
-        # Brightness control
-        ", XF86MonBrightnessDown, exec, brightnessctl set 5%- "
-        ", XF86MonBrightnessUp, exec, brightnessctl set +5% "
-
-        # Configuration files
-        '', Print, exec, grim -g "$(slurp)" - | swappy -f -''
-
-        # Waybar
-        "$mainMod, B, exec, pkill -SIGUSR1 waybar"
-        "$mainMod, W, exec, pkill -SIGUSR2 waybar"
-
-        # Disable all effects
-      ];
-
-      # Move/resize windows with mainMod + LMB/RMB and dragging
-      bindm = [
-        "$mainMod, mouse:272, movewindow"
-        "$mainMod, mouse:273, resizewindow"
-      ];
-    };
   };
 
 }

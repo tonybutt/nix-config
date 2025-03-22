@@ -1,6 +1,13 @@
 {
   description = "My personal flake";
   inputs = {
+    twofctl = {
+      type = "gitlab";
+      host = "code.il2.gamewarden.io";
+      owner = "gamewarden%2Fplatform";
+      repo = "2fctl";
+    };
+
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     nixpkgs.url = "nixpkgs/nixos-unstable";
     home-manager = {
@@ -29,6 +36,7 @@
       home-manager,
       hyprland,
       disko,
+      twofctl,
       nixos-hardware,
       ...
     }:
@@ -37,6 +45,7 @@
       nixpkgsCfg = import nixpkgs {
         inherit system;
         config.allowUnfree = true;
+        overlays = [ twofctl.overlays.default ];
       };
       user = {
         name = "anthony";
