@@ -30,7 +30,6 @@
 
   outputs =
     {
-      self,
       nixpkgs,
       stylix,
       home-manager,
@@ -64,6 +63,7 @@
           };
           modules = [
             ./hosts/mantra/configuration.nix
+            ./style
             stylix.nixosModules.stylix
             disko.nixosModules.disko
           ];
@@ -78,6 +78,7 @@
           modules = [
             nixos-hardware.nixosModules.framework-13-7040-amd
             ./hosts/lapnix/configuration.nix
+            ./style
             stylix.nixosModules.stylix
             disko.nixosModules.disko
           ];
@@ -95,10 +96,11 @@
         anthony = home-manager.lib.homeManagerConfiguration {
           pkgs = nixpkgsCfg;
           extraSpecialArgs = {
-            inherit user hyprland;
+            inherit user;
           };
           modules = [
             ./home/home.nix
+            ./style
             stylix.homeManagerModules.stylix
           ];
         };

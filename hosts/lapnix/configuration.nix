@@ -13,7 +13,6 @@ in
   imports = [
     ./hardware-configuration.nix
     ./disko.nix
-    ../../style
   ];
   fonts.packages = [ pkgs.nerd-fonts.jetbrains-mono ];
   boot = {
@@ -194,8 +193,8 @@ in
     gpgSmartcards.enable = true;
     graphics = {
       enable = true;
-      package = hypr-nixpkgs.mesa.drivers;
-      package32 = hypr-nixpkgs.pkgsi686Linux.mesa.drivers;
+      package = hypr-nixpkgs.mesa;
+      package32 = hypr-nixpkgs.pkgsi686Linux.mesa;
       enable32Bit = true;
     };
     amdgpu.amdvlk = {

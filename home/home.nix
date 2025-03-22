@@ -2,7 +2,6 @@
   pkgs,
   config,
   user,
-  hyprland,
   lib,
   ...
 }:
@@ -24,11 +23,9 @@ let
       sha256 = "sha256-Ktvp/9Hca87qWmDlQhFzvWsr7TvNpIAvOFS+4zTZbB8=";
     };
   });
-  hypr-pkgs = hyprland.packages.${pkgs.stdenv.hostPlatform.system};
 in
 {
   imports = [
-    ../style
     ./tools/oath.nix
     ./waybar.nix
   ];
@@ -475,7 +472,8 @@ in
   };
   wayland.windowManager.hyprland = {
     enable = true;
-    package = hypr-pkgs.hyprland;
+    package = null;
+    portalPackage = null;
     xwayland.enable = true;
     systemd = {
       enable = true;
@@ -600,22 +598,14 @@ in
           "special:browser"
         ];
         windowrule = [
-          "float, ^(imv)$"
-          "float, ^(mpv)$"
           "float, title:^(Sign in to Security Device)$"
           "move 0 -60,title:^(app.gather.town is sharing your).*$"
-        ];
-        windowrulev2 = [
           "float,title:^()$,class:^(dev.zed.Zed)$"
           "size 20% 20%,title:^()$,class:(dev.zed.Zed)"
           "move 0 0,title:^()$,class:(dev.zed.Zed)"
         ];
 
         exec-once = [
-          "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
-          "hyprpaper"
-          "hypridle"
-          "hyprpanel"
           "[workspace special:chat silent] slack"
           "[workspace special:chat silent] discord"
           "[workspace special:chat silent] signal-desktop"
