@@ -20,7 +20,7 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-   nixcord.url = "github:kaylorben/nixcord";
+    nixcord.url = "github:kaylorben/nixcord";
   };
   nixConfig = {
     extra-substituters = [ "https://hyprland.cachix.org" ];

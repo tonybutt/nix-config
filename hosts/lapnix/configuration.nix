@@ -14,7 +14,10 @@ in
     ./hardware-configuration.nix
     ./disko.nix
   ];
-  fonts.packages = [ pkgs.nerd-fonts.jetbrains-mono ];
+  fonts.packages = [
+    pkgs.nerd-fonts.jetbrains-mono
+    pkgs.font-awesome
+  ];
   boot = {
     loader.grub = {
       enable = true;

@@ -597,6 +597,7 @@ in
           "special:obs, on-created-empty: obs"
           "special:chat, on-created-empty: slack; vesktop; signal-desktop"
           "special:browser, on-created-empty: firefox"
+          "special:monitor, on-created-empty: foot btop"
         ];
         windowrule = [
           "float, title:^(Sign in to Security Device)$"
@@ -612,12 +613,12 @@ in
           "$mainMod, B, togglespecialworkspace, browser"
           "$mainMod, Z, togglespecialworkspace, spotify"
           "$mainMod, C, togglespecialworkspace, chat"
+          "$mainMod, M, togglespecialworkspace, monitor"
           "$mainMod, V, exec, cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"
           "$mainMod, G, togglegroup"
           "$mainMod, Return, exec, foot"
           "$mainMod, Y, exec, ykmanoath"
           "$mainMod, Q, killactive,"
-          "$mainMod, M, exit,"
           "$mainMod, E, exec, thunar"
           "$mainMod, F, togglefloating,"
           "$mainMod, SPACE, exec, fuzzel"
