@@ -20,6 +20,7 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+   nixcord.url = "github:kaylorben/nixcord";
   };
   nixConfig = {
     extra-substituters = [ "https://hyprland.cachix.org" ];
@@ -37,11 +38,12 @@
       disko,
       twofctl,
       nixos-hardware,
+      nixcord,
       ...
     }:
     let
       system = "x86_64-linux";
-      nixpkgsCfg = import nixpkgs {
+      pkgs = import nixpkgs {
         inherit system;
         config.allowUnfree = true;
         overlays = [ twofctl.overlays.default ];
@@ -56,8 +58,7 @@
       formatter.${system} = nixpkgs.legacyPackages.${system}.nixfmt-rfc-style;
       nixosConfigurations = {
         mantra = nixpkgs.lib.nixosSystem {
-          inherit system;
-          pkgs = nixpkgsCfg;
+          inherit pkgs system;
           specialArgs = {
             inherit user hyprland;
           };
@@ -69,8 +70,7 @@
           ];
         };
         lapnix = nixpkgs.lib.nixosSystem {
-          inherit system;
-          pkgs = nixpkgsCfg;
+          inherit pkgs system;
 
           specialArgs = {
             inherit user hyprland;
@@ -85,16 +85,15 @@
         };
         # Minimal Installation ISO.
         iso = nixpkgs.lib.nixosSystem {
-          inherit system;
-          pkgs = nixpkgsCfg;
+          inherit pkgs system;
           modules = [
             ./hosts/iso/configuration.nix
           ];
         };
       };
       homeConfigurations = {
-        anthony = home-manager.lib.homeManagerConfiguration {
-          pkgs = nixpkgsCfg;
+        "${user.name}" = home-manager.lib.homeManagerConfiguration {
+          inherit pkgs;
           extraSpecialArgs = {
             inherit user;
           };
@@ -102,6 +101,7 @@
             ./home/home.nix
             ./style
             stylix.homeManagerModules.stylix
+            nixcord.homeManagerModules.nixcord
           ];
         };
       };

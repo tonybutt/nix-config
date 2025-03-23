@@ -46,7 +46,6 @@ in
       pkg-config
       rustls-libssl
       nodePackages.vscode-langservers-extracted
-      discord
       openssl
       kind
       tree
@@ -104,6 +103,8 @@ in
   };
 
   programs = {
+    nixcord.enable = true;
+    nixcord.vesktop.enable = true;
     k9s.enable = true;
     direnv = {
       enable = true;
@@ -592,10 +593,10 @@ in
         };
 
         workspace = [
-          "special:spotify"
-          "special:obs"
-          "special:chat"
-          "special:browser"
+          "special:spotify, on-created-empty: spotify"
+          "special:obs, on-created-empty: obs"
+          "special:chat, on-created-empty: slack; vesktop; signal-desktop"
+          "special:browser, on-created-empty: firefox"
         ];
         windowrule = [
           "float, title:^(Sign in to Security Device)$"
@@ -603,16 +604,10 @@ in
           "float,title:^()$,class:^(dev.zed.Zed)$"
           "size 20% 20%,title:^()$,class:(dev.zed.Zed)"
           "move 0 0,title:^()$,class:(dev.zed.Zed)"
+          "group,class:signal"
+          "group,class:Slack"
+          "group,class:vesktop"
         ];
-
-        exec-once = [
-          "[workspace special:chat silent] slack"
-          "[workspace special:chat silent] discord"
-          "[workspace special:chat silent] signal-desktop"
-          "[workspace special:browser silent] firefox"
-          "[workspace 1 silent] hyprctl dispatch togglespecialworkspace chat"
-        ];
-
         bind = [
           "$mainMod, B, togglespecialworkspace, browser"
           "$mainMod, Z, togglespecialworkspace, spotify"
