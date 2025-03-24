@@ -3,17 +3,25 @@
   modulesPath,
   system,
   lib,
+  user,
   ...
 }:
 let
+  drivePassword = builtins.getEnv "DRIVE_PASSWORD";
+  hostname = builtins.getEnv "HOSTNAME";
   run-install = pkgs.writeShellApplication {
     name = "run-install";
     runtimeInputs = with pkgs; [
       git
       disko
-      rsync
+      nh
     ];
-    text = builtins.readFile ./run-install;
+    text = (
+      builtins.replaceStrings
+        [ "__USER__" "__HOSTNAME__" "__DRIVE_PASSWORD__" ]
+        [ user.name hostname drivePassword ]
+        (builtins.readFile ./install.sh)
+    );
   };
 in
 {

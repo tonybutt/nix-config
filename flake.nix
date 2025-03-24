@@ -21,6 +21,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixcord.url = "github:kaylorben/nixcord";
+    secondfront.url = "github:tonybutt/modules";
   };
   nixConfig = {
     extra-substituters = [ "https://hyprland.cachix.org" ];
@@ -39,6 +40,7 @@
       twofctl,
       nixos-hardware,
       nixcord,
+      secondfront,
       ...
     }:
     let
@@ -57,6 +59,19 @@
     {
       formatter.${system} = nixpkgs.legacyPackages.${system}.nixfmt-rfc-style;
       nixosConfigurations = {
+        nixtop = nixpkgs.lib.nixosSystem {
+          inherit pkgs system;
+          specialArgs = {
+            inherit user hyprland;
+          };
+          modules = [
+            ./hosts/nixtop/configuration.nix
+            ./style
+            stylix.nixosModules.stylix
+            disko.nixosModules.disko
+            secondfront.nixosModules.secondfront
+          ];
+        };
         mantra = nixpkgs.lib.nixosSystem {
           inherit pkgs system;
           specialArgs = {
@@ -81,11 +96,13 @@
             ./style
             stylix.nixosModules.stylix
             disko.nixosModules.disko
+            secondfront.nixosModules.secondfront
           ];
         };
         # Minimal Installation ISO.
         iso = nixpkgs.lib.nixosSystem {
-          inherit pkgs system;
+          inherit pkgs system user;
+
           modules = [
             ./hosts/iso/configuration.nix
           ];
@@ -102,6 +119,7 @@
             ./style
             stylix.homeManagerModules.stylix
             nixcord.homeManagerModules.nixcord
+            secondfront.homeManagerModules.secondfront
           ];
         };
       };
