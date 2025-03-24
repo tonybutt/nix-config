@@ -14,6 +14,9 @@ in
     ./hardware-configuration.nix
     ./disko.nix
   ];
+  hardware.nvidia.open = true;
+  hardware.nvidia.powerManagement.enable = true;
+
   fonts.packages = [
     pkgs.nerd-fonts.jetbrains-mono
     pkgs.font-awesome

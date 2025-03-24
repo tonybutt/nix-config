@@ -65,6 +65,7 @@
             inherit user hyprland;
           };
           modules = [
+            nixos-hardware.nixosModules.dell-xps-15-9530-nvidia
             ./hosts/nixtop/configuration.nix
             ./style
             stylix.nixosModules.stylix
@@ -101,7 +102,10 @@
         };
         # Minimal Installation ISO.
         iso = nixpkgs.lib.nixosSystem {
-          inherit pkgs system user;
+          inherit pkgs system;
+            specialArgs = {
+                inherit user;
+            };
 
           modules = [
             ./hosts/iso/configuration.nix
