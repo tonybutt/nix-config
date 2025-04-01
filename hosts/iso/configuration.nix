@@ -17,7 +17,12 @@ let
       disko
       nh
     ];
-    text = (builtins.replaceStrings ["__USER__" "__HOSTNAME__" "__DRIVE_PASSWORD__"] [user.name hostname drivePassword] (builtins.readFile ./install.sh));
+    text = (
+      builtins.replaceStrings
+        [ "__USER__" "__HOSTNAME__" "__DRIVE_PASSWORD__" ]
+        [ user.name hostname drivePassword ]
+        (builtins.readFile ./install.sh)
+    );
   };
 in
 {

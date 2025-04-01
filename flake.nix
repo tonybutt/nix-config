@@ -22,11 +22,16 @@
     };
     nixcord.url = "github:kaylorben/nixcord";
     secondfront.url = "github:tonybutt/modules";
+    nixos-cosmic.url = "github:lilyinstarlight/nixos-cosmic";
   };
   nixConfig = {
-    extra-substituters = [ "https://hyprland.cachix.org" ];
+    extra-substituters = [
+      "https://hyprland.cachix.org"
+      "https://cosmic.cachix.org/"
+    ];
     extra-trusted-public-keys = [
       "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
+      "cosmic.cachix.org-1:Dya9IyXD4xdBehWjrkPv6rtxpmMdRel02smYzA85dPE="
     ];
   };
 
@@ -40,9 +45,10 @@
       twofctl,
       nixos-hardware,
       nixcord,
+      nixos-cosmic,
       secondfront,
       ...
-    }:
+    }@inputs:
     let
       system = "x86_64-linux";
       pkgs = import nixpkgs {
@@ -52,7 +58,8 @@
       };
       user = {
         name = "anthony";
-        email = "anthony@abutt.io";
+        fullName = "Anthony Butt";
+        email = "anthony.butt@secondfront.com";
         signingkey = "0xF56C1FE0C44B03BE";
       };
     in
@@ -62,14 +69,14 @@
         nixtop = nixpkgs.lib.nixosSystem {
           inherit pkgs system;
           specialArgs = {
-            inherit user hyprland;
+            inherit user inputs hyprland;
           };
           modules = [
             nixos-hardware.nixosModules.dell-xps-15-9530-nvidia
             ./hosts/nixtop/configuration.nix
-            ./style
             stylix.nixosModules.stylix
             disko.nixosModules.disko
+            # nixos-cosmic.nixosModules.default
             secondfront.nixosModules.secondfront
           ];
         };
@@ -80,7 +87,6 @@
           };
           modules = [
             ./hosts/mantra/configuration.nix
-            ./style
             stylix.nixosModules.stylix
             disko.nixosModules.disko
           ];
@@ -94,7 +100,6 @@
           modules = [
             nixos-hardware.nixosModules.framework-13-7040-amd
             ./hosts/lapnix/configuration.nix
-            ./style
             stylix.nixosModules.stylix
             disko.nixosModules.disko
             secondfront.nixosModules.secondfront
@@ -103,9 +108,9 @@
         # Minimal Installation ISO.
         iso = nixpkgs.lib.nixosSystem {
           inherit pkgs system;
-            specialArgs = {
-                inherit user;
-            };
+          specialArgs = {
+            inherit user;
+          };
 
           modules = [
             ./hosts/iso/configuration.nix
@@ -116,11 +121,11 @@
         "${user.name}" = home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
           extraSpecialArgs = {
-            inherit user;
+            inherit inputs user;
           };
           modules = [
+            # ./hosts/nixtop/monitors.nix
             ./home/home.nix
-            ./style
             stylix.homeManagerModules.stylix
             nixcord.homeManagerModules.nixcord
             secondfront.homeManagerModules.secondfront

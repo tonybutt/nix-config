@@ -15,11 +15,7 @@ echo "Copying Configuration to Installed System"
 mount /dev/mapper/crypted /mnt
 mkdir -p /mnt/home/__USER__/.dotfiles
 cp -R /tmp/cfg /mnt/home/__USER__/.dotfiles
-chown -R __USER__:users /mnt/home/__USER__/.dotfiles
 
 echo "Setting user __USER__ password"
 nixos-enter -c 'passwd __USER__'
-
-echo "Installing Home Configuration"
-su - __USER__
-nh home switch "/mnt/home/__USER__/.dotfiles#__HOSTNAME__"
+nixos-enter -c 'chown -R __USER__:users /mnt/home/__USER__/.dotfiles'

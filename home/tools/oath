@@ -1,8 +1,4 @@
-device_serial=""
-if [[ -n $1 ]]; then
-    device_serial="--device $1"
-fi
-accounts=$(ykman "$device_serial" oath accounts code)
+accounts=$(ykman --device "$1" oath accounts code)
 
 if [[ -z "$accounts" ]]; then
     notify-send "Error" "No OTP accounts found."
