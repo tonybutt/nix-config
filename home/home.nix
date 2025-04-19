@@ -48,6 +48,13 @@
     signal-desktop
     twofctl
     pcsc-tools
+    (pkgs.writeShellScriptBin "setup-browser-CAC" ''
+      NSSDB="''${HOME}/.pki/nssdb"
+      mkdir -p ''${NSSDB}
+
+      ${pkgs.nssTools}/bin/modutil -force -dbdir sql:$NSSDB -add yubi-smartcard \
+        -libfile ${pkgs.opensc}/lib/opensc-pkcs11.so
+    '')
   ];
 
   programs = {
@@ -57,18 +64,69 @@
     foot.enable = true;
     chromium.enable = true;
     chromium.package = pkgs.brave;
+    chromium.extensions = [
+      { id = "cjpalhdlnbpafiamejdnhcphjbkeiagm"; } # ublock origin
+      { id = "nngceckbapebfimnlniiiahkandclblb"; } # bitwarden
+      { id = "dbepggeogbaibhgnhhndojpepiihcmeb"; } # vimium
+      { id = "eimadpbcbfnmbkopoojfekhnkhdbieeh"; } # darkreader
+      { id = "pkehgijcmpdhfbdbbnkijodmdjhbjlgp"; } # privacy badger
+    ];
     zsh.sessionVariables = {
       BROWSER = "firefox";
       EDITOR = "vim";
     };
-    firefox.policies = {
-      SecurityDevices = {
-        Add = {
-          "Yubikey/Smartcard" = "${pkgs.opensc}/lib/opensc-pkcs11.so";
+    firefox.policies.ExtensionSettings =
+      with pkgs.nur.repos.rycee.firefox-addons;
+      builtins.mapAttrs
+        (_: install_url: {
+          installation_mode = "force_installed";
+          inherit install_url;
+        })
+        {
+          "${vimium.addonId}" = "${vimium.src.url}";
+          "${darkreader.addonId}" = "${darkreader.src.url}";
+          "${bitwarden.addonId}" = "${bitwarden.src.url}";
+          "${ublock-origin.addonId}" = "${ublock-origin.src.url}";
+          "${privacy-badger.addonId}" = "${privacy-badger.src.url}";
+        };
+    firefox.profiles.anthony = {
+      search = {
+        force = true;
+        default = "google";
+        order = [
+          "google"
+        ];
+        engines = {
+          "Nix Packages" = {
+            urls = [
+              {
+                template = "https://search.nixos.org/packages";
+                params = [
+                  {
+                    name = "type";
+                    value = "packages";
+                  }
+                  {
+                    name = "query";
+                    value = "{searchTerms}";
+                  }
+                ];
+              }
+            ];
+            icon = "''${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
+            definedAliases = [ "@np" ];
+          };
+          "NixOS Wiki" = {
+            urls = [ { template = "https://nixos.wiki/index.php?search={searchTerms}"; } ];
+            icon = "https://nixos.wiki/favicon.png";
+            updateInterval = 24 * 60 * 60 * 1000; # every day
+            definedAliases = [ "@nw" ];
+          };
+          "bing".metaData.hidden = true;
+          "google".metaData.alias = "@g"; # builtin engines only support specifying one additional alias
         };
       };
-    };
-    firefox.profiles.anthony = {
+
       bookmarks = {
         force = true;
         settings = [
@@ -80,25 +138,17 @@
           }
         ];
       };
-      extensions = {
-        packages = with pkgs.nur.repos.rycee.firefox-addons; [
-          vimium
-          darkreader
-          bitwarden
-          privacy-badger
-          ublock-origin
-        ];
-      };
+      # extensions = {
+      #   packages = with pkgs.nur.repos.rycee.firefox-addons; [
+      #     vimium
+      #     darkreader
+      #     bitwarden
+      #     privacy-badger
+      #     ublock-origin
+      #   ];
+      # };
       settings = {
-        "ublock@raymondhill.net".settings = {
-          selectedFilterLists = [
-            "ublock-filters"
-            "ublock-badware"
-            "ublock-privacy"
-            "ublock-unbreak"
-            "ublock-quick-fixes"
-          ];
-        };
+        "extensions.autoDisableScopes" = 0;
       };
     };
   };

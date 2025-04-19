@@ -16,11 +16,6 @@
       scarlettRite.enable = true;
     };
   };
-  environment.systemPackages = [
-    pkgs.firefox
-    pkgs.brave
-    pkgs.google-chrome
-  ];
   fonts.packages = [
     pkgs.nerd-fonts.jetbrains-mono
     pkgs.font-awesome
