@@ -1,8 +1,9 @@
+# shellcheck disable=SC2148
 # This is temporary, first boot we will register a FIDO2 token as the drive decryption method.
 # Disko currently doesn't support configuring crypted for a FIDO2 or TPM2 decryption this is
 # this is left up to the end user.
 echo "Setting up Drive Encryption"
-echo -n "__DRIVE_PASSWORD__" > /tmp/secret.key
+echo -n "__DRIVE_PASSWORD__" >/tmp/secret.key
 
 cp -R /iso/cfg /tmp/cfg
 echo "Generating NixOS Hardware Configuration"

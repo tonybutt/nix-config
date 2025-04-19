@@ -23,6 +23,9 @@
     nixcord.url = "github:kaylorben/nixcord";
     secondfront.url = "github:tonybutt/modules";
     nixos-cosmic.url = "github:lilyinstarlight/nixos-cosmic";
+    nur.url = "github:nix-community/NUR";
+    treefmt-nix.url = "github:numtide/treefmt-nix";
+    pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
   };
   nixConfig = {
     extra-substituters = [
@@ -37,6 +40,7 @@
 
   outputs =
     {
+      self,
       nixpkgs,
       stylix,
       home-manager,
@@ -45,8 +49,10 @@
       twofctl,
       nixos-hardware,
       nixcord,
-      nixos-cosmic,
       secondfront,
+      nur,
+      treefmt-nix,
+      pre-commit-hooks,
       ...
     }@inputs:
     let
@@ -54,7 +60,10 @@
       pkgs = import nixpkgs {
         inherit system;
         config.allowUnfree = true;
-        overlays = [ twofctl.overlays.default ];
+        overlays = [
+          twofctl.overlays.default
+          nur.overlays.default
+        ];
       };
       user = {
         name = "anthony";
@@ -62,9 +71,22 @@
         email = "anthony.butt@secondfront.com";
         signingkey = "0xF56C1FE0C44B03BE";
       };
+      treefmtEval = treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
     in
     {
-      formatter.${system} = nixpkgs.legacyPackages.${system}.nixfmt-rfc-style;
+      formatter.${system} = treefmtEval.config.build.wrapper;
+      checks.${system} = {
+        pre-commit-check = pkgs.callPackage ./pre-commit.nix {
+          inherit pre-commit-hooks treefmtEval;
+        };
+      };
+      devShells.${system}.default = pkgs.mkShell {
+        inherit (self.checks.${system}.pre-commit-check) shellHook;
+        packages = [
+          (self.checks.${system}.pre-commit-check.enabledPackages)
+          treefmtEval.config.build.wrapper
+        ];
+      };
       nixosConfigurations = {
         nixtop = nixpkgs.lib.nixosSystem {
           inherit pkgs system;
