@@ -153,6 +153,19 @@
             secondfront.homeManagerModules.secondfront
           ];
         };
+        "${user.name}@lapnix" = home-manager.lib.homeManagerConfiguration {
+          inherit pkgs;
+          extraSpecialArgs = {
+            inherit inputs user;
+          };
+          modules = [
+            ./hosts/lapnix/home-overrides.nix
+            ./home/home.nix
+            stylix.homeManagerModules.stylix
+            nixcord.homeManagerModules.nixcord
+            secondfront.homeManagerModules.secondfront
+          ];
+        };
       };
     };
 }

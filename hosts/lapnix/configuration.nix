@@ -1,5 +1,6 @@
 {
   pkgs,
+  lib,
   config,
   hyprland,
   user,
@@ -66,35 +67,6 @@ in
     ];
     sessionVariables.NIXOS_OZONE_WL = "1";
   };
-  # networking.firewall = {
-  # allowedUDPPorts = [ 51820 ];
-  # };
-  # networking.wireguard.interfaces = {
-  #   wg0 = {
-  #     ips = ["10.10.10.4/32"];
-  #     listenPort = 51820;
-  #     privateKeyFile = "/home/anthony/nix-config/hosts/lapnix/alex-vpn-key.conf";
-  #     peers = [
-  # {
-  # publicKey = "VfN0wTDIEwC/8sDjcOexNEnp0XmpKx5//QfR+ytiiXA=";
-  # allowedIPs = ["0.0.0.0/0" "::/0" ];
-  # endpoint = "70.177.61.81:51820";
-  # persistentKeepalive = 25;
-  # }
-  # ];
-  # };
-  # };
-  # networking.extraHosts = ''
-
-  # 172.18.0.6 login.gw.local
-  # 172.18.0.6 santonio.gw.local
-  # 172.18.0.6 grafana.gw.local
-  # 172.18.0.6 argocd.gw.local
-  # '';
-  # security.pki.certificateFiles = [
-  #   ../../certs/server.crt
-  #   ../../certs/ca.crt
-  # ];
   services = {
     upower.enable = true;
     fwupd.enable = true;
@@ -285,7 +257,7 @@ in
   };
 
   networking = {
-    hostName = "lapnix";
+    hostName = lib.mkForce "lapnix";
     firewall = {
       enable = true;
       trustedInterfaces = [

@@ -18,14 +18,6 @@
       height = 1440;
       refreshRate = 60;
     }
-    # {
-    #   name = "DP-7";
-    #   position = "auto-right";
-    # }
-    # {
-    #   name = "DP-3";
-    #   position = "auto-left";
-    # }
   ];
   home.packages = with pkgs; [
     go
