@@ -6,6 +6,17 @@
   imports = [
     ./tools/oath.nix
   ];
+  dconf.settings = {
+    "org/virt-manager/virt-manager/connections" = {
+      autoconnect = [ "qemu:///system" ];
+      uris = [ "qemu:///system" ];
+    };
+  };
+  stylix = {
+    cursor.package = pkgs.rose-pine-cursor;
+    cursor.name = "BreezeX-RosePine-Linuxl";
+    cursor.size = 24;
+  };
   secondfront.hyprland.monitors = [
     {
       name = "eDP-1";
@@ -39,6 +50,7 @@
     nerd-fonts.jetbrains-mono
     signal-desktop
     twofctl
+    stern
     pcsc-tools
     (pkgs.writeShellScriptBin "setup-browser-CAC" ''
       NSSDB="''${HOME}/.pki/nssdb"
@@ -156,8 +168,8 @@
     settings = {
       workspace = [
         "special:spotify, on-created-empty: spotify"
-        "special:obs, on-created-empty: obs"
-        "special:chat, on-created-empty: slack; vesktop; signal-desktop"
+        "special:obs, on-created-empty: nvidia-offload obs --startvirtualcam --disable-shutdown-check"
+        "special:chat, on-created-empty: slack && vesktop && signal-desktop"
         "special:browser, on-created-empty: firefox"
         "special:monitor, on-created-empty: foot btop"
       ];
@@ -183,6 +195,7 @@
         "$mainMod, Z, togglespecialworkspace, spotify"
         "$mainMod, C, togglespecialworkspace, chat"
         "$mainMod, M, togglespecialworkspace, monitor"
+        "$mainMod, O, togglespecialworkspace, obs"
         "$mainMod, V, exec, cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"
         "$mainMod, G, togglegroup"
         "$mainMod, Return, exec, nvidia-offload kitty"

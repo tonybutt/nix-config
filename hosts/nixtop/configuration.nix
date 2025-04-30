@@ -20,6 +20,6 @@
     pkgs.nerd-fonts.jetbrains-mono
     pkgs.font-awesome
   ];
-
+  users.groups.libvirtd.members = [ "anthony" ];
   system.stateVersion = "24.05";
 }

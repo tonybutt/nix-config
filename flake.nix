@@ -149,7 +149,7 @@
             # ./hosts/nixtop/monitors.nix
             ./home/home.nix
             stylix.homeManagerModules.stylix
-            nixcord.homeManagerModules.nixcord
+            nixcord.homeModules.nixcord
             secondfront.homeManagerModules.secondfront
           ];
         };
