@@ -154,7 +154,7 @@
             ./home/home.nix
             stylix.homeManagerModules.stylix
             nixcord.homeManagerModules.nixcord
-            # secondfront.homeManagerModules.secondfront
+            secondfront.homeManagerModules.secondfront
           ];
         };
         "${user.name}@lapnix" = home-manager.lib.homeManagerConfiguration {
