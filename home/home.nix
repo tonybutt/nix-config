@@ -1,6 +1,5 @@
 {
   pkgs,
-  lib,
   ...
 }:
 {
@@ -15,9 +14,8 @@
   };
   stylix = {
     cursor.package = pkgs.rose-pine-cursor;
-    cursor.name = "BreezeX-RosePine-Linux";
+    cursor.name = "BreezeX-RosePine-Linuxl";
     cursor.size = 24;
-    opacity.terminal = lib.mkForce 0.8;
   };
   secondfront.hyprland.monitors = [
     {
@@ -38,7 +36,12 @@
     claude-code
     pavucontrol
     cloudflared
+    rustup
+    nodejs_23
     typescript
+    gcc
+    pkg-config
+    rustls-libssl
     nodePackages.vscode-langservers-extracted
     openssl
     spotify
@@ -59,8 +62,6 @@
   ];
 
   programs = {
-    k9s.enable = true;
-    k9s.settings.xdg.enable = true;
     nixcord.enable = true;
     nixcord.vesktop.enable = true;
     obs-studio.enable = true;
