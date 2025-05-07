@@ -22,7 +22,6 @@
     };
     nixcord.url = "github:kaylorben/nixcord";
     secondfront.url = "github:tonybutt/modules";
-    nixos-cosmic.url = "github:lilyinstarlight/nixos-cosmic";
     nur.url = "github:nix-community/NUR";
     treefmt-nix.url = "github:numtide/treefmt-nix";
     pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
