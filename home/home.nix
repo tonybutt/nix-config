@@ -14,7 +14,7 @@
   };
   stylix = {
     cursor.package = pkgs.rose-pine-cursor;
-    cursor.name = "BreezeX-RosePine-Linuxl";
+    cursor.name = "BreezeX-RosePine-Linux";
     cursor.size = 24;
   };
   secondfront.hyprland.monitors = [
@@ -37,7 +37,7 @@
     pavucontrol
     cloudflared
     rustup
-    nodejs_23
+    nodejs_24
     typescript
     gcc
     pkg-config
@@ -65,6 +65,7 @@
     nixcord.enable = true;
     nixcord.vesktop.enable = true;
     obs-studio.enable = true;
+    kitty.settings.scrollback_lines = 100000;
     # foot.enable = true;
     chromium.enable = true;
     chromium.package = pkgs.brave;
