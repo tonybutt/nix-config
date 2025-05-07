@@ -62,8 +62,8 @@
   ];
 
   programs = {
-    nixcord.enable = true;
-    nixcord.vesktop.enable = true;
+    # nixcord.enable = true;
+    # nixcord.vesktop.enable = true;
     obs-studio.enable = true;
     kitty.settings.scrollback_lines = 100000;
     # foot.enable = true;

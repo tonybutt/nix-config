@@ -20,7 +20,6 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixcord.url = "github:kaylorben/nixcord";
     secondfront.url = "github:tonybutt/modules";
     nur.url = "github:nix-community/NUR";
     treefmt-nix.url = "github:numtide/treefmt-nix";
@@ -47,7 +46,6 @@
       disko,
       twofctl,
       nixos-hardware,
-      nixcord,
       secondfront,
       nur,
       treefmt-nix,
@@ -152,7 +150,6 @@
             }
             ./home/home.nix
             stylix.homeManagerModules.stylix
-            nixcord.homeManagerModules.nixcord
             secondfront.homeManagerModules.secondfront
           ];
         };
@@ -165,7 +162,6 @@
             ./hosts/lapnix/home-overrides.nix
             ./home/home.nix
             stylix.homeManagerModules.stylix
-            nixcord.homeManagerModules.nixcord
             secondfront.homeManagerModules.secondfront
           ];
         };
