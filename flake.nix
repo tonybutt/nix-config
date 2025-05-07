@@ -146,11 +146,15 @@
             inherit inputs user;
           };
           modules = [
-            # ./hosts/nixtop/monitors.nix
+            {
+              home.username = "${user.name}";
+              home.stateVersion = "25.05";
+              home.homeDirectory = "/home/${user.name}";
+            }
             ./home/home.nix
             stylix.homeManagerModules.stylix
             nixcord.homeManagerModules.nixcord
-            secondfront.homeManagerModules.secondfront
+            # secondfront.homeManagerModules.secondfront
           ];
         };
         "${user.name}@lapnix" = home-manager.lib.homeManagerConfiguration {

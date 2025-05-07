@@ -17,19 +17,19 @@
     cursor.name = "BreezeX-RosePine-Linux";
     cursor.size = 24;
   };
-  secondfront.hyprland.monitors = [
-    {
-      name = "eDP-1";
-      enabled = false;
-    }
-    {
-      name = "DP-6";
-      position = "0x0";
-      width = 2560;
-      height = 1440;
-      refreshRate = 60;
-    }
-  ];
+  # secondfront.hyprland.monitors = [
+  #   {
+  #     name = "eDP-1";
+  #     enabled = false;
+  #   }
+  #   {
+  #     name = "DP-6";
+  #     position = "0x0";
+  #     width = 2560;
+  #     height = 1440;
+  #     refreshRate = 60;
+  #   }
+  # ];
   home.packages = with pkgs; [
     go
     pulumi-bin
