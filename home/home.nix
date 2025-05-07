@@ -142,6 +142,15 @@
           }
         ];
       };
+      # extensions = {
+      #   packages = with pkgs.nur.repos.rycee.firefox-addons; [
+      #     vimium
+      #     darkreader
+      #     bitwarden
+      #     privacy-badger
+      #     ublock-origin
+      #   ];
+      # };
       settings = {
         "extensions.autoDisableScopes" = 0;
       };
