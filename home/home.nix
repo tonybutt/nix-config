@@ -65,7 +65,7 @@
     nixcord.enable = true;
     nixcord.vesktop.enable = true;
     obs-studio.enable = true;
-    foot.enable = true;
+    # foot.enable = true;
     chromium.enable = true;
     chromium.package = pkgs.brave;
     chromium.extensions = [
