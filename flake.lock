@@ -1521,11 +1521,11 @@
         "treefmt": "treefmt"
       },
       "locked": {
-        "lastModified": 1746551404,
-        "narHash": "sha256-kvOzsKUEj1SQEOjof4HKMHuPU/myk8BzsxR6C2Zorx8=",
+        "lastModified": 1746628147,
+        "narHash": "sha256-MKE5D5JKlD3mEXCPyxaIJB97XHEIIJQeTIVblJRNMGg=",
         "owner": "tonybutt",
         "repo": "modules",
-        "rev": "458022063f94884bf6ba4f5a4a1f047f255cb494",
+        "rev": "43ce4fbe775be282a09331a6b04376b725a7cd65",
         "type": "github"
       },
       "original": {
