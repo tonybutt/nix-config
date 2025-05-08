@@ -137,6 +137,30 @@
         };
       };
       homeConfigurations = {
+        "ubuntuVm" = home-manager.lib.homeManagerConfiguration {
+          inherit pkgs;
+          modules = [
+            {
+              home.username = "${user.name}";
+              home.homeDirectory = "/home/${user.name}";
+              home.systemVersion = "25.05";
+              home.packages = [
+                pkgs.appgate
+                pkgs.opensc
+              ];
+              programs.firefox = {
+                enable = true;
+                policies = {
+                  SecurityDevices = {
+                    Add = {
+                      "Yubikey/Smartcard" = "${pkgs.opensc}/lib/opensc-pkcs11.so";
+                    };
+                  };
+                };
+              };
+            }
+          ];
+        };
         "${user.name}" = home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
           extraSpecialArgs = {

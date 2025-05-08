@@ -13,6 +13,7 @@
     };
   };
   stylix = {
+    targets.k9s.enable = true;
     cursor.package = pkgs.rose-pine-cursor;
     cursor.name = "BreezeX-RosePine-Linux";
     cursor.size = 24;
@@ -62,10 +63,14 @@
   ];
 
   programs = {
+    k9s.settings.ui.skin = "skin";
     # nixcord.enable = true;
     # nixcord.vesktop.enable = true;
     obs-studio.enable = true;
-    kitty.settings.scrollback_lines = 100000;
+    kitty.settings = {
+      scrollback_lines = 100000;
+      copy_on_select = "clipboard";
+    };
     # foot.enable = true;
     chromium.enable = true;
     chromium.package = pkgs.brave;
@@ -162,8 +167,14 @@
       "~/Wallpapers/Igris.png"
     ];
     settings.wallpaper = [
-      "~/Wallpapers/Igris.png"
+      ",~/Wallpapers/2fx.png"
     ];
+  };
+  gtk = {
+    iconTheme = {
+      package = pkgs.colloid-icon-theme;
+      name = "Colloid";
+    };
   };
   wayland.windowManager.hyprland = {
     settings = {
@@ -176,13 +187,15 @@
       ];
       windowrule = [
         "float, title:^(Sign in to Security Device)$"
-        "move 0 -60,title:^(app.gather.town is sharing your).*$"
+        "float, title:^(MainPicker)$"
+        "move 0 -60,title:^(app.gather.town is sharing your screen.)$"
         "float,title:^()$,class:^(dev.zed.Zed)$"
         "size 20% 20%,title:^()$,class:(dev.zed.Zed)"
         "move 0 0,title:^()$,class:(dev.zed.Zed)"
         "group,class:signal"
         "group,class:Slack"
         "group,class:vesktop"
+        "float,class:^(firefox)$,initialClass:"
         "float,class:^(dropdown)$"
         "size 800 400,class:^(dropdown)$"
         "center,class:^(dropdown)$"

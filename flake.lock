@@ -1668,11 +1668,11 @@
       },
       "locked": {
         "host": "code.il2.gamewarden.io",
-        "lastModified": 1745506597,
-        "narHash": "sha256-qiY8T6zZyamdclSE7fT85clYb1DCu6JjswUydSRKbZg=",
+        "lastModified": 1746733499,
+        "narHash": "sha256-6li81HbvBYuUEU3icCsp66W+UHN8PFxVo4ntzqVyxCU=",
         "owner": "gamewarden%2Fplatform",
         "repo": "2fctl",
-        "rev": "ba07013bd107f90095b52ee8aa67e27c39c2250f",
+        "rev": "954fd5ba0b25125b5c334140ea01ba317bc5e24b",
         "type": "gitlab"
       },
       "original": {
