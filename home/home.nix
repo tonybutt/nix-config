@@ -1,10 +1,12 @@
 {
   pkgs,
+  lib,
   ...
 }:
 {
   imports = [
     ./tools/oath.nix
+    ./firefox.nix
   ];
   dconf.settings = {
     "org/virt-manager/virt-manager/connections" = {
@@ -33,6 +35,7 @@
   ];
   home.packages = with pkgs; [
     go
+    gimp3
     pulumi-bin
     claude-code
     pavucontrol
@@ -64,102 +67,25 @@
 
   programs = {
     k9s.settings.ui.skin = "skin";
-    # nixcord.enable = true;
-    # nixcord.vesktop.enable = true;
     obs-studio.enable = true;
     kitty.settings = {
       scrollback_lines = 100000;
       copy_on_select = "clipboard";
     };
-    # foot.enable = true;
-    chromium.enable = true;
-    chromium.package = pkgs.brave;
-    chromium.extensions = [
-      { id = "cjpalhdlnbpafiamejdnhcphjbkeiagm"; } # ublock origin
-      { id = "nngceckbapebfimnlniiiahkandclblb"; } # bitwarden
-      { id = "dbepggeogbaibhgnhhndojpepiihcmeb"; } # vimium
-      { id = "eimadpbcbfnmbkopoojfekhnkhdbieeh"; } # darkreader
-      { id = "pkehgijcmpdhfbdbbnkijodmdjhbjlgp"; } # privacy badger
-    ];
+    chromium = {
+      enable = true;
+      package = pkgs.brave;
+      extensions = [
+        { id = "cjpalhdlnbpafiamejdnhcphjbkeiagm"; } # ublock origin
+        { id = "nngceckbapebfimnlniiiahkandclblb"; } # bitwarden
+        { id = "dbepggeogbaibhgnhhndojpepiihcmeb"; } # vimium
+        { id = "eimadpbcbfnmbkopoojfekhnkhdbieeh"; } # darkreader
+        { id = "pkehgijcmpdhfbdbbnkijodmdjhbjlgp"; } # privacy badger
+      ];
+    };
     zsh.sessionVariables = {
       BROWSER = "firefox";
       EDITOR = "vim";
-    };
-    firefox.policies.ExtensionSettings =
-      with pkgs.nur.repos.rycee.firefox-addons;
-      builtins.mapAttrs
-        (_: install_url: {
-          installation_mode = "force_installed";
-          inherit install_url;
-        })
-        {
-          "${vimium.addonId}" = "${vimium.src.url}";
-          "${darkreader.addonId}" = "${darkreader.src.url}";
-          "${bitwarden.addonId}" = "${bitwarden.src.url}";
-          "${ublock-origin.addonId}" = "${ublock-origin.src.url}";
-          "${privacy-badger.addonId}" = "${privacy-badger.src.url}";
-        };
-    firefox.profiles.anthony = {
-      search = {
-        force = true;
-        default = "google";
-        order = [
-          "google"
-        ];
-        engines = {
-          "Nix Packages" = {
-            urls = [
-              {
-                template = "https://search.nixos.org/packages";
-                params = [
-                  {
-                    name = "type";
-                    value = "packages";
-                  }
-                  {
-                    name = "query";
-                    value = "{searchTerms}";
-                  }
-                ];
-              }
-            ];
-            icon = "''${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
-            definedAliases = [ "@np" ];
-          };
-          "NixOS Wiki" = {
-            urls = [ { template = "https://nixos.wiki/index.php?search={searchTerms}"; } ];
-            icon = "https://nixos.wiki/favicon.png";
-            updateInterval = 24 * 60 * 60 * 1000; # every day
-            definedAliases = [ "@nw" ];
-          };
-          "bing".metaData.hidden = true;
-          "google".metaData.alias = "@g"; # builtin engines only support specifying one additional alias
-        };
-      };
-
-      bookmarks = {
-        force = true;
-        settings = [
-          {
-            name = "SSO Commercial";
-            url = "https://d-9067aa9977.awsapps.com/start";
-            tags = [ "work" ];
-            keyword = "sso";
-          }
-        ];
-      };
-      # extensions = {
-      #   packages = with pkgs.nur.repos.rycee.firefox-addons; [
-      #     vimium
-      #     darkreader
-      #     bitwarden
-      #     privacy-badger
-      #     ublock-origin
-      #   ];
-      # };
-      settings = {
-        "extensions.autoDisableScopes" = 0;
-      };
     };
   };
   services.hyprpaper = {
@@ -178,20 +104,25 @@
   };
   wayland.windowManager.hyprland = {
     settings = {
+      group = {
+        groupbar = {
+          "col.inactive" = lib.mkForce "rgba(f5274e80)";
+          "col.active" = lib.mkForce "rgba(3aff26bf)";
+        };
+      };
       workspace = [
         "special:spotify, on-created-empty: spotify"
         "special:obs, on-created-empty: nvidia-offload obs --startvirtualcam --disable-shutdown-check"
         "special:chat, on-created-empty: slack && vesktop && signal-desktop"
         "special:browser, on-created-empty: firefox"
-        "special:monitor, on-created-empty: foot btop"
+        "special:monitor, on-created-empty: kitty btop"
       ];
       windowrule = [
-        "float, title:^(Sign in to Security Device)$"
         "float, title:^(MainPicker)$"
-        "move 0 -60,title:^(app.gather.town is sharing your screen.)$"
+        "float, title:^(Sign in to Security Device)$"
+        "workspace 10,title:^(app.gather.town is sharing)(.*)$"
         "float,title:^()$,class:^(dev.zed.Zed)$"
-        "size 20% 20%,title:^()$,class:(dev.zed.Zed)"
-        "move 0 0,title:^()$,class:(dev.zed.Zed)"
+        "opacity 0.85,class:(dev.zed.Zed)"
         "group,class:signal"
         "group,class:Slack"
         "group,class:vesktop"
