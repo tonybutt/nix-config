@@ -2,6 +2,20 @@
 {
   programs = {
     firefox = {
+      policies.ExtensionSettings =
+        with pkgs.nur.repos.rycee.firefox-addons;
+        builtins.mapAttrs
+          (_: install_url: {
+            installation_mode = "force_installed";
+            inherit install_url;
+          })
+          {
+            "${vimium.addonId}" = "${vimium.src.url}";
+            "${darkreader.addonId}" = "${darkreader.src.url}";
+            "${bitwarden.addonId}" = "${bitwarden.src.url}";
+            "${ublock-origin.addonId}" = "${ublock-origin.src.url}";
+            "${privacy-badger.addonId}" = "${privacy-badger.src.url}";
+          };
       profiles.anthony = {
         search = {
           force = true;
