@@ -1378,11 +1378,11 @@
         "treefmt": "treefmt"
       },
       "locked": {
-        "lastModified": 1747152625,
-        "narHash": "sha256-7hvf6d8rOhIOlx2t6KAI0y5G0dd5UKhaqtDrp8L4ZkE=",
+        "lastModified": 1747328294,
+        "narHash": "sha256-YQ0DdRBb8Bb2l1z2VIWWDWWPbkHeJI84q36A0F1Q05k=",
         "owner": "tonybutt",
         "repo": "modules",
-        "rev": "f33cabaa6c22247f963097574f87abfc805628eb",
+        "rev": "527c5d232bfa8aed374d2a8cb575ecc78cb2393a",
         "type": "github"
       },
       "original": {
