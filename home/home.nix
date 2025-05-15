@@ -104,6 +104,9 @@
   };
   wayland.windowManager.hyprland = {
     settings = {
+      misc = {
+        focus_on_activate = true;
+      };
       group = {
         groupbar = {
           "col.inactive" = lib.mkForce "rgba(f5274e80)";
