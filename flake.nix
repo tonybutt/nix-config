@@ -114,7 +114,7 @@
           inherit pkgs system;
 
           specialArgs = {
-            inherit user hyprland;
+            inherit user inputs hyprland;
           };
           modules = [
             nixos-hardware.nixosModules.framework-13-7040-amd
