@@ -116,7 +116,7 @@
       workspace = [
         "special:spotify, on-created-empty: spotify"
         "special:obs, on-created-empty: nvidia-offload obs --startvirtualcam --disable-shutdown-check"
-        "special:chat, on-created-empty: slack && vesktop && signal-desktop"
+        "special:chat, on-created-empty: slack; signal-desktop;"
         "special:browser, on-created-empty: firefox"
         "special:monitor, on-created-empty: kitty btop"
       ];

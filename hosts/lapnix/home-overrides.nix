@@ -8,4 +8,8 @@
       scale = "1.5";
     }
   ];
+
+  wayland.windowManager.hyprland.settings.bind = [
+    "$mainMod, Return, exec, kitty"
+  ];
 }
