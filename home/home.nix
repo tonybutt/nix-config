@@ -56,6 +56,7 @@
     twofctl
     stern
     discord
+    uv
     ssm-session-manager-plugin
     pcsc-tools
     (pkgs.writeShellScriptBin "setup-browser-CAC" ''
@@ -68,7 +69,15 @@
   ];
 
   programs = {
-    k9s.settings.ui.skin = "skin";
+    zed-editor = {
+      userSettings = {
+        indent_guides = {
+          enabled = true;
+          coloring = "indent_aware";
+          background_coloring = "indent_aware";
+        };
+      };
+    };
     obs-studio.enable = true;
     kitty.settings = {
       scrollback_lines = 100000;
@@ -193,12 +202,12 @@
         "$mainMod, mouse_up, workspace, e-1"
         "$mainMod, F3, exec, brightnessctl -d *::kbd_backlight set +33%"
         "$mainMod, F2, exec, brightnessctl -d *::kbd_backlight set 33%-"
-        ", XF86AudioRaiseVolume, exec, pamixer -i 5 "
-        ", XF86AudioLowerVolume, exec, pamixer -d 5 "
-        ", XF86AudioMute, exec, pamixer -t"
-        ", XF86AudioMicMute, exec, pamixer --default-source -m"
-        ", XF86MonBrightnessDown, exec, brightnessctl set 5%- "
-        ", XF86MonBrightnessUp, exec, brightnessctl set +5% "
+        ", XF86AudioRaiseVolume, exec, ${pkgs.pamixer}/bin/pamixer -i 5 "
+        ", XF86AudioLowerVolume, exec, ${pkgs.pamixer}/bin/pamixer -d 5 "
+        ", XF86AudioMute, exec, ${pkgs.pamixer}/bin/pamixer -t"
+        ", XF86AudioMicMute, exec, ${pkgs.pamixer}/bin/pamixer --default-source -m"
+        ", XF86MonBrightnessDown, exec, ${pkgs.brightnessctl}/bin/brightnessctl set 5%- "
+        ", XF86MonBrightnessUp, exec, ${pkgs.brightnessctl}/bin/brightnessctl set +5% "
         '', Print, exec, grim -g "$(slurp)" - | swappy -f -''
       ];
       bindm = [
