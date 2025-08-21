@@ -1273,11 +1273,11 @@
         "treefmt": "treefmt"
       },
       "locked": {
-        "lastModified": 1755782787,
-        "narHash": "sha256-Moc1fTp/lFtiC9FKlhgSde3NXatb41qLBxjYfuEwM2s=",
+        "lastModified": 1755783795,
+        "narHash": "sha256-0OggI10+I/VvhBUh3OSSLC6UpBVgRjp8Lt3ITOzLjlM=",
         "owner": "tonybutt",
         "repo": "modules",
-        "rev": "14bb2f036897fc72c3e8d889d173c018a236efc7",
+        "rev": "7c9b11a800de552b1b1c865b6619d8374292fe8c",
         "type": "github"
       },
       "original": {
