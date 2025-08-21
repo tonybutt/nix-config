@@ -173,7 +173,7 @@
               home.homeDirectory = "/home/${user.name}";
             }
             ./home/home.nix
-            stylix.homeManagerModules.stylix
+            stylix.homeModules.stylix
             secondfront.homeManagerModules.secondfront
           ];
         };
@@ -185,7 +185,7 @@
           modules = [
             ./hosts/lapnix/home-overrides.nix
             ./home/home.nix
-            stylix.homeManagerModules.stylix
+            stylix.homeModules.stylix
             secondfront.homeManagerModules.secondfront
           ];
         };
