@@ -60,5 +60,6 @@ in
     disko
     vim
     git
+    toybox
   ];
 }
