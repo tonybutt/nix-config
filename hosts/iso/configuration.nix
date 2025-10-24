@@ -6,9 +6,7 @@
   ...
 }:
 let
-  drivePassword = builtins.getEnv "DRIVE_PASSWORD";
   hostname = builtins.getEnv "HOSTNAME";
-  token = builtins.getEnv "GITLAB_TOKEN";
   run-install = pkgs.writeShellApplication {
     name = "run-install";
     runtimeInputs = with pkgs; [
@@ -17,10 +15,9 @@ let
       nh
     ];
     text = (
-      builtins.replaceStrings
-        [ "__USER__" "__HOSTNAME__" "__DRIVE_PASSWORD__" ]
-        [ user.name hostname drivePassword ]
-        (builtins.readFile ./install.sh)
+      builtins.replaceStrings [ "__USER__" "__HOSTNAME__" ] [ user.name hostname ] (
+        builtins.readFile ./install.sh
+      )
     );
   };
 in
@@ -33,7 +30,6 @@ in
   nix = {
     channel.enable = false;
     settings = {
-      access-tokens = "code.il2.gamewarden.io=PAT:${token}";
       substituters = [ "https://hyprland.cachix.org" ];
       trusted-public-keys = [ "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc=" ];
     };
@@ -61,6 +57,5 @@ in
     disko
     vim
     git
-    toybox
   ];
 }

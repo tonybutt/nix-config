@@ -6,7 +6,7 @@
 ## Make ISO
 
 ```sh
-HOSTNAME=<hostname> DRIVE_PASSWORD=<pass> GITLAB_TOKEN=<token> nix run --show-trace nixpkgs#nixos-generators -- --format iso --flake .#iso -o result
+HOSTNAME=<hostname> nix run --show-trace nixpkgs#nixos-generators -- --format iso --flake .#iso -o result
 sudo dd if=result/iso/nixinstaller.iso of=/dev/sdc bs=4M status=progress conv=fdatasync
 ```
 

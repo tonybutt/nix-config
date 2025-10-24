@@ -1,13 +1,6 @@
 {
   description = "My personal flake";
   inputs = {
-    twofctl = {
-      type = "gitlab";
-      host = "code.il2.gamewarden.io";
-      owner = "gamewarden%2Fplatform";
-      repo = "2fctl";
-    };
-
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     nixpkgs.url = "nixpkgs/nixos-unstable";
     home-manager = {
@@ -20,7 +13,7 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    secondfront.url = "github:tonybutt/modules";
+    mymodules.url = "github:tonybutt/modules";
     nur.url = "github:nix-community/NUR";
     treefmt-nix.url = "github:numtide/treefmt-nix";
     pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
@@ -44,9 +37,8 @@
       home-manager,
       hyprland,
       disko,
-      twofctl,
       nixos-hardware,
-      secondfront,
+      mymodules,
       nur,
       treefmt-nix,
       pre-commit-hooks,
@@ -58,14 +50,13 @@
         inherit system;
         config.allowUnfree = true;
         overlays = [
-          twofctl.overlays.default
           nur.overlays.default
         ];
       };
       user = {
         name = "anthony";
         fullName = "Anthony Butt";
-        email = "anthony.butt@secondfront.com";
+        email = "anthony@abutt.io";
         signingkey = "0xF56C1FE0C44B03BE";
       };
       treefmtEval = treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
@@ -85,18 +76,17 @@
         ];
       };
       nixosConfigurations = {
-        nixtop = nixpkgs.lib.nixosSystem {
+        atlas = nixpkgs.lib.nixosSystem {
           inherit pkgs system;
           specialArgs = {
             inherit user inputs hyprland;
           };
           modules = [
-            nixos-hardware.nixosModules.dell-xps-15-9530-nvidia
-            ./hosts/nixtop/configuration.nix
+            nixos-hardware.nixosModules.framework-16-7040-amd
+            ./hosts/atlas/configuration.nix
             stylix.nixosModules.stylix
             disko.nixosModules.disko
-            # nixos-cosmic.nixosModules.default
-            secondfront.nixosModules.secondfront
+            mymodules.nixosModules.secondfront
           ];
         };
         mantra = nixpkgs.lib.nixosSystem {
@@ -121,7 +111,7 @@
             ./hosts/lapnix/configuration.nix
             stylix.nixosModules.stylix
             disko.nixosModules.disko
-            secondfront.nixosModules.secondfront
+            mymodules.nixosModules.secondfront
           ];
         };
         # Minimal Installation ISO.
@@ -137,30 +127,6 @@
         };
       };
       homeConfigurations = {
-        "ubuntuVm" = home-manager.lib.homeManagerConfiguration {
-          inherit pkgs;
-          modules = [
-            {
-              home.username = "${user.name}";
-              home.homeDirectory = "/home/${user.name}";
-              home.systemVersion = "25.05";
-              home.packages = [
-                pkgs.appgate
-                pkgs.opensc
-              ];
-              programs.firefox = {
-                enable = true;
-                policies = {
-                  SecurityDevices = {
-                    Add = {
-                      "Yubikey/Smartcard" = "${pkgs.opensc}/lib/opensc-pkcs11.so";
-                    };
-                  };
-                };
-              };
-            }
-          ];
-        };
         "${user.name}" = home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
           extraSpecialArgs = {
@@ -174,7 +140,7 @@
             }
             ./home/home.nix
             stylix.homeModules.stylix
-            secondfront.homeManagerModules.secondfront
+            mymodules.homeManagerModules.secondfront
           ];
         };
         "${user.name}@lapnix" = home-manager.lib.homeManagerConfiguration {
@@ -186,7 +152,7 @@
             ./hosts/lapnix/home-overrides.nix
             ./home/home.nix
             stylix.homeModules.stylix
-            secondfront.homeManagerModules.secondfront
+            mymodules.homeManagerModules.secondfront
           ];
         };
       };
