@@ -7,7 +7,7 @@
 
 ```sh
 HOSTNAME=<hostname> nix run --show-trace nixpkgs#nixos-generators -- --format iso --flake .#iso -o result
-sudo dd if=result/iso/nixinstaller.iso of=/dev/sdc bs=4M status=progress conv=fdatasync
+sudo dd if=result/iso/nixinstaller.iso of=/dev/sda bs=4M status=progress conv=fdatasync
 ```
 
 ## Boot ISO
