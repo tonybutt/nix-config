@@ -24,10 +24,6 @@
   services.fwupd.enable = true;
   hardware = {
     keyboard.zsa.enable = true;
-    amdgpu.amdvlk = {
-      enable = true;
-      support32Bit.enable = true;
-    };
     bluetooth = {
       enable = true;
       powerOnBoot = true;

@@ -7,9 +7,11 @@
   imports = [
     ./hardware-configuration.nix
     ./disks.nix
+    ../../modules/nixos
   ];
   modules = {
     hostName = "atlas";
+    grub = false;
     peripherals = {
       enable = true;
       obs.enable = true;
@@ -20,7 +22,6 @@
     pkgs.nerd-fonts.jetbrains-mono
     pkgs.font-awesome
   ];
-
   hardware = {
     keyboard.zsa.enable = true;
     # amdgpu.amdvlk = {

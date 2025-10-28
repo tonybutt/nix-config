@@ -13,7 +13,6 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    mymodules.url = "github:tonybutt/modules";
     nur.url = "github:nix-community/NUR";
     treefmt-nix.url = "github:numtide/treefmt-nix";
     pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
@@ -38,7 +37,6 @@
       hyprland,
       disko,
       nixos-hardware,
-      mymodules,
       nur,
       treefmt-nix,
       pre-commit-hooks,
@@ -86,7 +84,6 @@
             ./hosts/atlas/configuration.nix
             stylix.nixosModules.stylix
             disko.nixosModules.disko
-            mymodules.nixosModules.secondfront
           ];
         };
         mantra = nixpkgs.lib.nixosSystem {
@@ -111,7 +108,6 @@
             ./hosts/lapnix/configuration.nix
             stylix.nixosModules.stylix
             disko.nixosModules.disko
-            mymodules.nixosModules.secondfront
           ];
         };
         # Minimal Installation ISO.
@@ -140,7 +136,6 @@
             }
             ./home/home.nix
             stylix.homeModules.stylix
-            mymodules.homeManagerModules.secondfront
           ];
         };
         "${user.name}@lapnix" = home-manager.lib.homeManagerConfiguration {
@@ -152,7 +147,6 @@
             ./hosts/lapnix/home-overrides.nix
             ./home/home.nix
             stylix.homeModules.stylix
-            mymodules.homeManagerModules.secondfront
           ];
         };
       };

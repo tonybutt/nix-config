@@ -7,8 +7,12 @@
   imports = [
     ./tools/oath.nix
     ./firefox.nix
+    ../modules/hm
   ];
   dconf.settings = {
+    "org/gnome/desktop/interface" = {
+      color_scheme = "prefer-dark";
+    };
     "org/virt-manager/virt-manager/connections" = {
       autoconnect = [ "qemu:///system" ];
       uris = [ "qemu:///system" ];
@@ -53,7 +57,6 @@
     yubioath-flutter
     nerd-fonts.jetbrains-mono
     signal-desktop
-    twofctl
     stern
     discord
     uv
