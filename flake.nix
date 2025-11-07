@@ -74,6 +74,18 @@
         ];
       };
       nixosConfigurations = {
+        tiberius = nixpkgs.lib.nixosSystem {
+          inherit pkgs system;
+          specialArgs = {
+            inherit user inputs hyprland;
+          };
+          modules = [
+            nixos-hardware.nixosModules.dell-precision-3490-intel
+            ./hosts/tiberius/configuration.nix
+            stylix.nixosModules.stylix
+            disko.nixosModules.disko
+          ];
+        };
         atlas = nixpkgs.lib.nixosSystem {
           inherit pkgs system;
           specialArgs = {
