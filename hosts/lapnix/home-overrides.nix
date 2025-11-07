@@ -1,5 +1,5 @@
 {
-  secondfront.hyprland.monitors = [
+  modules.hyprland.monitors = [
     {
       name = "eDP-1";
       width = 2880;

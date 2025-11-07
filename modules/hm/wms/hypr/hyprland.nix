@@ -1,6 +1,6 @@
 { config, lib, ... }:
 let
-  cfg = config.secondfront.hyprland;
+  cfg = config.modules.hyprland;
   inherit (lib)
     mkIf
     mkEnableOption
@@ -11,10 +11,10 @@ let
 in
 {
   options = {
-    secondfront.hyprland.enable = mkEnableOption "Enable hyprland window Manager" // {
+    modules.hyprland.enable = mkEnableOption "Enable hyprland window Manager" // {
       default = true;
     };
-    secondfront.hyprland.monitors = mkOption {
+    modules.hyprland.monitors = mkOption {
       type = types.listOf (
         types.submodule {
           options = {
@@ -51,7 +51,7 @@ in
               description = ''
                 Monitor resolution. Can be:
                 - "highres@highrr" - Highest resolution at highest refresh rate
-                - "preferred" - Use monitor's preferred mode  
+                - "preferred" - Use monitor's preferred mode
                 - "auto" - Let Hyprland decide
                 - { width = 1920; height = 1080; refreshRate = 60; } - Explicit resolution
               '';
@@ -92,7 +92,7 @@ in
       );
       default = [ ];
     };
-    secondfront.hyprland.mainMod = mkOption {
+    modules.hyprland.mainMod = mkOption {
       type = types.str;
       default = "SUPER";
       example = "CTRL";
@@ -236,8 +236,6 @@ in
             };
           };
           gestures = {
-            workspace_swipe = true;
-            workspace_swipe_fingers = 3;
             workspace_swipe_invert = false;
             workspace_swipe_distance = 200;
             workspace_swipe_forever = true;

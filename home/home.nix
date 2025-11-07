@@ -24,7 +24,7 @@
     cursor.name = "BreezeX-RosePine-Linux";
     cursor.size = 24;
   };
-  secondfront.hyprland.monitors = [
+  modules.hyprland.monitors = [
     {
       name = "eDP-1";
       enabled = false;
