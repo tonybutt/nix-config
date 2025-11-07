@@ -126,7 +126,7 @@
       };
       workspace = [
         "special:spotify, on-created-empty: spotify"
-        "special:obs, on-created-empty: nvidia-offload obs --startvirtualcam --disable-shutdown-check"
+        "special:obs, on-created-empty: obs --startvirtualcam --disable-shutdown-check"
         "special:chat, on-created-empty: slack; signal-desktop;"
         "special:browser, on-created-empty: firefox"
         "special:monitor, on-created-empty: kitty btop"
@@ -140,7 +140,6 @@
         "group,class:signal"
         "group,class:Slack"
         "group,class:vesktop"
-        "float,class:^(firefox)$,initialClass:"
         "float,class:^(dropdown)$"
         "size 800 400,class:^(dropdown)$"
         "center,class:^(dropdown)$"
