@@ -22,27 +22,26 @@ in
       signing = {
         key = user.signingkey;
         signByDefault = true;
-        signer = "gpg";
+        format = "ssh";
       };
       settings = {
         user.email = user.email;
         user.name = user.fullName;
-        extraConfig = {
-          core.askPass = "";
-          core.editor = "vim";
-          init.defaultBranch = "main";
-          credential.helper = "libsecret";
-          push.autoSetupRemote = true;
-          pull.rebase = true;
-          merge.conflictStyle = "zdiff3";
-          rebase.autosquash = true;
-          rebase.autostash = true;
-          commit.verbose = true;
-          rerere.enabled = true;
-          help.autocorrect = 10;
-          diff.histogram = "histogram";
-          core.pager = "${pkgs.delta}/bin/delta";
-        };
+        user.signingkey = "${user.signingkey}";
+        core.askPass = "";
+        core.editor = "vim";
+        init.defaultBranch = "main";
+        credential.helper = "libsecret";
+        push.autoSetupRemote = true;
+        pull.rebase = true;
+        merge.conflictStyle = "zdiff3";
+        rebase.autosquash = true;
+        rebase.autostash = true;
+        commit.verbose = true;
+        rerere.enabled = true;
+        help.autocorrect = 10;
+        diff.histogram = "histogram";
+        core.pager = "${pkgs.delta}/bin/delta";
       };
     };
   };

@@ -102,10 +102,10 @@ in
 
     security = {
       sudo-rs = {
-        enable = true;
+        enable = false;
         execWheelOnly = true;
       };
-      sudo.enable = false;
+      sudo.enable = true;
       auditd.enable = true;
       audit.enable = true;
       rtkit.enable = true;

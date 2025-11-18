@@ -54,8 +54,8 @@
       user = {
         name = "anthony";
         fullName = "Anthony Butt";
-        email = "anthony@abutt.io";
-        signingkey = "0xF56C1FE0C44B03BE";
+        email = "anthony@tiberius.com";
+        signingkey = "~/.ssh/id_ed25519_sk.pub";
       };
       treefmtEval = treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
     in
