@@ -1,83 +1,70 @@
-window#waybar {
-  background: transparent;
-}
-#custom-os_button {
+@define-color foreground @base05;
+@define-color background @base00;
+
+* {
+  background-color: @background;
+  color: @foreground;
+
+  border: none;
+  border-radius: 0;
+  min-height: 0;
   font-family: "JetBrainsMono Nerd Font";
-  font-size: 24px;
-  padding-left: 12px;
-  padding-right: 20px;
-  transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
-}
-#custom-os_button:hover {
-  background: @base00;
-  color: @base0B;
-}
-tooltip {
-}
-tooltip label {
-  color: @base05;
+  font-size: 12px;
 }
 
-.modules-center,
-.modules-right,
 .modules-left {
-  background: @base03;
-  margin: 0.15em;
-  border-radius: 0.25em;
+  margin-left: 8px;
 }
-.modules-center {
-  border: 2px solid @base07;
-}
+
 .modules-right {
-  border: 2px solid @base0C;
-}
-.modules-left {
-  border: 2px solid @base0E;
-}
-.modules-left #workspaces button {
-  padding: 0 0.5em;
-  color: @base05;
-  background: @base03;
-  margin: 0.25em;
-  border-bottom: unset;
+  margin-right: 8px;
 }
 
-.modules-left #workspaces button.focused,
-.modules-left #workspaces button.active {
-  color: @base0B;
-  border-bottom: unset;
+#workspaces button {
+  all: initial;
+  padding: 0 6px;
+  margin: 0 1.5px;
+  min-width: 9px;
+  color: @foreground;
+  background-color: @background;
 }
 
-#mode,
-#clock,
-#battery {
-  padding: 0 10px;
+#workspaces button.empty {
+  opacity: 0.5;
 }
 
-#mode {
-  background: #64727d;
-  border-bottom: 3px solid white;
+#cpu,
+#battery,
+#pulseaudio,
+#custom-omarchy {
+  min-width: 12px;
+  margin: 0 7.5px;
 }
 
-#battery {
-  color: @base05;
+#tray {
+  margin-right: 16px;
 }
 
-#battery.charging {
-  color: @base0B;
+#bluetooth {
+  margin-right: 17px;
 }
 
-@keyframes blink {
-  to {
-    color: @base08;
-  }
+#network {
+  margin-right: 13px;
 }
 
-#battery.warning:not(.charging) {
-  color: @base08;
-  animation-name: blink;
-  animation-duration: 0.5s;
-  animation-timing-function: steps(12);
-  animation-iteration-count: infinite;
-  animation-direction: alternate;
+#custom-expand-icon {
+  margin-right: 18px;
+}
+
+tooltip {
+  padding: 2px;
+}
+
+#clock {
+  margin-left: 8.75px;
+}
+
+.hidden {
+  opacity: 0;
 }

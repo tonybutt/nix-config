@@ -15,7 +15,10 @@
     };
     nur.url = "github:nix-community/NUR";
     treefmt-nix.url = "github:numtide/treefmt-nix";
-    pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
+    pre-commit-hooks = {
+      url = "github:cachix/pre-commit-hooks.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
   nixConfig = {
     extra-substituters = [
@@ -54,7 +57,7 @@
       user = {
         name = "anthony";
         fullName = "Anthony Butt";
-        email = "anthony@tiberius.com";
+        email = "abutt@tiberius.com";
         signingkey = "~/.ssh/id_ed25519_sk.pub";
       };
       treefmtEval = treefmt-nix.lib.evalModule pkgs ./treefmt.nix;

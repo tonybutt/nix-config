@@ -67,6 +67,10 @@
       };
       stateVersion = "25.05";
     };
+    xdg.userDirs = {
+      enable = true;
+      createDirectories = true;
+    };
     services.cliphist = {
       enable = true;
       allowImages = true;

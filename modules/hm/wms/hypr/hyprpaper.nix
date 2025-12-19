@@ -1,22 +1,26 @@
 { config, lib, ... }:
 with lib;
 let
-  cfg = config.secondfront.hyprland.hyprpaper;
+  cfg = config.modules.hyprpaper;
 in
 {
-  options = {
-    secondfront.hyprland.hyprpaper.enable = mkEnableOption "Enable hyprpaper theme" // {
+  options.modules.hyprpaper = {
+    enable = mkEnableOption "Enable hyprpaper" // {
       default = true;
     };
+    wallpaper = mkOption {
+      type = types.str;
+      default = "~/Wallpapers/default.png";
+      description = "Path to wallpaper image";
+    };
   };
+
   config = mkIf cfg.enable {
     services.hyprpaper = {
       enable = true;
       settings = {
-        preload = [ ];
-        wallpaper = [
-          ",~/Wallpapers/Lavendar.png"
-        ];
+        preload = [ cfg.wallpaper ];
+        wallpaper = [ ",${cfg.wallpaper}" ];
       };
     };
   };

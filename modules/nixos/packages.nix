@@ -24,6 +24,7 @@ in
         pavucontrol
         git
         vim
+        unityhub
       ]
       ++ cfg.extraDefaultPackages;
   };
