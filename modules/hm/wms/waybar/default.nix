@@ -7,6 +7,7 @@
 with lib;
 let
   cfg = config.secondfront.hyprland.waybar;
+  inherit (config.lib.stylix) colors;
 in
 {
   options = {
@@ -60,11 +61,11 @@ in
               "9" = "9";
               "10" = "0";
               active = "";
-              "spotify" = "<span color='#1db954'>󰓇</span>";
-              "obs" = "<span color='#d43b3b'></span>";
-              "chat" = "<span color='#4a154b'>󰭹</span>";
-              "browser" = "<span color='#fb542b'></span>";
-              "monitor" = "<span color='#89b4fa'>󱌣</span>";
+              "spotify" = "<span color='#${colors.base0B}'>󰓇</span>";
+              "obs" = "<span color='#${colors.base08}'></span>";
+              "chat" = "<span color='#${colors.base0C}'>󰭹</span>";
+              "browser" = "<span color='#${colors.base09}'></span>";
+              "monitor" = "<span color='#${colors.base0D}'>󱌣</span>";
             };
             persistent-workspaces = {
               "1" = [ ];
