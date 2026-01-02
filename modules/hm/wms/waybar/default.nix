@@ -27,7 +27,7 @@ in
           height = 26;
 
           modules-left = [
-            "custom/omarchy"
+            "custom/nix"
             "hyprland/workspaces"
           ];
           modules-center = [
@@ -35,6 +35,7 @@ in
           ];
           modules-right = [
             "group/tray-expander"
+            "custom/lock"
             "bluetooth"
             "network"
             "pulseaudio"
@@ -59,11 +60,11 @@ in
               "9" = "9";
               "10" = "0";
               active = "";
-              "spotify" = "󰓇";
-              "obs" = "";
-              "chat" = "󰭹";
-              "browser" = "";
-              "monitor" = "󱌣";
+              "spotify" = "<span color='#1db954'>󰓇</span>";
+              "obs" = "<span color='#d43b3b'></span>";
+              "chat" = "<span color='#4a154b'>󰭹</span>";
+              "browser" = "<span color='#fb542b'></span>";
+              "monitor" = "<span color='#89b4fa'>󱌣</span>";
             };
             persistent-workspaces = {
               "1" = [ ];
@@ -74,11 +75,17 @@ in
             };
           };
 
-          "custom/omarchy" = {
-            format = "";
+          "custom/nix" = {
+            format = "󱄅";
             on-click = "fuzzel";
-            on-click-right = "${pkgs.kitty}/bin/kitty";
-            tooltip-format = "Menu\n\nSuper + Space";
+            on-click-right = "system-menu";
+            tooltip-format = "Left: App Launcher\nRight: System Menu";
+          };
+
+          "custom/lock" = {
+            format = "";
+            on-click = "loginctl lock-session && ${pkgs.hyprlock}/bin/hyprlock";
+            tooltip = false;
           };
 
           "group/tray-expander" = {

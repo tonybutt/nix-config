@@ -9,7 +9,7 @@
   border-radius: 0;
   min-height: 0;
   font-family: "JetBrainsMono Nerd Font";
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .modules-left {
@@ -36,7 +36,7 @@
 #cpu,
 #battery,
 #pulseaudio,
-#custom-omarchy {
+#custom-nix {
   min-width: 12px;
   margin: 0 7.5px;
 }

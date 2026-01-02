@@ -2,7 +2,6 @@
 {
   imports = [
     ./tools/oath.nix
-    ./firefox.nix
     ../modules/hm
   ];
   dconf.settings = {
@@ -68,6 +67,16 @@
     '')
     (pkgs.writeShellScriptBin "launch-webapp" ''
       exec ${pkgs.brave}/bin/brave --app="$1" "''${@:2}"
+    '')
+    (pkgs.writeShellScriptBin "system-menu" ''
+      choice=$(printf "󰌾  Lock\n󰤄  Sleep\n  Reboot\n󰐥  Shutdown\n󰗽  Logout" | ${pkgs.fuzzel}/bin/fuzzel --dmenu -p "System: ")
+      case "$choice" in
+        *Lock*) loginctl lock-session ;;
+        *Sleep*) systemctl suspend ;;
+        *Reboot*) systemctl reboot ;;
+        *Shutdown*) systemctl poweroff ;;
+        *Logout*) hyprctl dispatch exit ;;
+      esac
     '')
   ];
 

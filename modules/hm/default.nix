@@ -7,7 +7,6 @@
 {
   imports = [
     ./wms
-    ./browsers
     ./git
     ./gpg
     ./editors
@@ -23,7 +22,9 @@
       mimeApps = {
         enable = true;
         defaultApplications = {
-          "x-scheme-handler/https" = [ "firefox.desktop" ];
+          "x-scheme-handler/https" = [ "brave-browser.desktop" ];
+          "x-scheme-handler/http" = [ "brave-browser.desktop" ];
+          "text/html" = [ "brave-browser.desktop" ];
         };
       };
     };

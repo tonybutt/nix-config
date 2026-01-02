@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.modules.hyprland;
   inherit (lib)
@@ -8,6 +13,26 @@ let
     types
     ;
   inherit (builtins) map toString;
+
+  # Binary paths
+  kitty = "${pkgs.kitty}/bin/kitty";
+  thunar = "${pkgs.xfce.thunar}/bin/thunar";
+  fuzzel = "${pkgs.fuzzel}/bin/fuzzel";
+  cliphist = "${pkgs.cliphist}/bin/cliphist";
+  wl-copy = "${pkgs.wl-clipboard}/bin/wl-copy";
+  brightnessctl = "${pkgs.brightnessctl}/bin/brightnessctl";
+  grim = "${pkgs.grim}/bin/grim";
+  slurp = "${pkgs.slurp}/bin/slurp";
+  swappy = "${pkgs.swappy}/bin/swappy";
+  wpctl = "${pkgs.wireplumber}/bin/wpctl";
+  playerctl = "${pkgs.playerctl}/bin/playerctl";
+  btop = "${pkgs.btop}/bin/btop";
+  hyprlock = "${pkgs.hyprlock}/bin/hyprlock";
+  spotify = "${pkgs.spotify}/bin/spotify";
+  obs = "${pkgs.obs-studio}/bin/obs";
+  slack = "${pkgs.slack}/bin/slack";
+  signal = "${pkgs.signal-desktop}/bin/signal-desktop";
+  brave = "${pkgs.brave}/bin/brave";
 in
 {
   options = {
@@ -316,11 +341,7 @@ in
 
           # Special workspaces
           workspace = [
-            "special:spotify, on-created-empty: spotify"
-            "special:obs, on-created-empty: obs --startvirtualcam --disable-shutdown-check"
-            "special:chat, on-created-empty: slack; signal-desktop;"
-            "special:browser, on-created-empty: firefox"
-            "special:monitor, on-created-empty: kitty btop"
+            "special:monitor, on-created-empty: ${kitty} ${btop}"
           ];
 
           # Omarchy window rules + personal rules
@@ -338,7 +359,6 @@ in
             "opacity 0.85,class:(dev.zed.Zed)"
             "group,class:signal"
             "group,class:Slack"
-            "group,class:vesktop"
             "float,class:^(dropdown)$"
             "size 800 400,class:^(dropdown)$"
             "center,class:^(dropdown)$"
@@ -357,16 +377,16 @@ in
             "$mainMod CTRL, F, fullscreenstate, 0 2"
             "$mainMod ALT, F, fullscreen, 1"
             # Applications
-            "$mainMod, Return, exec, kitty"
-            "$mainMod, E, exec, thunar"
-            "$mainMod, SPACE, exec, fuzzel"
+            "$mainMod, Return, exec, ${kitty}"
+            "$mainMod, E, exec, ${thunar}"
+            "$mainMod, SPACE, exec, ${fuzzel}"
             "$mainMod, Y, exec, oath 19125157"
-            "$mainMod, V, exec, cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"
+            "$mainMod, V, exec, ${cliphist} list | ${fuzzel} --dmenu | ${cliphist} decode | ${wl-copy}"
             # Web apps
             "$mainMod SHIFT, A, exec, launch-webapp https://chatgpt.com"
             # Move focus with vim keys
             "$mainMod, h, movefocus, l"
-            "$mainMod, l, movefocus, r"
+            "$mainMod, L, exec, loginctl lock-session && ${hyprlock}"
             "$mainMod, k, movefocus, u"
             "$mainMod, j, movefocus, d"
             # Move focus with arrow keys
@@ -454,10 +474,10 @@ in
             "$mainMod ALT, 4, changegroupactive, 4"
             "$mainMod ALT, 5, changegroupactive, 5"
             # Keyboard backlight
-            "$mainMod, F3, exec, brightnessctl -d *::kbd_backlight set +33%"
-            "$mainMod, F2, exec, brightnessctl -d *::kbd_backlight set 33%-"
+            "$mainMod, F3, exec, ${brightnessctl} -d *::kbd_backlight set +33%"
+            "$mainMod, F2, exec, ${brightnessctl} -d *::kbd_backlight set 33%-"
             # Screenshot
-            '', Print, exec, grim -g "$(slurp)" - | swappy -f -''
+            '', Print, exec, ${grim} -g "$(${slurp})" - | ${swappy} -f -''
           ];
 
           # ALT+TAB cycling
@@ -470,20 +490,20 @@ in
 
           # Media keys (repeat on hold)
           bindel = [
-            ", XF86AudioRaiseVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+"
-            ", XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
-            ", XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
-            ", XF86AudioMicMute, exec, wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"
-            ", XF86MonBrightnessUp, exec, brightnessctl set 5%+"
-            ", XF86MonBrightnessDown, exec, brightnessctl set 5%-"
+            ", XF86AudioRaiseVolume, exec, ${wpctl} set-volume @DEFAULT_AUDIO_SINK@ 5%+"
+            ", XF86AudioLowerVolume, exec, ${wpctl} set-volume @DEFAULT_AUDIO_SINK@ 5%-"
+            ", XF86AudioMute, exec, ${wpctl} set-mute @DEFAULT_AUDIO_SINK@ toggle"
+            ", XF86AudioMicMute, exec, ${wpctl} set-mute @DEFAULT_AUDIO_SOURCE@ toggle"
+            ", XF86MonBrightnessUp, exec, ${brightnessctl} set 5%+"
+            ", XF86MonBrightnessDown, exec, ${brightnessctl} set 5%-"
           ];
 
           # Media playback (locked)
           bindl = [
-            ", XF86AudioNext, exec, playerctl next"
-            ", XF86AudioPause, exec, playerctl play-pause"
-            ", XF86AudioPlay, exec, playerctl play-pause"
-            ", XF86AudioPrev, exec, playerctl previous"
+            ", XF86AudioNext, exec, ${playerctl} next"
+            ", XF86AudioPause, exec, ${playerctl} play-pause"
+            ", XF86AudioPlay, exec, ${playerctl} play-pause"
+            ", XF86AudioPrev, exec, ${playerctl} previous"
           ];
 
           # Mouse bindings
@@ -494,6 +514,11 @@ in
 
           exec-once = [
             "systemctl --user import-environment PATH && systemctl --user restart xdg-desktop-portal.service"
+            "[workspace special:spotify silent] ${spotify}"
+            "[workspace special:obs silent] ${obs} --startvirtualcam"
+            "[workspace special:chat silent] ${slack}"
+            "[workspace special:chat silent] ${signal}"
+            "[workspace special:browser silent] ${brave}"
           ];
         };
     };
