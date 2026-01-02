@@ -8,6 +8,7 @@
 let
   cfg = config.secondfront.git;
   inherit (lib) mkIf mkEnableOption;
+  commitTemplate = ./commit-template.txt;
 in
 {
   options = {
@@ -30,6 +31,7 @@ in
         user.signingkey = "${user.signingkey}";
         core.askPass = "";
         core.editor = "vim";
+        commit.template = "${commitTemplate}";
         init.defaultBranch = "main";
         credential.helper = "libsecret";
         push.autoSetupRemote = true;

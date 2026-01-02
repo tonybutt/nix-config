@@ -1,0 +1,52 @@
+
+# ------------------------------------------- 50 |
+# <type>(<scope>): <description>
+#
+# ----------------------------------------------------------------- 72 |
+# [optional body]
+#
+# [optional footer(s)]
+
+
+# --- Writing Good Commits ---
+# Subject line:
+#   - Max 50 chars, imperative mood ("add" not "added")
+#   - Capitalize after type, no period at end
+#   - Complete the sentence: "This commit will..."
+#
+# Body (after blank line):
+#   - Wrap at 72 chars
+#   - Explain WHAT and WHY, not HOW (code shows how)
+#   - Reference related issues or context
+
+# --- Conventional Commits ---
+# Types:
+#   feat:     New feature
+#   fix:      Bug fix
+#   docs:     Documentation only
+#   style:    Formatting, no code change
+#   refactor: Code change that neither fixes a bug nor adds a feature
+#   perf:     Performance improvement
+#   test:     Adding or updating tests
+#   build:    Build system or dependencies
+#   ci:       CI configuration
+#   chore:    Other changes that don't modify src or test
+#
+# Breaking changes: Add ! after type/scope, e.g., feat!: or feat(api)!:
+# Or add BREAKING CHANGE: in footer
+
+# --- Linear Integration ---
+# Reference issues:    Fixes GRA-123, Closes GRA-456
+# Link without close:  Ref GRA-123, See GRA-456
+# Multiple issues:     Fixes GRA-123, GRA-456
+
+# --- Co-Authors ---
+# Uncomment and edit to add co-authors:
+#
+# Co-Authored-By: Anthony Butt <abutt@tiberius.com>
+# Co-Authored-By: Alex Schlecht <aschlecht@tiberius.com>
+# Co-Authored-By: Lucas Pick <lpick@tiberius.com>
+# Co-Authored-By: Clinton Harris <charris@tiberius.com>
+# Co-Authored-By: Stephen Bounamassa <sbounamassa@tiberius.com>
+# Co-Authored-By: Eric Wardner <ewardner@tiberius.com>
+# Co-Authored-By: Josh Taylor <jtaylor@tiberius.com>
