@@ -18,6 +18,7 @@
       scarlettRite.enable = true;
     };
   };
+  services.fwupd.enable = true;
   fonts.packages = [
     pkgs.nerd-fonts.jetbrains-mono
     pkgs.font-awesome
