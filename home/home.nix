@@ -19,6 +19,7 @@
     cursor.name = "BreezeX-RosePine-Linux";
     cursor.size = 24;
   };
+  modules.ai.claude-cognitive.enable = true;
   modules.hyprland.monitors = [
     {
       name = "eDP-1";

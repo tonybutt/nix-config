@@ -12,6 +12,7 @@
     ./editors
     ./shells
     ./terminals
+    ./ai
     ../stylix
   ];
   config = {

@@ -63,6 +63,9 @@
       treefmtEval = treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
     in
     {
+      homeModules = {
+        claude-cognitive = import ./modules/hm/ai/claude-cognitive.nix;
+      };
       formatter.${system} = treefmtEval.config.build.wrapper;
       checks.${system} = {
         pre-commit-check = pkgs.callPackage ./pre-commit.nix {
@@ -75,6 +78,9 @@
           (self.checks.${system}.pre-commit-check.enabledPackages)
           treefmtEval.config.build.wrapper
         ];
+        env = {
+          CLAUDE_INSTANCE = "nix-config";
+        };
       };
       nixosConfigurations = {
         tiberius = nixpkgs.lib.nixosSystem {
