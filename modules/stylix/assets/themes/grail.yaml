@@ -1,0 +1,18 @@
+scheme: "Grail"
+author: "Anthony Butt (from Tiberius Grail Figma)"
+base00: "0D1118" # Radar Blue - primary background
+base01: "151B25" # Dark Navy - secondary background
+base02: "1E2733" # Ghost Blue - selection/highlight
+base03: "2B333F" # Target Gray - comments/borders
+base04: "5A6270" # Steel Gray - dark foreground
+base05: "A0A5AC" # Steel Mist - default foreground
+base06: "C8CCD1" # Light Gray - bright foreground
+base07: "F5F6F7" # UI White - brightest foreground
+base08: "FA4D59" # Combat Red - errors, variables
+base09: "D97742" # Rust Amber - constants, numbers
+base0A: "E6B84D" # Warning Gold - classes, warnings
+base0B: "5C9A6B" # Tactical Green - strings, success
+base0C: "4DAAAB" # HUD Teal - regex, support
+base0D: "5687A8" # Steel Blue - functions, methods
+base0E: "A13A44" # HUD Red - keywords, storage
+base0F: "73333D" # Dim Red - deprecated, embedded

@@ -45,8 +45,8 @@ in
             popups = 10;
           };
         };
-      image = ./assets/walls/wallpaper.png;
-      base16Scheme = ./assets/themes/dark_oxide.yaml;
+      image = ./assets/walls/Tiberius.png;
+      base16Scheme = ./assets/themes/grail.yaml;
       opacity = {
         terminal = 0.65;
       };
