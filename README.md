@@ -2,20 +2,90 @@
 
 Personal NixOS and Home Manager configuration flake.
 
-## Table of Contents
+## Usage
 
-| Section                               | Description                          |
-| ------------------------------------- | ------------------------------------ |
-| [Goals](#goals)                       | Design principles                    |
-| [Exported Modules](#exported-modules) | Reusable modules for external flakes |
-| [Installation](#installation)         | ISO creation and system install      |
+### Rebuild System
 
----
+```sh
+nh os switch . -H <hostname>
+```
 
-## Goals
+Hostnames: `tiberius`, `atlas`, `lapnix`, `mantra`
 
-- Keep the config simple and only abstract when necessary to support multiple machines
-- Keep home configuration completely separate from system configuration, allowing the home configuration to be portable across hosts
+### Rebuild Home
+
+```sh
+nh home switch . -c <username>
+```
+
+Use `<username>@<hostname>` for host-specific home configs (e.g., `anthony@lapnix`).
+
+### Update Inputs
+
+```sh
+nix flake update
+```
+
+Then rebuild system and home to apply updates.
+
+### Format & Check
+
+```sh
+nix fmt              # Format all files
+nix flake check      # Validate flake and run pre-commit hooks
+```
+
+## Structure
+
+```
+flake.nix                 # Entry point: inputs, outputs, host definitions
+├── hosts/<hostname>/     # Per-machine NixOS config
+│   ├── configuration.nix # System config
+│   ├── disks.nix         # Disko disk layout
+│   └── home-overrides.nix # Optional host-specific home overrides
+├── home/home.nix         # Home Manager entry (imports modules/hm)
+└── modules/
+    ├── hm/               # Home Manager modules (user programs, shell, wm)
+    ├── nixos/            # NixOS modules (system packages, services)
+    └── stylix/           # Theming
+```
+
+## Adding a New Host
+
+1. Create `hosts/<hostname>/configuration.nix` importing `../../modules/nixos`
+2. Create `hosts/<hostname>/disks.nix` with disko disk layout
+3. Add nixosConfiguration in `flake.nix`:
+
+```nix
+<hostname> = nixpkgs.lib.nixosSystem {
+  inherit pkgs system;
+  specialArgs = { inherit user inputs hyprland; };
+  modules = [
+    ./hosts/<hostname>/configuration.nix
+    stylix.nixosModules.stylix
+    disko.nixosModules.disko
+  ];
+};
+```
+
+4. Optionally add host-specific homeConfiguration with overrides
+
+## Fresh Install
+
+### Create ISO
+
+```sh
+nix run nixpkgs#nixos-generators -- --format iso --flake .#iso -o result
+sudo dd if=result/iso/nixinstaller.iso of=/dev/sdX bs=4M status=progress conv=fdatasync
+```
+
+### Install
+
+Boot from ISO, then:
+
+```sh
+sudo run-install
+```
 
 ---
 
@@ -25,99 +95,23 @@ Personal NixOS and Home Manager configuration flake.
 
 Home Manager module for [claude-cognitive](https://github.com/GMaN1911/claude-cognitive) - persistent working memory for Claude Code.
 
-> [!NOTE]
-> This module provides automatic context routing and multi-instance coordination for Claude Code, reducing token usage by up to 79%.
-
-| Output                         | Path                                 |
-| ------------------------------ | ------------------------------------ |
-| `homeModules.claude-cognitive` | `modules/hm/ai/claude-cognitive.nix` |
-
-#### Installation
-
-<details>
-<summary><strong>1. Add flake input</strong></summary>
+**Add to your flake:**
 
 ```nix
-{
-  inputs = {
-    nixpkgs.url = "nixpkgs/nixos-unstable";
-    home-manager = {
-      url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    abutt-nix-config = {
-      url = "github:abutt/nix-config";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-  };
-}
+inputs.abutt-nix-config.url = "github:abutt/nix-config";
 ```
 
-</details>
-
-<details>
-<summary><strong>2. Import and enable module</strong></summary>
+**Enable in home configuration:**
 
 ```nix
-homeConfigurations."youruser" = home-manager.lib.homeManagerConfiguration {
-  modules = [
-    abutt-nix-config.homeModules.claude-cognitive
-    {
-      modules.ai.claude-cognitive = {
-        enable = true;
-        instanceId = "A";  # Optional, for multi-instance coordination
-      };
-    }
-  ];
-};
+modules = [
+  abutt-nix-config.homeModules.claude-cognitive
+  { modules.ai.claude-cognitive.enable = true; }
+];
 ```
 
-</details>
-
-> [!TIP]
-> Set different `instanceId` values (A, B, C, etc.) for each terminal when running multiple Claude Code instances to enable state sharing between them.
-
-#### What It Provides
-
-| Item                      | Description                                          |
-| ------------------------- | ---------------------------------------------------- |
-| `~/.claude-cognitive`     | Source repository                                    |
-| `~/.claude/scripts`       | Context routing and pool coordination scripts        |
-| `~/.claude/settings.json` | Claude Code hooks configuration                      |
-| `CLAUDE_INSTANCE`         | Environment variable for multi-instance coordination |
-| `python3`                 | Runtime dependency                                   |
-| `claude-cognitive-init`   | Command to initialize projects                       |
-
-#### Per-Project Setup
-
-After rebuilding, initialize any project:
+**Initialize per-project:**
 
 ```sh
-cd /path/to/your/project
-claude-cognitive-init
-```
-
-> [!IMPORTANT]
-> Edit `.claude/CLAUDE.md` with your project info after initialization. This file tells Claude Code about your project's architecture and conventions.
-
----
-
-## Installation
-
-### Create ISO
-
-```sh
-HOSTNAME=<hostname> nix run --show-trace nixpkgs#nixos-generators -- --format iso --flake .#iso -o result
-sudo dd if=result/iso/nixinstaller.iso of=/dev/sda bs=4M status=progress conv=fdatasync
-```
-
-> [!CAUTION]
-> The `dd` command will overwrite the target device. Double-check the device path before running.
-
-### Install NixOS
-
-Boot from the ISO, then run:
-
-```sh
-sudo run-install
+cd /path/to/project && claude-cognitive-init
 ```
