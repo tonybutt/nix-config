@@ -18,7 +18,6 @@ in
       enable = true;
       extraPackages = with pkgs; [
         nil
-        nixfmt-rfc-style
         yaml-language-server
         nodePackages.vscode-json-languageserver
         package-version-server
@@ -39,9 +38,21 @@ in
         # Editor behavior
         vim_mode = true;
         autosave = "on_focus_change";
+        format_on_save = "on";
         relative_line_numbers = true;
         cursor_blink = false;
         vertical_scroll_margin = 5;
+
+        # Global formatter - treefmt handles all languages via project config
+        formatter = {
+          external = {
+            command = "treefmt";
+            arguments = [
+              "--stdin"
+              "{buffer_path}"
+            ];
+          };
+        };
 
         scrollbar = {
           show = "never";
@@ -90,11 +101,6 @@ in
               "!nixd"
               "nil"
             ];
-            formatter = {
-              external = {
-                command = "nixfmt";
-              };
-            };
           };
         };
       };
