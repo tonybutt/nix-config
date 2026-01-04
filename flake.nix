@@ -80,6 +80,7 @@
         ];
         env = {
           CLAUDE_INSTANCE = "nix-config";
+          CONTEXT_DOCS_ROOT = "/home/anthony/nix-config/.claude";
         };
       };
       nixosConfigurations = {
@@ -90,6 +91,7 @@
           };
           modules = [
             nixos-hardware.nixosModules.dell-precision-3490-intel
+            nixos-hardware.nixosModules.common-gpu-intel
             ./hosts/tiberius/configuration.nix
             stylix.nixosModules.stylix
             disko.nixosModules.disko

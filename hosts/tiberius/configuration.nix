@@ -24,6 +24,8 @@
     pkgs.font-awesome
   ];
   hardware = {
+    intelgpu.driver = "xe";
+    intelgpu.vaapiDriver = "intel-media-driver";
     keyboard.zsa.enable = true;
     bluetooth = {
       enable = true;

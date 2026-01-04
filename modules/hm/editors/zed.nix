@@ -29,6 +29,8 @@ in
         "docker-compose"
         "git-firefly"
         "html"
+        "log"
+        "markdown"
       ];
       userSettings = {
         # Appearance

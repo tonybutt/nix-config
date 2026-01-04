@@ -2,6 +2,7 @@
 {
   imports = [
     ./tools/oath.nix
+    ./tools/wf-recorder.nix
     ../modules/hm
   ];
   dconf.settings = {
@@ -34,6 +35,7 @@
     }
   ];
   home.packages = with pkgs; [
+    mpv
     go
     gimp3
     pulumi-bin

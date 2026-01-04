@@ -33,6 +33,7 @@ let
   slack = "${pkgs.slack}/bin/slack";
   signal = "${pkgs.signal-desktop}/bin/signal-desktop";
   brave = "${pkgs.brave}/bin/brave";
+  wfRecorderToggle = "wf-recorder-toggle";
 in
 {
   options = {
@@ -478,6 +479,8 @@ in
             "$mainMod, F2, exec, ${brightnessctl} -d *::kbd_backlight set 33%-"
             # Screenshot
             '', Print, exec, ${grim} -g "$(${slurp})" - | ${swappy} -f -''
+            # Screen recording
+            "$mainMod, R, exec, ${wfRecorderToggle}"
           ];
 
           # ALT+TAB cycling
