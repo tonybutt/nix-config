@@ -1,5 +1,15 @@
+{ lib, ... }:
 {
-  modules.hyprland.monitors = [
+  modules.hyprland.monitors = lib.mkForce [
+    {
+      name = "eDP-1";
+      resolution = {
+        width = 1920;
+        height = 1080;
+        refreshRate = 60;
+      };
+      position = "auto-left";
+    }
     {
       name = "DP-1";
       resolution = {
