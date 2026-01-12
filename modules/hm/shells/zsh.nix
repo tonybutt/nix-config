@@ -16,6 +16,7 @@ in
   };
   config = mkIf cfg.zsh.enable {
     programs.zsh = {
+      dotDir = "${config.xdg.configHome}/zsh";
       plugins = [
         {
           file = "p10k.zsh";

@@ -31,6 +31,7 @@ in
         "html"
         "log"
         "markdown"
+        "proto"
       ];
       userSettings = {
         # Appearance

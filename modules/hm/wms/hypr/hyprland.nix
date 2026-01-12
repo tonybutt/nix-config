@@ -16,7 +16,7 @@ let
 
   # Binary paths
   kitty = "${pkgs.kitty}/bin/kitty";
-  thunar = "${pkgs.xfce.thunar}/bin/thunar";
+  thunar = "${pkgs.thunar}/bin/thunar";
   fuzzel = "${pkgs.fuzzel}/bin/fuzzel";
   cliphist = "${pkgs.cliphist}/bin/cliphist";
   wl-copy = "${pkgs.wl-clipboard}/bin/wl-copy";
