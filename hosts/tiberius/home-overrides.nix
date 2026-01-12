@@ -2,6 +2,7 @@
 {
   modules.hyprland.monitors = lib.mkForce [
     {
+      enabled = false;
       name = "eDP-1";
       resolution = {
         width = 1920;

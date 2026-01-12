@@ -385,9 +385,10 @@ in
             "$mainMod, V, exec, ${cliphist} list | ${fuzzel} --dmenu | ${cliphist} decode | ${wl-copy}"
             # Web apps
             "$mainMod SHIFT, A, exec, launch-webapp https://chatgpt.com"
+            "$mainMod SHIFT, G, exec, launch-webapp https://app.v2.gather.town/app/grail-41d17977-d077-48a5-835a-7eb7cb97cbff"
             # Move focus with vim keys
             "$mainMod, h, movefocus, l"
-            "$mainMod, L, exec, loginctl lock-session && ${hyprlock}"
+            "$mainMod, l, movefocus, r"
             "$mainMod, k, movefocus, u"
             "$mainMod, j, movefocus, d"
             # Move focus with arrow keys
@@ -454,6 +455,7 @@ in
             "$mainMod, mouse_down, workspace, e+1"
             "$mainMod, mouse_up, workspace, e-1"
             # Groups
+            "ALT CTRL SHIFT, L, exec, loginctl lock-session && ${hyprlock}"
             "$mainMod, G, togglegroup"
             "$mainMod ALT, G, moveoutofgroup"
             "$mainMod ALT, J, changegroupactive, f"
