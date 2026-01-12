@@ -335,7 +335,7 @@ in
             disable_splash_rendering = true;
             focus_on_activate = true;
             anr_missed_pings = 3;
-            new_window_takes_over_fullscreen = 1;
+            on_focus_under_fullscreen = 1;
             key_press_enables_dpms = true;
             mouse_move_enables_dpms = true;
           };
@@ -345,25 +345,25 @@ in
             "special:monitor, on-created-empty: ${kitty} ${btop}"
           ];
 
-          # Omarchy window rules + personal rules
+          # Omarchy window rules + personal rules (Hyprland 0.53+ syntax)
           windowrule = [
-            "suppressevent maximize, class:.*"
-            "opacity 0.97 0.9, class:.*"
-            "nofocus,class:^$,title:^$,xwayland:1,floating:1,fullscreen:0,pinned:0"
-            "scrolltouchpad 1.5, class:(Alacritty|kitty)"
-            "scrolltouchpad 0.2, class:com.mitchell.ghostty"
+            "match:class .*, suppress_event maximize"
+            "match:class .*, opacity 0.97 0.9"
+            "match:class ^$, match:title ^$, match:xwayland true, match:float true, match:fullscreen false, match:pin false, no_focus on"
+            "match:class (Alacritty|kitty), scroll_touchpad 1.5"
+            "match:class com.mitchell.ghostty, scroll_touchpad 0.2"
             # Personal window rules
-            "float, title:^(MainPicker)$"
-            "float, title:^(Sign in to Security Device)$"
-            "workspace 10,title:^(app.v2.gather.town is sharing)(.*)$"
-            "float,title:^()$,class:^(dev.zed.Zed)$"
-            "opacity 0.85,class:(dev.zed.Zed)"
-            "group,class:signal"
-            "group,class:Slack"
-            "float,class:^(dropdown)$"
-            "size 800 400,class:^(dropdown)$"
-            "center,class:^(dropdown)$"
-            "animation slide,class:^(dropdown)$"
+            "match:title ^(MainPicker)$, float on"
+            "match:title ^(Sign in to Security Device)$, float on"
+            "match:title ^(app.v2.gather.town is sharing)(.*)$, workspace 10"
+            "match:title ^()$, match:class ^(dev.zed.Zed)$, float on"
+            "match:class (dev.zed.Zed), opacity 0.85"
+            "match:class signal, group on"
+            "match:class Slack, group on"
+            "match:class ^(dropdown)$, float on"
+            "match:class ^(dropdown)$, size 800 400"
+            "match:class ^(dropdown)$, center on"
+            "match:class ^(dropdown)$, animation slide"
           ];
 
           # Tiling bindings (Omarchy + personal vim keys)

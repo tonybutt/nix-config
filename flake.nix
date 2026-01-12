@@ -172,6 +172,17 @@
             stylix.homeModules.stylix
           ];
         };
+        "${user.name}@tiberius" = home-manager.lib.homeManagerConfiguration {
+          inherit pkgs;
+          extraSpecialArgs = {
+            inherit inputs user;
+          };
+          modules = [
+            ./hosts/tiberius/home-overrides.nix
+            ./home/home.nix
+            stylix.homeModules.stylix
+          ];
+        };
       };
     };
 }
