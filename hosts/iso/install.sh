@@ -11,6 +11,12 @@ mount /dev/mapper/crypted /mnt
 mkdir -p /mnt/home/__USER__/nix-config
 cp -R /tmp/cfg /mnt/home/__USER__/nix-config
 
+mount -o subvol=root,compress=zstd,noatime /dev/mapper/crypted /mnt
+mount -o subvol=home,compress=zstd,noatime /dev/mapper/crypted /mnt/home
+mount -o subvol=nix,compress=zstd,noatime /dev/mapper/crypted /mnt/nix
+mount /dev/disk/by-label/boot /mnt/boot
+
 echo "Setting user __USER__ password"
 nixos-enter -c 'passwd __USER__'
-nixos-enter -c 'chown -R __USER__:users /mnt/home/nix-config'
+nixos-enter -c 'chown -R __USER__:users /home/__USER__/nix-config'
+nixos-enter -c 'chmod +w -R /home/__USER__/nix-config/**'
