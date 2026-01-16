@@ -72,11 +72,57 @@ flake.nix                 # Entry point: inputs, outputs, host definitions
 
 ## Fresh Install
 
+### Modify the with your machine's name [flake](./flake.nix)
+
+Update your user information
+
+```nix
+  user = {
+    name = "anthony";
+    fullName = "Anthony Butt";
+    email = "abutt@tiberius.com";
+    signingkey = "~/.ssh/id_ed25519_sk.pub";
+  };
+```
+
+Update the nixosConfigurations block with just your machine and iso
+
+```nix
+nixosConfigurations = {
+<YOUR_CHOSEN_HOSTNAME> = nixpkgs.lib.nixosSystem {
+          inherit pkgs system;
+          specialArgs = {
+            inherit user inputs hyprland;
+          };
+          modules = [
+            nixos-hardware.nixosModules.dell-precision-3490-intel
+            nixos-hardware.nixosModules.common-gpu-intel
+            ./hosts/tiberius/configuration.nix
+            stylix.nixosModules.stylix
+            disko.nixosModules.disko
+          ];
+        };
+        # Minimal Installation ISO.
+        iso = nixpkgs.lib.nixosSystem {
+          inherit pkgs system;
+          specialArgs = {
+            inherit user;
+          };
+
+          modules = [
+            ./hosts/iso/configuration.nix
+          ];
+        };
+      };
+```
+
 ### Create ISO
 
 ```sh
-nix run nixpkgs#nixos-generators -- --format iso --flake .#iso -o result
-sudo dd if=result/iso/nixinstaller.iso of=/dev/sdX bs=4M status=progress conv=fdatasync
+HOSTNAME=YOUR_CHOSEN_HOSTNAME nix run nixpkgs#nixos-generators -- --format iso --flake .#iso -o result
+# X is not your usbs location. Use lsblk to find the usb you want to write to.
+# The iso gets sent to the result folder
+sudo dd if=path_to_generated_iso of=/dev/sdX bs=4M status=progress conv=fdatasync
 ```
 
 ### Install
