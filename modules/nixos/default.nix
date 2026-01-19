@@ -42,7 +42,7 @@ in
     nix = {
       channel.enable = false;
       settings = {
-        trusted-users = [ user.name ];
+        trusted-users = [ user.username ];
         experimental-features = [
           "nix-command"
           "flakes"
@@ -123,7 +123,7 @@ in
         enable = true;
         clean.enable = true;
         clean.extraArgs = "--keep-since 4d --keep 3";
-        flake = "/home/${user.name}/nix-config";
+        flake = "/home/${user.username}/nix-config";
       };
 
       gnupg.agent = {

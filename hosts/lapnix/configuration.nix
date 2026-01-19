@@ -47,7 +47,7 @@
   nix = {
     channel.enable = false;
     settings = {
-      trusted-users = [ user.name ];
+      trusted-users = [ user.username ];
       experimental-features = [
         "nix-command"
         "flakes"

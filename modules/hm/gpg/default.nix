@@ -44,8 +44,8 @@ in
 
       settings = {
         # Default/trusted key ID to use (helpful with throw-keyids)
-        default-key = user.signingkey;
-        trusted-key = user.signingkey;
+        default-key = user.work.signingKey;
+        trusted-key = user.work.signingKey;
 
         keyserver = "hkps://keys.openpgp.org";
 

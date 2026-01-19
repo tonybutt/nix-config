@@ -19,7 +19,7 @@ in
     boot.kernelModules = [ "vfio-pci" ];
 
     users = {
-      users.${user.name} = {
+      users.${user.username} = {
         extraGroups = mkAfter [
           "docker"
           "libvirtd"

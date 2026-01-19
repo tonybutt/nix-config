@@ -30,8 +30,8 @@
       };
     };
     home = {
-      username = user.name;
-      homeDirectory = "/home/${user.name}";
+      username = user.username;
+      homeDirectory = "/home/${user.username}";
       packages = with pkgs; [
         # DevOpts
         awscli2

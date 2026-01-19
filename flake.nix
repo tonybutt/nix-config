@@ -3,6 +3,7 @@
   inputs = {
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     nixpkgs.url = "nixpkgs/nixos-unstable";
+    nixpkgs-color-lsp.url = "github:tonybutt/nixpkgs/color-lsp-init";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -55,10 +56,18 @@
         ];
       };
       user = {
-        name = "anthony";
+        username = "anthony";
         fullName = "Anthony Butt";
-        email = "abutt@tiberius.com";
-        signingkey = "~/.ssh/id_ed25519_sk.pub";
+        work = {
+          email = "abutt@tiberius.com";
+          signingKey = "~/.ssh/id_ed25519_sk.pub";
+          githubOrg = "tiberius-grail";
+        };
+        personal = {
+          email = "anthony@abutt.io";
+          signingKey = "~/.ssh/id_ed25519_personal.pub";
+          githubUsername = "tonybutt";
+        };
       };
       treefmtEval = treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
     in
@@ -139,9 +148,9 @@
               };
               modules = [
                 {
-                  home.username = user.name;
+                  home.username = user.username;
                   home.stateVersion = "25.05";
-                  home.homeDirectory = "/home/${user.name}";
+                  home.homeDirectory = "/home/${user.username}";
                 }
                 ./home/home.nix
                 ./hosts/${hostname}/home-overrides.nix
@@ -150,10 +159,10 @@
             };
         in
         {
-          "${user.name}" = mkHome "tiberius"; # default
-          "${user.name}@lapnix" = mkHome "lapnix";
-          "${user.name}@atlas" = mkHome "atlas";
-          "${user.name}@mantra" = mkHome "mantra";
+          "${user.username}" = mkHome "tiberius"; # default
+          "${user.username}@lapnix" = mkHome "lapnix";
+          "${user.username}@atlas" = mkHome "atlas";
+          "${user.username}@mantra" = mkHome "mantra";
         };
     };
 }

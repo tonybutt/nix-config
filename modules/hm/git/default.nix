@@ -21,14 +21,32 @@ in
       package = pkgs.gitFull;
       enable = true;
       signing = {
-        key = user.signingkey;
+        key = user.work.signingKey;
         signByDefault = true;
         format = "ssh";
       };
+      includes = [
+        # Personal repos via SSH
+        {
+          condition = "hasconfig:remote.*.url:git@github.com:${user.personal.githubUsername}/**";
+          contents = {
+            user.email = user.personal.email;
+            user.signingkey = user.personal.signingKey;
+          };
+        }
+        # Personal repos via HTTPS
+        {
+          condition = "hasconfig:remote.*.url:https://github.com/${user.personal.githubUsername}/**";
+          contents = {
+            user.email = user.personal.email;
+            user.signingkey = user.personal.signingKey;
+          };
+        }
+      ];
       settings = {
-        user.email = user.email;
+        user.email = user.work.email;
         user.name = user.fullName;
-        user.signingkey = "${user.signingkey}";
+        user.signingkey = user.work.signingKey;
         core.askPass = "";
         core.editor = "vim";
         commit.template = "${commitTemplate}";

@@ -16,7 +16,7 @@ let
       nh
     ];
     text = (
-      builtins.replaceStrings [ "__USER__" "__HOSTNAME__" "__DRIVE__" ] [ user.name hostname drive ] (
+      builtins.replaceStrings [ "__USER__" "__HOSTNAME__" "__DRIVE__" ] [ user.username hostname drive ] (
         builtins.readFile ./install.sh
       )
     );

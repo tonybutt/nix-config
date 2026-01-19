@@ -43,7 +43,7 @@
               exit 1
             fi
             # shellcheck disable=SC1091
-            source /home/${user.name}/config/2fctl/credentials.sh
+            source /home/${user.username}/config/2fctl/credentials.sh
             ${pkgs.awscli2}/bin/aws ssm start-session --target "$instance_id"
           '';
         };

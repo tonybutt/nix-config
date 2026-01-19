@@ -2,11 +2,13 @@
   pkgs,
   config,
   lib,
+  inputs,
   ...
 }:
 let
   cfg = config.modules.editors;
   inherit (lib) mkIf mkEnableOption;
+  pkgs-color-lsp = import inputs.nixpkgs-color-lsp { inherit (pkgs) system; };
 in
 {
   options.modules.editors.zed.enable = mkEnableOption "Enable Zed" // {
@@ -23,6 +25,7 @@ in
         package-version-server
         tailwindcss-language-server
         typescript-language-server
+        pkgs-color-lsp.color-lsp
       ];
       extensions = [
         "nix"
@@ -38,6 +41,7 @@ in
       ];
       userSettings = {
         # Appearance
+        lsp_document_colors = "background";
         ui_font_size = lib.mkForce 16;
         buffer_font_size = lib.mkForce 16;
 
@@ -45,7 +49,7 @@ in
         vim_mode = true;
         autosave = "on_focus_change";
         format_on_save = "on";
-        relative_line_numbers = true;
+        relative_line_numbers = "enabled";
         cursor_blink = false;
         vertical_scroll_margin = 5;
 
@@ -105,6 +109,7 @@ in
           let
             language_servers = [
               "typescript-language-server"
+              "color-lsp"
               "!vtsls"
             ];
           in
@@ -127,6 +132,7 @@ in
             Nix = {
               language_servers = [
                 "!nixd"
+                "color-lsp"
                 "nil"
               ];
             };

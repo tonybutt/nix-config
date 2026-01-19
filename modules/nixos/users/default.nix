@@ -18,9 +18,9 @@ in
   config = mkIf cfg.users.enable {
     users = {
       defaultUserShell = pkgs.zsh;
-      users.${user.name} = {
+      users.${user.username} = {
         isNormalUser = true;
-        home = "/home/${user.name}";
+        home = "/home/${user.username}";
         extraGroups = [
           "wheel"
           "networkmanager"
