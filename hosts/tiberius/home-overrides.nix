@@ -1,5 +1,5 @@
 {
-  module = {
+  modules = {
     hyprpaper.wallpaper = "~/Wallpapers/Tiberius.png";
     hyprland.monitors = [
       {
