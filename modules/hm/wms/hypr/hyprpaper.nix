@@ -10,7 +10,7 @@ in
     };
     wallpaper = mkOption {
       type = types.str;
-      default = "~/Wallpapers/default.png";
+      default = "~/Wallpapers/Igris.png";
       description = "Path to wallpaper image";
     };
   };

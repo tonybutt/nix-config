@@ -20,20 +20,9 @@
     cursor.name = "BreezeX-RosePine-Linux";
     cursor.size = 24;
   };
-  modules.ai.claude-cognitive.enable = false;
-  modules.hyprland.monitors = [
-    {
-      name = "eDP-1";
-      enabled = true;
-    }
-    {
-      name = "DP-6";
-      position = "0x0";
-      width = 2560;
-      height = 1440;
-      refreshRate = 60;
-    }
-  ];
+  modules = {
+    ai.claude-cognitive.enable = false;
+  };
   home.packages = with pkgs; [
     mpv
     go
@@ -104,7 +93,6 @@
       EDITOR = "vim";
     };
   };
-  modules.hyprpaper.wallpaper = "~/Wallpapers/Tiberius.png";
   gtk = {
     iconTheme = {
       package = pkgs.colloid-icon-theme;

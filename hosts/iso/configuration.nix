@@ -7,6 +7,7 @@
 }:
 let
   hostname = builtins.getEnv "HOSTNAME";
+  drive = builtins.getEnv "DRIVE" ? "/dev/nvme0n1";
   run-install = pkgs.writeShellApplication {
     name = "run-install";
     runtimeInputs = with pkgs; [
@@ -15,7 +16,7 @@ let
       nh
     ];
     text = (
-      builtins.replaceStrings [ "__USER__" "__HOSTNAME__" ] [ user.name hostname ] (
+      builtins.replaceStrings [ "__USER__" "__HOSTNAME__" "__DRIVE__" ] [ user.name hostname drive ] (
         builtins.readFile ./install.sh
       )
     );
@@ -52,10 +53,12 @@ in
   ];
 
   nixpkgs.hostPlatform = system;
+  networking.wireless.enable = true;
   environment.systemPackages = with pkgs; [
     run-install
     disko
     vim
     git
+    toybox
   ];
 }

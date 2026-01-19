@@ -21,6 +21,7 @@ in
         yaml-language-server
         nodePackages.vscode-json-languageserver
         package-version-server
+        tailwindcss-language-server
       ];
       extensions = [
         "nix"
@@ -99,6 +100,12 @@ in
 
         # Language configs
         languages = {
+          CSS = {
+            language_servers = [
+              "!vscode-css-languageserver"
+              "tailwindcss-language-server"
+            ];
+          };
           Nix = {
             language_servers = [
               "!nixd"

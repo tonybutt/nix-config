@@ -83,106 +83,77 @@
           CONTEXT_DOCS_ROOT = "/home/anthony/nix-config/.claude";
         };
       };
-      nixosConfigurations = {
-        tiberius = nixpkgs.lib.nixosSystem {
-          inherit pkgs system;
-          specialArgs = {
-            inherit user inputs hyprland;
+      nixosConfigurations =
+        let
+          hosts = {
+            tiberius = {
+              hardwareModules = [
+                nixos-hardware.nixosModules.dell-precision-3490-intel
+                nixos-hardware.nixosModules.common-gpu-intel
+              ];
+            };
+            atlas = {
+              hardwareModules = [ nixos-hardware.nixosModules.framework-16-7040-amd ];
+            };
+            mantra = {
+              hardwareModules = [ ];
+            };
+            lapnix = {
+              hardwareModules = [ nixos-hardware.nixosModules.framework-13-7040-amd ];
+            };
           };
-          modules = [
-            nixos-hardware.nixosModules.dell-precision-3490-intel
-            nixos-hardware.nixosModules.common-gpu-intel
-            ./hosts/tiberius/configuration.nix
-            stylix.nixosModules.stylix
-            disko.nixosModules.disko
-          ];
-        };
-        atlas = nixpkgs.lib.nixosSystem {
-          inherit pkgs system;
-          specialArgs = {
-            inherit user inputs hyprland;
+          mkSystem =
+            hostname:
+            { hardwareModules }:
+            nixpkgs.lib.nixosSystem {
+              inherit pkgs system;
+              specialArgs = {
+                inherit user inputs hyprland;
+              };
+              modules = hardwareModules ++ [
+                ./hosts/${hostname}/configuration.nix
+                stylix.nixosModules.stylix
+                disko.nixosModules.disko
+              ];
+            };
+        in
+        (builtins.mapAttrs mkSystem hosts)
+        // {
+          # Minimal Installation ISO (special case)
+          iso = nixpkgs.lib.nixosSystem {
+            inherit pkgs system;
+            specialArgs = {
+              inherit user;
+            };
+            modules = [ ./hosts/iso/configuration.nix ];
           };
-          modules = [
-            nixos-hardware.nixosModules.framework-16-7040-amd
-            ./hosts/atlas/configuration.nix
-            stylix.nixosModules.stylix
-            disko.nixosModules.disko
-          ];
         };
-        mantra = nixpkgs.lib.nixosSystem {
-          inherit pkgs system;
-          specialArgs = {
-            inherit user hyprland;
-          };
-          modules = [
-            ./hosts/mantra/configuration.nix
-            stylix.nixosModules.stylix
-            disko.nixosModules.disko
-          ];
+      homeConfigurations =
+        let
+          mkHome =
+            hostname:
+            home-manager.lib.homeManagerConfiguration {
+              inherit pkgs;
+              extraSpecialArgs = {
+                inherit inputs user;
+              };
+              modules = [
+                {
+                  home.username = user.name;
+                  home.stateVersion = "25.05";
+                  home.homeDirectory = "/home/${user.name}";
+                }
+                ./home/home.nix
+                ./hosts/${hostname}/home-overrides.nix
+                stylix.homeModules.stylix
+              ];
+            };
+        in
+        {
+          "${user.name}" = mkHome "tiberius"; # default
+          "${user.name}@lapnix" = mkHome "lapnix";
+          "${user.name}@atlas" = mkHome "atlas";
+          "${user.name}@mantra" = mkHome "mantra";
         };
-        lapnix = nixpkgs.lib.nixosSystem {
-          inherit pkgs system;
-
-          specialArgs = {
-            inherit user inputs hyprland;
-          };
-          modules = [
-            nixos-hardware.nixosModules.framework-13-7040-amd
-            ./hosts/lapnix/configuration.nix
-            stylix.nixosModules.stylix
-            disko.nixosModules.disko
-          ];
-        };
-        # Minimal Installation ISO.
-        iso = nixpkgs.lib.nixosSystem {
-          inherit pkgs system;
-          specialArgs = {
-            inherit user;
-          };
-
-          modules = [
-            ./hosts/iso/configuration.nix
-          ];
-        };
-      };
-      homeConfigurations = {
-        "${user.name}" = home-manager.lib.homeManagerConfiguration {
-          inherit pkgs;
-          extraSpecialArgs = {
-            inherit inputs user;
-          };
-          modules = [
-            {
-              home.username = "${user.name}";
-              home.stateVersion = "25.05";
-              home.homeDirectory = "/home/${user.name}";
-            }
-            ./home/home.nix
-            stylix.homeModules.stylix
-          ];
-        };
-        "${user.name}@lapnix" = home-manager.lib.homeManagerConfiguration {
-          inherit pkgs;
-          extraSpecialArgs = {
-            inherit inputs user;
-          };
-          modules = [
-            ./hosts/lapnix/home-overrides.nix
-            ./home/home.nix
-            stylix.homeModules.stylix
-          ];
-        };
-        "${user.name}@tiberius" = home-manager.lib.homeManagerConfiguration {
-          inherit pkgs;
-          extraSpecialArgs = {
-            inherit inputs user;
-          };
-          modules = [
-            ./hosts/tiberius/home-overrides.nix
-            ./home/home.nix
-            stylix.homeModules.stylix
-          ];
-        };
-      };
     };
 }

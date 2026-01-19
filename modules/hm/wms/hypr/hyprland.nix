@@ -518,6 +518,7 @@ in
           ];
 
           exec-once = [
+            "hyprpaper"
             "systemctl --user import-environment PATH && systemctl --user restart xdg-desktop-portal.service"
             "[workspace special:spotify silent] ${spotify}"
             "[workspace special:obs silent] ${obs} --startvirtualcam"
