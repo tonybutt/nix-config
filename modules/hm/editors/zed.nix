@@ -22,6 +22,7 @@ in
         nodePackages.vscode-json-languageserver
         package-version-server
         tailwindcss-language-server
+        typescript-language-server
       ];
       extensions = [
         "nix"
@@ -33,6 +34,7 @@ in
         "log"
         "markdown"
         "proto"
+        "color-highlight"
       ];
       userSettings = {
         # Appearance
@@ -99,20 +101,36 @@ in
         };
 
         # Language configs
-        languages = {
-          CSS = {
+        languages =
+          let
             language_servers = [
-              "!vscode-css-languageserver"
-              "tailwindcss-language-server"
+              "typescript-language-server"
+              "!vtsls"
             ];
+          in
+          {
+            TypeScript = {
+              inherit language_servers;
+            };
+            JavaScript = {
+              inherit language_servers;
+            };
+            TSX = {
+              inherit language_servers;
+            };
+            CSS = {
+              language_servers = [
+                "!vscode-css-languageserver"
+                "tailwindcss-language-server"
+              ];
+            };
+            Nix = {
+              language_servers = [
+                "!nixd"
+                "nil"
+              ];
+            };
           };
-          Nix = {
-            language_servers = [
-              "!nixd"
-              "nil"
-            ];
-          };
-        };
       };
     };
   };
