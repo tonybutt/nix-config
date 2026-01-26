@@ -10,6 +10,11 @@ in
     };
   };
   config = mkIf cfg.kitty.enable {
-    programs.kitty.enable = true;
+    programs.kitty = {
+      enable = true;
+      extraConfig = ''
+        allow_remote_control yes
+      '';
+    };
   };
 }

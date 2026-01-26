@@ -38,6 +38,8 @@ in
         "markdown"
         "proto"
         "color-highlight"
+        "scss"
+        "typst"
       ];
       userSettings = {
         # Appearance
