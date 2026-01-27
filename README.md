@@ -129,6 +129,12 @@ sudo dd if=path_to_generated_iso of=/dev/sdX bs=4M status=progress conv=fdatasyn
 
 Boot from ISO, then:
 
+connect to wifi if not on ethernet:
+
+```sh
+sudo nmcli device wifi connect "YourSSID" password "YourPassword"
+```
+
 ```sh
 sudo run-install
 ```
