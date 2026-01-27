@@ -7,7 +7,7 @@
 }:
 let
   hostname = builtins.getEnv "HOSTNAME";
-  drive = builtins.getEnv "DRIVE" ? "/dev/nvme0n1";
+  drive = let d = builtins.getEnv "DRIVE"; in if d == "" then "/dev/nvme0n1" else d;
   run-install = pkgs.writeShellApplication {
     name = "run-install";
     runtimeInputs = with pkgs; [
