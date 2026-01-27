@@ -25,29 +25,17 @@
   };
   home.packages = with pkgs; [
     mpv
-    go
     gimp3
-    pulumi-bin
     unzip
     claude-code
     pavucontrol
     cloudflared
-    rustup
-    nodejs_24
-    typescript
-    gcc
-    pkg-config
-    rustls-libssl
-    nodePackages.vscode-langservers-extracted
     openssl
     spotify
     libnotify
     yubioath-flutter
-    nerd-fonts.jetbrains-mono
     signal-desktop
     stern
-    discord
-    uv
     ssm-session-manager-plugin
     pcsc-tools
     (pkgs.writeShellScriptBin "setup-browser-CAC" ''

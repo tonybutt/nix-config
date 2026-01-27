@@ -5,16 +5,34 @@
   ...
 }:
 let
-  cfg = config.secondfront.themes;
-  inherit (lib) mkIf mkEnableOption;
+  cfg = config.modules.themes;
+  inherit (lib)
+    mkIf
+    mkEnableOption
+    mkOption
+    types
+    ;
 in
 {
   options = {
-    secondfront.themes.enable = mkEnableOption "Enable Stylix theme" // {
+    modules.themes.enable = mkEnableOption "Enable Stylix theme" // {
       default = true;
     };
-    secondfront.themes.darkOxide.enable = mkEnableOption "Enable Dark Oxide theme" // {
-      default = true;
+    modules.themes.theme = mkOption {
+      type = types.str or types.path;
+      default = "${pkgs.base16-schemes}/share/themes/material-darker.yaml";
+      example = ''
+        ./assets/themes/grail.yaml
+        $${pkgs.base16-schemes}/share/themes/material-darker.yaml
+      '';
+    };
+    modules.themes.wallpaper = mkOption {
+      type = types.path;
+      default = ./assets/walls/Tiberius.png;
+      example = ''
+        ./path/to/wallpaper.png
+        ~/Wallpapers/Eric.png
+      '';
     };
   };
   config = mkIf cfg.enable {
@@ -45,9 +63,8 @@ in
             popups = 10;
           };
         };
-      image = ./assets/walls/Tiberius.png;
-      base16Scheme = "${pkgs.base16-schemes}/share/themes/material-darker.yaml";
-      # base16Scheme = ./assets/themes/grail.yaml;
+      image = cfg.wallpaper;
+      base16Scheme = cfg.theme;
       opacity = {
         terminal = 0.65;
       };
