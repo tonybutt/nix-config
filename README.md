@@ -72,7 +72,7 @@ flake.nix                 # Entry point: inputs, outputs, host definitions
 
 ## Fresh Install
 
-### Modify the with your machine's name [flake](./flake.nix)
+### Modify the [flake](./flake.nix) with your machine's name
 
 Update your user information
 
