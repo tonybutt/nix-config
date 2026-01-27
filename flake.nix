@@ -54,17 +54,17 @@
         ];
       };
       user = {
-        username = "anthony";
-        fullName = "Anthony Butt";
+        username = "ewardner";
+        fullName = "Eric Wardner";
         work = {
-          email = "abutt@tiberius.com";
+          email = "ewardner@tiberius.com";
           signingKey = "~/.ssh/id_ed25519_sk.pub";
           githubOrg = "tiberius-grail";
         };
         personal = {
-          email = "anthony@abutt.io";
+          email = "ewardner22@gmail.com";
           signingKey = "~/.ssh/id_ed25519_personal.pub";
-          githubUsername = "tonybutt";
+          githubUsername = "ericwardner";
         };
       };
       treefmtEval = treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
@@ -87,7 +87,7 @@
         ];
         env = {
           CLAUDE_INSTANCE = "nix-config";
-          CONTEXT_DOCS_ROOT = "/home/anthony/nix-config/.claude";
+          CONTEXT_DOCS_ROOT = "/home/ewardner/nix-config/.claude";
         };
       };
       nixosConfigurations =
@@ -98,15 +98,6 @@
                 nixos-hardware.nixosModules.dell-precision-3490-intel
                 nixos-hardware.nixosModules.common-gpu-intel
               ];
-            };
-            atlas = {
-              hardwareModules = [ nixos-hardware.nixosModules.framework-16-7040-amd ];
-            };
-            mantra = {
-              hardwareModules = [ ];
-            };
-            lapnix = {
-              hardwareModules = [ nixos-hardware.nixosModules.framework-13-7040-amd ];
             };
           };
           mkSystem =
@@ -158,9 +149,6 @@
         in
         {
           "${user.username}" = mkHome "tiberius"; # default
-          "${user.username}@lapnix" = mkHome "lapnix";
-          "${user.username}@atlas" = mkHome "atlas";
-          "${user.username}@mantra" = mkHome "mantra";
         };
     };
 }
