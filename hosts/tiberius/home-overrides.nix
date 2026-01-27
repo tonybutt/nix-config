@@ -4,7 +4,7 @@
     hyprland.monitors = [
       {
         name = "eDP-1";
-        enabled = false;
+        enabled = true;
       }
       {
         name = "DP-1";
