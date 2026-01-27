@@ -182,7 +182,7 @@ in
           ];
 
           xwayland = {
-            force_zero_scaling = true;
+            force_zero_scaling = false;
           };
 
           cursor = {
@@ -243,13 +243,13 @@ in
             rounding = 0;
 
             shadow = {
-              enabled = true;
+              enabled = false;
               range = 2;
               render_power = 3;
             };
 
             blur = {
-              enabled = true;
+              enabled = false;
               size = 2;
               passes = 2;
               special = true;
@@ -348,7 +348,6 @@ in
           # Omarchy window rules + personal rules (Hyprland 0.53+ syntax)
           windowrule = [
             "match:class .*, suppress_event maximize"
-            "match:class .*, opacity 0.97 0.9"
             "match:class ^$, match:title ^$, match:xwayland true, match:float true, match:fullscreen false, match:pin false, no_focus on"
             "match:class (Alacritty|kitty), scroll_touchpad 1.5"
             "match:class com.mitchell.ghostty, scroll_touchpad 0.2"

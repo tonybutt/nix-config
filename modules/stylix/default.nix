@@ -46,7 +46,8 @@ in
           };
         };
       image = ./assets/walls/Tiberius.png;
-      base16Scheme = ./assets/themes/grail.yaml;
+      base16Scheme = "${pkgs.base16-schemes}/share/themes/material-darker.yaml";
+      # base16Scheme = ./assets/themes/grail.yaml;
       opacity = {
         terminal = 0.65;
       };
