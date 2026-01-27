@@ -19,8 +19,11 @@ in
     services.hyprpaper = {
       enable = true;
       settings = {
-        preload = [ cfg.wallpaper ];
-        wallpaper = [ ",${cfg.wallpaper}" ];
+        wallpaper = {
+          monitor = "";
+          path = cfg.wallpaper;
+          fit_mode = "cover";
+        };
       };
     };
   };
