@@ -119,7 +119,7 @@ nixosConfigurations = {
 ### Create ISO
 
 ```sh
-HOSTNAME=YOUR_CHOSEN_HOSTNAME nix run nixpkgs#nixos-generators -- --format iso --flake .#iso -o result
+HOSTNAME=YOUR_CHOSEN_HOSTNAME nix run "nixpkgs#nixos-generators" -- --format iso --flake ".#iso" -o result
 # X is not your usbs location. Use lsblk to find the usb you want to write to.
 # The iso gets sent to the result folder
 sudo dd if=path_to_generated_iso of=/dev/sdX bs=4M status=progress conv=fdatasync
