@@ -35,7 +35,6 @@
     libnotify
     yubioath-flutter
     signal-desktop
-    stern
     ssm-session-manager-plugin
     pcsc-tools
     (pkgs.writeShellScriptBin "setup-browser-CAC" ''

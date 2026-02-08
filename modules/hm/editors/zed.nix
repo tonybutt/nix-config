@@ -27,6 +27,7 @@ in
         tailwindcss-language-server
         typescript-language-server
         pkgs-color-lsp.color-lsp
+        slint-lsp
       ];
       extensions = [
         "nix"
@@ -41,6 +42,7 @@ in
         "color-highlight"
         "scss"
         "typst"
+        "slint"
       ];
       userSettings = {
         # Appearance

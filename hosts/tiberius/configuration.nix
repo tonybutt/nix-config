@@ -22,6 +22,7 @@
   fonts.packages = [
     pkgs.nerd-fonts.jetbrains-mono
     pkgs.font-awesome
+    pkgs.material-icons
   ];
   hardware = {
     enableRedistributableFirmware = true;

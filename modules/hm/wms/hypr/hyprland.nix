@@ -347,6 +347,7 @@ in
 
           # Omarchy window rules + personal rules (Hyprland 0.53+ syntax)
           windowrule = [
+            "match:title Select what to share, size 250 250, float on, center on"
             "match:class .*, suppress_event maximize"
             "match:class ^$, match:title ^$, match:xwayland true, match:float true, match:fullscreen false, match:pin false, no_focus on"
             "match:class (Alacritty|kitty), scroll_touchpad 1.5"
@@ -380,7 +381,7 @@ in
             "$mainMod, Return, exec, ${kitty}"
             "$mainMod, E, exec, ${thunar}"
             "$mainMod, SPACE, exec, ${fuzzel}"
-            "$mainMod, Y, exec, oath 19125157"
+            "$mainMod, Y, exec, oath 22293570"
             "$mainMod, V, exec, ${cliphist} list | ${fuzzel} --dmenu | ${cliphist} decode | ${wl-copy}"
             # Web apps
             "$mainMod SHIFT, A, exec, launch-webapp https://chatgpt.com"

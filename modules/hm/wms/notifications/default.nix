@@ -7,6 +7,11 @@ in
     services.mako.enable = true;
     services.mako.settings = {
       "default-timeout" = 5000;
+
+      # Route Signal notifications to HDMI monitor
+      "app-name=Signal" = {
+        output = "HDMI-A-1";
+      };
     };
   };
 }
