@@ -21,7 +21,9 @@
     cursor.size = 24;
   };
   modules = {
-    ai.claude-cognitive.enable = false;
+    ai.claude-cognitive.enable = true;
+    ai.team-skills.enable = true;
+    ai.superpowers.enable = true;
   };
   home.packages = with pkgs; [
     mpv
