@@ -20,6 +20,8 @@ let
     sha256 = "sha256-2/cKcDexmJdQzHrN77BTigOTfaPCsyqWl6QwlC9UgsY=";
   };
 
+  pythonWithDeps = pkgs.python3.withPackages (ps: [ ps.pyyaml ]);
+
   claude-cognitive-init = pkgs.writeShellApplication {
     name = "claude-cognitive-init";
     text = builtins.readFile ./claude-cognitive-init.sh;
@@ -39,6 +41,7 @@ in
 
   config = mkIf cfg.enable {
     home.packages = [
+      pythonWithDeps
       claude-cognitive-init
     ];
 
@@ -87,11 +90,11 @@ in
             hooks = [
               {
                 type = "command";
-                command = "python3 ~/.claude/scripts/context-router-v2.py";
+                command = "${pythonWithDeps}/bin/python3 ~/.claude/scripts/context-router-v2.py";
               }
               {
                 type = "command";
-                command = "python3 ~/.claude/scripts/pool-auto-update.py";
+                command = "${pythonWithDeps}/bin/python3 ~/.claude/scripts/pool-auto-update.py";
               }
             ];
           }
@@ -101,7 +104,7 @@ in
             hooks = [
               {
                 type = "command";
-                command = "python3 ~/.claude/scripts/pool-loader.py";
+                command = "${pythonWithDeps}/bin/python3 ~/.claude/scripts/pool-loader.py";
               }
             ];
           }
@@ -111,7 +114,7 @@ in
             hooks = [
               {
                 type = "command";
-                command = "python3 ~/.claude/scripts/pool-extractor.py";
+                command = "${pythonWithDeps}/bin/python3 ~/.claude/scripts/pool-extractor.py";
               }
             ];
           }
