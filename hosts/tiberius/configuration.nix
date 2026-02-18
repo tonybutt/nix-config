@@ -18,6 +18,9 @@
       scarlettRite.enable = true;
     };
   };
+  boot.resumeDevice = "/dev/mapper/crypted";
+  boot.kernelParams = [ "resume_offset=533760" ];
+
   services.fwupd.enable = true;
   fonts.packages = [
     pkgs.nerd-fonts.jetbrains-mono

@@ -9,6 +9,10 @@
     ./disks.nix
     ../../modules/nixos
   ];
+  boot.resumeDevice = "/dev/mapper/crypted";
+  # TODO: Get offset with: sudo btrfs inspect-internal map-swapfile -r /.swapvol/swapfile
+  # boot.kernelParams = [ "resume_offset=XXXXX" ];
+
   modules = {
     hostName = "atlas";
     grub = false;

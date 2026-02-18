@@ -47,6 +47,18 @@ in
           "nix-command"
           "flakes"
         ];
+        substituters = [
+          "https://hyprland.cachix.org"
+          "https://claude-code.cachix.org"
+        ];
+        trusted-substituters = [
+          "https://hyprland.cachix.org"
+          "https://claude-code.cachix.org"
+        ];
+        trusted-public-keys = [
+          "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
+          "claude-code.cachix.org-1:YeXf2aNu7UTX8Vwrze0za1WEDS+4DuI2kVeWEE4fsRk="
+        ];
       };
     };
 
@@ -142,6 +154,13 @@ in
       xfconf.enable = true;
     };
 
+    powerManagement.enable = true;
+
+    systemd.sleep.extraConfig = ''
+      HibernateDelaySec=1h
+      HibernateOnACPower=no
+    '';
+
     services = {
       upower.enable = true;
       devmon.enable = true;
@@ -152,6 +171,14 @@ in
       blueman.enable = true;
       pcscd.enable = true;
       gnome.gnome-keyring.enable = true;
+
+      logind.settings.Login = {
+        HandleLidSwitch = "suspend-then-hibernate";
+        HandleLidSwitchDocked = "suspend-then-hibernate";
+        HandleLidSwitchExternalPower = "suspend-then-hibernate";
+        HandlePowerKey = "suspend-then-hibernate";
+        HandlePowerKeyLongPress = "poweroff";
+      };
     };
 
     time.timeZone = cfg.timeZone;

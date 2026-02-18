@@ -53,7 +53,7 @@
       choice=$(printf "󰌾  Lock\n󰤄  Sleep\n  Reboot\n󰐥  Shutdown\n󰗽  Logout" | ${pkgs.fuzzel}/bin/fuzzel --dmenu -p "System: ")
       case "$choice" in
         *Lock*) loginctl lock-session ;;
-        *Sleep*) systemctl suspend ;;
+        *Sleep*) systemctl suspend-then-hibernate ;;
         *Reboot*) systemctl reboot ;;
         *Shutdown*) systemctl poweroff ;;
         *Logout*) hyprctl dispatch exit ;;
