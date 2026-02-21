@@ -1,16 +1,18 @@
 {
   pkgs,
-  user,
   ...
 }:
 {
   imports = [
+    # Generated automatically during install (uncommented by run-install)
     # ./hardware-configuration.nix
     ./disks.nix
     ../../modules/nixos
   ];
+
+  # Hibernation support — after install, get offset with:
+  # sudo btrfs inspect-internal map-swapfile -r /.swapvol/swapfile
   boot.resumeDevice = "/dev/mapper/crypted";
-  # TODO: Get offset with: sudo btrfs inspect-internal map-swapfile -r /.swapvol/swapfile
   # boot.kernelParams = [ "resume_offset=XXXXX" ];
 
   modules = {
@@ -22,55 +24,16 @@
       scarlettRite.enable = true;
     };
   };
+
   fonts.packages = [
     pkgs.nerd-fonts.jetbrains-mono
     pkgs.font-awesome
+    pkgs.material-icons
   ];
-  hardware = {
-    keyboard.zsa.enable = true;
-    bluetooth = {
-      enable = true;
-      powerOnBoot = true;
-      settings = {
-        General = {
-          Enable = "Source,Sink,Media,Socket";
-          Experimental = true;
-          ControllerMode = "Dual";
-          FastConnectable = true;
-        };
-        Policy = {
-          AutoEnable = "true";
-        };
-        LE = {
-          EnableAdvMonInterleaveScan = "true";
-        };
-      };
-    };
-  };
 
-  nix = {
-    channel.enable = false;
-    settings = {
-      trusted-users = [ user.username ];
-      experimental-features = [
-        "nix-command"
-        "flakes"
-      ];
-    };
-  };
+  services.fwupd.enable = true;
 
-  time.timeZone = "America/New_York";
-  i18n.defaultLocale = "en_US.UTF-8";
-  i18n.extraLocaleSettings = {
-    LC_ADDRESS = "en_US.UTF-8";
-    LC_IDENTIFICATION = "en_US.UTF-8";
-    LC_MEASUREMENT = "en_US.UTF-8";
-    LC_MONETARY = "en_US.UTF-8";
-    LC_NAME = "en_US.UTF-8";
-    LC_NUMERIC = "en_US.UTF-8";
-    LC_PAPER = "en_US.UTF-8";
-    LC_TELEPHONE = "en_US.UTF-8";
-    LC_TIME = "en_US.UTF-8";
-  };
-  system.stateVersion = "24.05";
+  hardware.keyboard.zsa.enable = true;
+
+  system.stateVersion = "25.05";
 }

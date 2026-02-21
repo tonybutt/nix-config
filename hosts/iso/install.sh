@@ -2,6 +2,7 @@
 cp -R /iso/cfg /tmp/cfg
 echo "Generating NixOS Hardware Configuration"
 nixos-generate-config --dir "/tmp/cfg/hosts/__HOSTNAME__" --no-filesystems
+sed -i 's|# \./hardware-configuration\.nix|./hardware-configuration.nix|' "/tmp/cfg/hosts/__HOSTNAME__/configuration.nix"
 
 echo "Partitioning Drive and Installing NixOS"
 disko-install --flake "/tmp/cfg#__HOSTNAME__" --disk main __DRIVE__ --write-efi-boot-entries
