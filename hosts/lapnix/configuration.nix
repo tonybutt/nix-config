@@ -7,6 +7,7 @@
   imports = [
     ./hardware-configuration.nix
     ./disko.nix
+    ../../modules/nixos
   ];
   modules = {
     hostName = "lapnix";
@@ -19,6 +20,7 @@
   fonts.packages = [
     pkgs.nerd-fonts.jetbrains-mono
     pkgs.font-awesome
+    pkgs.material-icons
   ];
 
   services.fwupd.enable = true;
