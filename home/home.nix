@@ -75,6 +75,7 @@
         { id = "nngceckbapebfimnlniiiahkandclblb"; } # bitwarden
         { id = "pkehgijcmpdhfbdbbnkijodmdjhbjlgp"; } # privacy badger
         { id = "damfoaielhjgnodobkkikiaiikkklejb"; } # Gather Meetings
+        { id = "iaalpfgpbocpdfblpnhhgllgbdbchmia"; } # Asciidoctor.js Live Preview
       ];
     };
     zsh.sessionVariables = {

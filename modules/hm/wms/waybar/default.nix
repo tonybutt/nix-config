@@ -46,6 +46,7 @@ in
 
           "hyprland/workspaces" = {
             on-click = "activate";
+            all-outputs = false;
             show-special = true;
             format = "{icon}";
             format-icons = {
@@ -66,13 +67,6 @@ in
               "chat" = "<span color='#${colors.base0C}'>󰭹</span>";
               "browser" = "<span color='#${colors.base09}'></span>";
               "monitor" = "<span color='#${colors.base0D}'>󱌣</span>";
-            };
-            persistent-workspaces = {
-              "1" = [ ];
-              "2" = [ ];
-              "3" = [ ];
-              "4" = [ ];
-              "5" = [ ];
             };
           };
 

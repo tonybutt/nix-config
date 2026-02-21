@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  inputs,
   ...
 }:
 let
@@ -128,8 +129,9 @@ in
   config = mkIf cfg.enable {
     wayland.windowManager.hyprland = {
       enable = true;
-      package = null;
-      portalPackage = null;
+      package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
+      portalPackage =
+        inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
       xwayland.enable = true;
       systemd = {
         enable = true;
@@ -231,8 +233,8 @@ in
           general = {
             "col.active_border" = lib.mkDefault "${activeGradient}";
             "col.inactive_border" = lib.mkDefault "${inactiveGradient}";
-            gaps_in = 5;
-            gaps_out = 10;
+            gaps_in = 2;
+            gaps_out = 4;
             border_size = 2;
             resize_on_border = false;
             allow_tearing = false;
@@ -249,12 +251,14 @@ in
             };
 
             blur = {
-              enabled = false;
-              size = 2;
-              passes = 2;
+              enabled = true;
+              size = 6;
+              passes = 3;
               special = true;
-              brightness = 0.60;
-              contrast = 0.75;
+              brightness = 0.80;
+              contrast = 0.90;
+              new_optimizations = true;
+              ignore_opacity = true;
             };
           };
 
@@ -314,8 +318,8 @@ in
               height = 22;
               gaps_in = 5;
               gaps_out = 0;
-              text_color = lib.mkDefault (rgb colors.base05);
-              text_color_inactive = "rgba(${colors.base04}90)";
+              text_color = lib.mkForce (rgb colors.base00);
+              text_color_inactive = lib.mkForce "rgba(${colors.base01}cc)";
               "col.active" = lib.mkForce "rgba(${colors.base0B}bf)";
               "col.inactive" = lib.mkForce "rgba(${colors.base03}80)";
               gradients = true;

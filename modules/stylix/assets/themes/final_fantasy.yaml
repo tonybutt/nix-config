@@ -1,0 +1,22 @@
+scheme: "Final Fantasy Crystal"
+author: "Anthony Butt (derived from FF crystal sprite art)"
+# Dark theme sampled from the FF crystal image.
+# Backgrounds: deep navy void. Accents: ice crystal blues and lavender particles.
+# Syntax: character class colors - warrior red, knight amber, thunder gold,
+#         cure green, crystal blue (dominant), deep blue, esper violet, mystic rose.
+base00: "08101C" # Void Dark      - deepest background (space behind the crystal)
+base01: "0D1828" # Abyss          - secondary background
+base02: "162335" # Crystal Cave   - selection / highlight
+base03: "273B54" # Twilight Blue  - comments / inactive borders
+base04: "486888" # Dusk Aegis     - dark foreground elements
+base05: "7AAAC8" # Crystal Mist   - default foreground (ice blue from crystal surface)
+base06: "9CC0DC" # Ether Glow     - bright foreground
+base07: "C2D8EC" # Pure Crystal   - brightest
+base08: "D04444" # Warrior Red    - errors, variables (red warrior)
+base09: "C88430" # Knight Amber   - constants, numbers (knight/brown tones)
+base0A: "D4BC3C" # Thunder Gold   - classes, warnings (golden armor)
+base0B: "44C078" # Cure Leaf      - strings, success (green mage healing)
+base0C: "68C8E0" # Crystal Blue   - regex, support (dominant ice-blue of crystal)
+base0D: "4878D0" # Aqua Rune      - functions, methods (deep blue mage)
+base0E: "9060D0" # Esper Violet   - keywords, storage (lavender particle sprites)
+base0F: "C04880" # Mystic Rose    - deprecated, embedded (pink/magenta)

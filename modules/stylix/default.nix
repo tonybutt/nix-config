@@ -19,8 +19,8 @@ in
       default = true;
     };
     modules.themes.theme = mkOption {
-      type = types.str or types.path;
-      default = "${pkgs.base16-schemes}/share/themes/material-darker.yaml";
+      type = types.either types.str types.path;
+      default = ./assets/themes/final_fantasy.yaml;
       example = ''
         ./assets/themes/grail.yaml
         $${pkgs.base16-schemes}/share/themes/material-darker.yaml
@@ -28,7 +28,7 @@ in
     };
     modules.themes.wallpaper = mkOption {
       type = types.path;
-      default = ./assets/walls/Tiberius.png;
+      default = ./assets/walls/FF.png;
       example = ''
         ./path/to/wallpaper.png
         ~/Wallpapers/Eric.png
