@@ -5,12 +5,12 @@
   ...
 }:
 let
-  cfg = config.secondfront.gpg;
+  cfg = config.modules.gpg;
   inherit (lib) mkIf mkEnableOption;
 in
 {
   options = {
-    secondfront.gpg.enable = mkEnableOption "Enable GPG" // {
+    modules.gpg.enable = mkEnableOption "Enable GPG" // {
       default = true;
     };
   };

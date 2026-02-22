@@ -1,11 +1,11 @@
 { config, lib, ... }:
 let
-  cfg = config.secondfront.terminals;
+  cfg = config.modules.terminals;
   inherit (lib) mkIf mkEnableOption;
 in
 {
   options = {
-    secondfront.terminals.kitty.enable = mkEnableOption "Enable Kitty terminal" // {
+    modules.terminals.kitty.enable = mkEnableOption "Enable Kitty terminal" // {
       default = true;
     };
   };
@@ -14,6 +14,7 @@ in
       enable = true;
       extraConfig = ''
         allow_remote_control yes
+        font_size 16.0
       '';
     };
   };

@@ -6,13 +6,13 @@
   ...
 }:
 let
-  cfg = config.secondfront.git;
+  cfg = config.modules.git;
   inherit (lib) mkIf mkEnableOption;
   commitTemplate = ./commit-template.txt;
 in
 {
   options = {
-    secondfront.git.enable = mkEnableOption "Enable git configuration" // {
+    modules.git.enable = mkEnableOption "Enable git configuration" // {
       default = true;
     };
   };

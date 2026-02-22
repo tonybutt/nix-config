@@ -5,12 +5,12 @@
   ...
 }:
 let
-  cfg = config.secondfront.shells;
+  cfg = config.modules.shells;
   inherit (lib) mkIf mkEnableOption;
 in
 {
   options = {
-    secondfront.shells.zsh.enable = mkEnableOption "Enable zsh" // {
+    modules.shells.zsh.enable = mkEnableOption "Enable zsh" // {
       default = true;
     };
   };

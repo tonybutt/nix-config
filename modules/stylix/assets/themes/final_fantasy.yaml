@@ -4,19 +4,43 @@ author: "Anthony Butt (derived from FF crystal sprite art)"
 # Backgrounds: deep navy void. Accents: ice crystal blues and lavender particles.
 # Syntax: character class colors - warrior red, knight amber, thunder gold,
 #         cure green, crystal blue (dominant), deep blue, esper violet, mystic rose.
+#
+# base16 role guide:
+#   base00-03  backgrounds (darkest → highlight/comment)
+#   base04-07  foregrounds (muted UI text → brightest)
+#   base08-0F  accent/syntax colors (semantic meaning below)
+#
+# Slot   Role (syntax)                     Role (UI)
+# base00 default background                app/terminal background
+# base01 lighter background                status bars, gutters
+# base02 selection background              active selection, highlights
+# base03 comments, invisibles              inactive borders, placeholders
+# base04 dark foreground                   subdued UI text (e.g. status bar text)
+# base05 default foreground                body text, icons, cursors
+# base06 light foreground                  bright body text (rarely used)
+# base07 lightest foreground               headings on dark bg (rarely used)
+# base08 variables, errors, diff deleted   danger / destructive actions
+# base09 integers, booleans, constants     warnings, numbers, URLs
+# base0A classes, search highlight         caution, highlighted labels
+# base0B strings, success, diff inserted   success, positive states
+# base0C support, regex, escape chars      info, special values, links
+# base0D functions, methods, headings      primary accent, interactive elements
+# base0E keywords, storage, diff changed   secondary accent, toggles
+# base0F deprecated, embedded lang tags    tertiary accent, subtle highlights
+
 base00: "08101C" # Void Dark      - deepest background (space behind the crystal)
 base01: "0D1828" # Abyss          - secondary background
 base02: "162335" # Crystal Cave   - selection / highlight
 base03: "273B54" # Twilight Blue  - comments / inactive borders
-base04: "486888" # Dusk Aegis     - dark foreground elements
+base04: "486888" # Dusk Aegis     - subdued UI text (status bars, muted icons)
 base05: "7AAAC8" # Crystal Mist   - default foreground (ice blue from crystal surface)
 base06: "9CC0DC" # Ether Glow     - bright foreground
-base07: "C2D8EC" # Pure Crystal   - brightest
-base08: "D04444" # Warrior Red    - errors, variables (red warrior)
-base09: "C88430" # Knight Amber   - constants, numbers (knight/brown tones)
-base0A: "D4BC3C" # Thunder Gold   - classes, warnings (golden armor)
-base0B: "44C078" # Cure Leaf      - strings, success (green mage healing)
-base0C: "68C8E0" # Crystal Blue   - regex, support (dominant ice-blue of crystal)
-base0D: "4878D0" # Aqua Rune      - functions, methods (deep blue mage)
-base0E: "9060D0" # Esper Violet   - keywords, storage (lavender particle sprites)
-base0F: "C04880" # Mystic Rose    - deprecated, embedded (pink/magenta)
+base07: "C2D8EC" # Pure Crystal   - brightest foreground / headings on dark
+base08: "D04444" # Warrior Red    - errors, variables, danger
+base09: "C88430" # Knight Amber   - constants, numbers, warnings
+base0A: "D4BC3C" # Thunder Gold   - classes, search highlights, caution
+base0B: "44C078" # Cure Leaf      - strings, success, positive states
+base0C: "68C8E0" # Crystal Blue   - support, regex, info, links
+base0D: "4878D0" # Aqua Rune      - functions, headings, primary interactive accent
+base0E: "9060D0" # Esper Violet   - keywords, secondary accent
+base0F: "C04880" # Mystic Rose    - deprecated, embedded, tertiary accent

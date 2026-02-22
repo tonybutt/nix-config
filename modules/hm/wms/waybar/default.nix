@@ -6,12 +6,12 @@
 }:
 with lib;
 let
-  cfg = config.secondfront.hyprland.waybar;
+  cfg = config.modules.hyprland.waybar;
   inherit (config.lib.stylix) colors;
 in
 {
   options = {
-    secondfront.hyprland.waybar.enable = mkEnableOption "Enable waybar" // {
+    modules.hyprland.waybar.enable = mkEnableOption "Enable waybar" // {
       default = true;
     };
   };
@@ -25,7 +25,7 @@ in
           layer = "top";
           position = "top";
           spacing = 0;
-          height = 26;
+          height = 38;
 
           modules-left = [
             "custom/nix"
@@ -119,16 +119,16 @@ in
 
           network = {
             format-icons = [
-              "󰢜"
-              "󰢟"
-              "󰢝"
-              "󰢞"
-              "󰢘"
+              "<span color='#${colors.base08}'>󰤯</span>"
+              "<span color='#${colors.base09}'>󰤟</span>"
+              "<span color='#${colors.base0A}'>󰤢</span>"
+              "<span color='#${colors.base0C}'>󰤥</span>"
+              "<span color='#${colors.base0B}'>󰤨</span>"
             ];
             format = "{icon}";
             format-wifi = "{icon}";
-            format-ethernet = "󰌘";
-            format-disconnected = "󰢘";
+            format-ethernet = "<span color='#${colors.base0B}'>󰌘</span>";
+            format-disconnected = "<span color='#${colors.base08}'>󰤭</span>";
             tooltip-format-wifi = "{essid} ({frequency} GHz)\n↓{bandwidthDownBytes}  ↑{bandwidthUpBytes}";
             tooltip-format-ethernet = "↓{bandwidthDownBytes}  ↑{bandwidthUpBytes}";
             tooltip-format-disconnected = "Disconnected";
@@ -144,30 +144,25 @@ in
             format-plugged = "🔌";
             format-icons = {
               charging = [
-                "󰢜"
-                "󰢟"
-                "󰢝"
-                "󰢞"
-                "󰢘"
-                "󰂆"
-                "󰂇"
-                "󰂈"
-                "󰢜"
+                "󰯮"
+                "󰯯"
+                "󰯰"
+                "󰯱"
+                "󰯲"
+                "󰯳"
+                "󰯴"
+                "󰯵"
+                "󰯶"
               ];
               default = [
-                "󰂎"
-                "󰂏"
-                "󰂐"
-                "󰂑"
-                "󰂒"
-                "󰂓"
-                "󰂔"
-                "󰂕"
-                "󰂖"
-                "󰂗"
+                ""
+                ""
+                ""
+                ""
+                ""
               ];
             };
-            format-full = "󰢜";
+            format-full = "";
             tooltip-format-discharging = "{power:>1.0f}W ⬇ {capacity}%";
             tooltip-format-charging = "{power:>1.0f}W ⬆ {capacity}%";
             interval = 5;
