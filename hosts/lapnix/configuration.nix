@@ -11,6 +11,7 @@
   ];
   modules = {
     hostName = "lapnix";
+    laptop = true;
     peripherals = {
       enable = true;
       obs.enable = true;

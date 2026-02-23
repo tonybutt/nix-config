@@ -16,6 +16,7 @@ in
     ./peripherals
     ./users
     ./virtualizations
+    ./laptop.nix
     ../stylix
   ];
   options = {
@@ -36,6 +37,11 @@ in
       type = types.bool;
       default = true;
       description = "Enable GRUB bootloader.";
+    };
+    modules.laptop = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Enable laptop-specific configuration (lid switch handling, clamshell mode).";
     };
   };
   config = mkIf cfg.enable {
@@ -173,9 +179,6 @@ in
       gnome.gnome-keyring.enable = true;
 
       logind.settings.Login = {
-        HandleLidSwitch = "suspend-then-hibernate";
-        HandleLidSwitchDocked = "suspend-then-hibernate";
-        HandleLidSwitchExternalPower = "suspend-then-hibernate";
         HandlePowerKey = "suspend-then-hibernate";
         HandlePowerKeyLongPress = "poweroff";
       };

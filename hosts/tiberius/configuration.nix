@@ -12,6 +12,7 @@
   modules = {
     hostName = "tiberius";
     grub = false;
+    laptop = true;
     peripherals = {
       enable = true;
       obs.enable = true;

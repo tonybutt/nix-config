@@ -18,6 +18,7 @@
   modules = {
     hostName = "atlas";
     grub = false;
+    laptop = true;
     peripherals = {
       enable = true;
       obs.enable = true;
