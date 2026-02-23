@@ -20,8 +20,8 @@ in
     specialisation = {
       on-the-go.configuration = {
         services.logind.settings.Login = {
-          HandleLidSwitchDocked = "suspend-then-hibernate";
-          HandleLidSwitchExternalPower = "suspend-then-hibernate";
+          HandleLidSwitchDocked = lib.mkOverride 50 "suspend-then-hibernate";
+          HandleLidSwitchExternalPower = lib.mkOverride 50 "suspend-then-hibernate";
         };
       };
     };
