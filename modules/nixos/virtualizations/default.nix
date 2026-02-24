@@ -11,65 +11,71 @@ let
 in
 {
   options = {
-    modules.virtualization.enable = mkEnableOption "Enable virtualization" // {
-      default = true;
+    modules.virtualization = {
+      enable = mkEnableOption "Enable virtualization" // {
+        default = true;
+      };
+      vms.enable = mkEnableOption "Enable KVM/QEMU virtual machines";
     };
   };
-  config = mkIf cfg.enable {
-    boot.kernelModules = [ "vfio-pci" ];
+  config = mkIf cfg.enable (mkMerge [
+    {
+      users.users.${user.username}.extraGroups = mkAfter [ "docker" ];
 
-    users = {
-      users.${user.username} = {
-        extraGroups = mkAfter [
-          "docker"
-          "libvirtd"
-          "qemu-libvirtd"
-          "kvm"
-        ];
+      virtualisation = {
+        docker.enable = true;
+        containers.enable = true;
       };
-    };
+    }
 
-    networking.firewall.trustedInterfaces = [
-      "virbr0"
-      "br0"
-    ];
+    (mkIf cfg.vms.enable {
+      boot.kernelModules = [ "vfio-pci" ];
 
-    services.udev.extraRules = ''
-      # Supporting VFIO
-      SUBSYSTEM=="vfio", OWNER="root", GROUP="kvm"
-    '';
+      users.users.${user.username}.extraGroups = mkAfter [
+        "libvirtd"
+        "qemu-libvirtd"
+        "kvm"
+      ];
 
-    environment.systemPackages = with pkgs; [
-      virt-manager
-      qemu_kvm
-      qemu
-    ];
+      networking.firewall.trustedInterfaces = [
+        "virbr0"
+        "br0"
+      ];
 
-    virtualisation = {
-      docker.enable = true;
-      containers.enable = true;
-      kvmgt.enable = true;
-      spiceUSBRedirection.enable = true;
+      services.udev.extraRules = ''
+        # Supporting VFIO
+        SUBSYSTEM=="vfio", OWNER="root", GROUP="kvm"
+      '';
 
-      libvirtd = {
-        enable = true;
-        qemu = {
-          package = pkgs.qemu_kvm;
-          runAsRoot = false;
-          swtpm.enable = true;
+      environment.systemPackages = with pkgs; [
+        virt-manager
+        qemu_kvm
+        qemu
+      ];
 
-          verbatimConfig = ''
-            namespaces = []
+      virtualisation = {
+        kvmgt.enable = true;
+        spiceUSBRedirection.enable = true;
 
-            # Whether libvirt should dynamically change file ownership
-            dynamic_ownership = 0
-          '';
+        libvirtd = {
+          enable = true;
+          qemu = {
+            package = pkgs.qemu_kvm;
+            runAsRoot = false;
+            swtpm.enable = true;
+
+            verbatimConfig = ''
+              namespaces = []
+
+              # Whether libvirt should dynamically change file ownership
+              dynamic_ownership = 0
+            '';
+          };
+
+          onBoot = "ignore";
+          onShutdown = "shutdown";
         };
-
-        onBoot = "ignore";
-        onShutdown = "shutdown";
       };
-    };
-
-  };
+    })
+  ]);
 }
