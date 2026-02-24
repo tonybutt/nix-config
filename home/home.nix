@@ -24,6 +24,7 @@
     ai.claude-cognitive.enable = true;
     ai.team-skills.enable = true;
     ai.superpowers.enable = true;
+    terminals.ghostty.enable = true;
   };
   home.packages = with pkgs; [
     mpv

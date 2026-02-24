@@ -254,7 +254,7 @@ in
               enabled = true;
               size = 6;
               passes = 3;
-              special = true;
+              special = false;
               brightness = 0.80;
               contrast = 0.90;
               new_optimizations = true;
@@ -353,6 +353,9 @@ in
           windowrule = [
             "match:title Select what to share, size 250 250, float on, center on"
             "match:class .*, suppress_event maximize"
+            # Blur only for terminals — disable globally then re-enable for kitty
+            "match:class .*, no_blur on"
+            "match:class (kitty|Alacritty), no_blur off"
             "match:class ^$, match:title ^$, match:xwayland true, match:float true, match:fullscreen false, match:pin false, no_focus on"
             "match:class (Alacritty|kitty), scroll_touchpad 1.5"
             "match:class com.mitchell.ghostty, scroll_touchpad 0.2"
@@ -524,6 +527,7 @@ in
           exec-once = [
             "hyprpaper"
             "systemctl --user import-environment PATH && systemctl --user restart xdg-desktop-portal.service"
+            "${pkgs.networkmanagerapplet}/bin/nm-applet --indicator"
             "[workspace special:spotify silent] ${spotify}"
             "[workspace special:obs silent] ${obs} --startvirtualcam"
             "[workspace special:chat silent] ${slack}"

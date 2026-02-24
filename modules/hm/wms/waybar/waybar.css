@@ -1,19 +1,20 @@
 @define-color foreground @base04;
 @define-color background @base00;
 
-window#waybar {
-  background-color: transparent;
-}
-
 * {
   background-color: transparent;
-  color: @foreground;
+  color: @base05;
 
   border: none;
   border-radius: 0;
   min-height: 0;
   font-family: "JetBrainsMono Nerd Font";
-  font-size: 20px;
+  font-size: 16px;
+}
+
+window#waybar {
+  background: rgba(0, 0, 0, 0);
+  border-radius: 8px;
 }
 
 .modules-left {
@@ -24,83 +25,178 @@ window#waybar {
   margin-right: 8px;
 }
 
+#workspaces {
+  background: transparent;
+  margin: 0 4px;
+}
+
 #workspaces button {
-  all: initial;
-  padding: 0 10px;
-  margin: 0 1.5px;
-  min-width: 9px;
-  color: @foreground;
+  padding: 0 6px 0 8px;
+  margin: 0 4px;
+  min-width: 8px;
+  color: @base05;
   background-color: transparent;
+  border: none;
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  transition: all 0.3s ease;
 }
 
 #workspaces button.empty {
   opacity: 0.5;
 }
 
+#workspaces button.focused,
+#workspaces button.visible,
+#workspaces button.available {
+  border-bottom: 4px solid @base05;
+}
+
+#window {
+  margin-right: 8px;
+}
+
 #cpu,
+#memory,
+#temperature,
 #battery,
 #pulseaudio,
-#custom-nix {
+#backlight,
+#bluetooth,
+#network {
   min-width: 12px;
-  margin: 0 7.5px;
+  margin: 0 4px;
+}
+
+#custom-nix {
+  color: @base0D;
+  font-size: 24px;
+  margin-right: 18px;
 }
 
 #tray {
   margin-right: 16px;
 }
 
-#bluetooth {
-  margin-right: 17px;
-  color: @base0D;
+#tray > widget:hover {
+  background-color: transparent;
+  border-radius: 4px;
 }
 
-#network {
-  margin-right: 13px;
+/* nm-applet and tray menu styling */
+window > menu {
+  background: @base00;
+}
+
+window > menu > menuitem:hover,
+window > menu > menuitem:hover > check,
+window > menu > menuitem:hover > box,
+window > menu > menuitem:hover > box > *,
+window > menu > menuitem:hover > label,
+window > menu > menuitem:hover > label > *,
+window > menu > menuitem:hover > arrow {
+  background-color: @base02;
+  color: @base05;
+}
+
+#tray > .passive {
+  -gtk-icon-effect: dim;
+}
+
+#tray > .needs-attention {
+  -gtk-icon-effect: highlight;
+  background-color: @base08;
 }
 
 #custom-expand-icon {
-  margin-right: 18px;
+  margin-right: 20px;
+}
+
+#custom-lock {
+  padding: 0 8px;
+  margin: 0 4px;
+  border-radius: 4px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease;
+}
+
+#custom-lock:hover {
+  background-color: rgba(255, 255, 255, 0.25);
 }
 
 tooltip {
-  padding: 2px;
+  padding: 6px 10px;
+  background: rgba(30, 30, 30, 0.93);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+tooltip label {
+  color: @base05;
 }
 
 #clock {
-  margin-left: 8.75px;
+  margin-left: 8px;
 }
 
-.hidden {
-  opacity: 0;
-}
-
-#custom-nix {
+#bluetooth {
   color: @base0D;
-  font-size: 30px;
-  margin-right: 18px;
 }
 
+#network.disconnected {
+  color: @base08;
+}
+
+#temperature.critical {
+  color: @base08;
+}
+
+#pulseaudio.muted {
+  color: @base03;
+}
+
+/* Battery states */
 #battery {
   color: @base0B;
 }
 
-#battery.warning {
-  color: @base0A;
-}
-
-#battery.critical {
-  color: @base08;
-  animation: battery-blink 1s linear infinite;
-}
-
 #battery.charging,
-#battery.plugged,
-#battery.full {
+#battery.plugged {
   color: @base0B;
 }
 
+#battery.warning:not(.charging) {
+  color: @base0A;
+}
+
+#battery.critical:not(.charging) {
+  color: @base08;
+  animation: battery-blink 0.5s linear infinite alternate;
+}
+
 @keyframes battery-blink {
-  50% {
+  to {
     color: @foreground;
   }
+}
+
+#custom-webcam {
+  margin: 0 4px;
+}
+
+#custom-webcam.muted {
+  color: @base03;
+}
+
+#custom-webcam.in-use {
+  color: @base00;
+  background-color: @base0B;
+  border-radius: 4px;
+  padding: 0 4px;
+}
+
+.hidden {
+  opacity: 0;
 }
