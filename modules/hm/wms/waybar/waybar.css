@@ -197,6 +197,22 @@ tooltip label {
   padding: 0 4px;
 }
 
+#custom-agility {
+  margin: 0 4px;
+}
+
+#custom-agility.online {
+  color: @base0B;
+}
+
+#custom-agility.degraded {
+  color: @base0A;
+}
+
+#custom-agility.offline {
+  color: @base03;
+}
+
 .hidden {
   opacity: 0;
 }
