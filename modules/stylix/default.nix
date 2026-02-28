@@ -20,7 +20,7 @@ in
     };
     modules.themes.theme = mkOption {
       type = types.either types.str types.path;
-      default = ./assets/themes/final_fantasy.yaml;
+      description = "Path to base16 YAML theme file";
       example = ''
         ./assets/themes/grail.yaml
         $${pkgs.base16-schemes}/share/themes/material-darker.yaml
@@ -28,7 +28,7 @@ in
     };
     modules.themes.wallpaper = mkOption {
       type = types.path;
-      default = ./assets/walls/FF.png;
+      description = "Path to wallpaper image";
       example = ''
         ./path/to/wallpaper.png
         ~/Wallpapers/Eric.png

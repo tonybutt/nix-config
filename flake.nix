@@ -150,8 +150,20 @@
         };
       homeConfigurations =
         let
+          themes = import ./themes.nix { inherit pkgs; };
+
+          hostDefaults = {
+            tiberius = "final-fantasy";
+            atlas = "final-fantasy";
+            lapnix = "final-fantasy";
+            mantra = "final-fantasy";
+          };
+
           mkHome =
-            hostname:
+            hostname: themeName:
+            let
+              theme = themes.${themeName};
+            in
             home-manager.lib.homeManagerConfiguration {
               inherit pkgs;
               extraSpecialArgs = {
@@ -166,14 +178,36 @@
                 ./home/home.nix
                 ./hosts/${hostname}/home-overrides.nix
                 stylix.homeModules.stylix
+                {
+                  modules.themes.theme = theme.scheme;
+                  modules.themes.wallpaper = theme.wallpaper;
+                  modules.hyprpaper.wallpaper = builtins.toString theme.wallpaper;
+                }
               ];
             };
+
+          # Generate all host x theme combinations
+          allConfigs = builtins.foldl' (acc: { name, value }: acc // { ${name} = value; }) { } (
+            builtins.concatLists (
+              nixpkgs.lib.mapAttrsToList (
+                hostname: defaultTheme:
+                let
+                  # Default config uses the host's default theme
+                  default = {
+                    name = "${user.username}@${hostname}";
+                    value = mkHome hostname defaultTheme;
+                  };
+                  # Named variant for every theme
+                  variants = nixpkgs.lib.mapAttrsToList (themeName: _: {
+                    name = "${user.username}@${hostname}-${themeName}";
+                    value = mkHome hostname themeName;
+                  }) themes;
+                in
+                [ default ] ++ variants
+              ) hostDefaults
+            )
+          );
         in
-        {
-          "${user.username}" = mkHome "tiberius"; # default
-          "${user.username}@lapnix" = mkHome "lapnix";
-          "${user.username}@atlas" = mkHome "atlas";
-          "${user.username}@mantra" = mkHome "mantra";
-        };
+        allConfigs;
     };
 }
