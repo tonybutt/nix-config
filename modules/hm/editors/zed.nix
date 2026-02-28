@@ -28,6 +28,7 @@ in
         typescript-language-server
         pkgs-color-lsp.color-lsp
         slint-lsp
+        claude-code-acp
       ];
       extensions = [
         "nix"
@@ -57,6 +58,13 @@ in
         relative_line_numbers = "enabled";
         cursor_blink = false;
         vertical_scroll_margin = 5;
+        agent_servers = {
+          claude = {
+            env = {
+              CLAUDE_CODE_EXECUTABLE = "${pkgs.claude-code}/bin/claude";
+            };
+          };
+        };
 
         # Global formatter - treefmt handles all languages via project config
         formatter = {
@@ -68,7 +76,7 @@ in
             ];
           };
         };
-
+        #
         scrollbar = {
           show = "never";
         };

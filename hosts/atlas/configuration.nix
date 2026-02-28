@@ -5,7 +5,7 @@
 {
   imports = [
     # Generated automatically during install (uncommented by run-install)
-    # ./hardware-configuration.nix
+    ./hardware-configuration.nix
     ./disks.nix
     ../../modules/nixos
   ];
@@ -13,7 +13,7 @@
   # Hibernation support — after install, get offset with:
   # sudo btrfs inspect-internal map-swapfile -r /.swapvol/swapfile
   boot.resumeDevice = "/dev/mapper/crypted";
-  # boot.kernelParams = [ "resume_offset=XXXXX" ];
+  boot.kernelParams = [ "resume_offset=533760" ];
 
   modules = {
     hostName = "atlas";

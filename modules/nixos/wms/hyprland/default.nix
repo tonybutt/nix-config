@@ -2,8 +2,6 @@
   pkgs,
   config,
   lib,
-  user,
-  inputs,
   ...
 }:
 with lib;
@@ -23,13 +21,13 @@ in
       greetd = {
         enable = true;
         settings = {
-          initial_session = {
-            command = "${session}";
-            user = "${user.username}";
-          };
+          # initial_session = {
+          # command = "${session}";
+          # user = "${user.username}";
+          # };
           default_session = {
             command = "${tuigreet} --greeting 'Welcome to NixOS!' --asterisks --time --remember --remember-user-session -cmd ${session}";
-            user = "${user.username}";
+            user = "greeter";
           };
         };
       };
@@ -55,23 +53,20 @@ in
     };
     programs.hyprland = {
       enable = true;
-      package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
-      portalPackage =
-        inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
-      xwayland.enable = true;
+      # package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
+      # portalPackage =
+      # inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
+      # xwayland.enable = true;
     };
     xdg.portal = {
       enable = true;
-      config.common.default = [ "hyprland" ];
-    };
-    hardware = {
-      nvidia = {
-        open = true;
-        powerManagement.enable = true;
-      };
-      graphics = {
-        enable = true;
-        enable32Bit = true;
+      extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+      config.common = {
+        default = [
+          "hyprland"
+          "gtk"
+        ];
+        "org.freedesktop.impl.portal.Settings" = [ "gtk" ];
       };
     };
     environment.sessionVariables = {

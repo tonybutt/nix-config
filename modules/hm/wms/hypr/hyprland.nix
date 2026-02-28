@@ -137,6 +137,7 @@ in
         enable = true;
         variables = [ "--all" ];
       };
+      extraConfig = "debug:disable_logs = false";
       settings =
         let
           inherit (config.lib.stylix) colors;
@@ -160,6 +161,7 @@ in
               m.resolution;
         in
         {
+
           "$mainMod" = cfg.mainMod;
 
           # Omarchy environment variables

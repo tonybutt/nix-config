@@ -27,6 +27,7 @@
     terminals.ghostty.enable = true;
   };
   home.packages = with pkgs; [
+    nixpkgs-review
     mpv
     gimp3
     unzip
@@ -88,6 +89,12 @@
     iconTheme = {
       package = pkgs.colloid-icon-theme;
       name = "Colloid";
+    };
+    gtk3.extraConfig = {
+      gtk-application-prefer-dark-theme = true;
+    };
+    gtk4.extraConfig = {
+      gtk-application-prefer-dark-theme = true;
     };
   };
 }
