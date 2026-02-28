@@ -3,6 +3,7 @@
   imports = [
     ./tools/oath.nix
     ./tools/wf-recorder.nix
+    ./tools/theme-switch.nix
     ../modules/hm
   ];
   dconf.settings = {

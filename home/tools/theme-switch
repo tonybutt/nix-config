@@ -1,0 +1,41 @@
+FLAKE_DIR="${HOME}/nix-config"
+THEME="${1:-}"
+
+# Available themes (injected at build time via sed replacement)
+AVAILABLE_THEMES="@THEME_LIST@"
+
+if [ -z "${THEME}" ]; then
+  echo "Usage: theme-switch <theme-name>"
+  echo ""
+  echo "Available themes:"
+  for t in ${AVAILABLE_THEMES}; do
+    echo "  - ${t}"
+  done
+  exit 0
+fi
+
+# Validate theme name
+VALID=false
+for t in ${AVAILABLE_THEMES}; do
+  if [ "${t}" = "${THEME}" ]; then
+    VALID=true
+    break
+  fi
+done
+
+if [ "${VALID}" = "false" ]; then
+  echo "Error: Unknown theme '${THEME}'"
+  echo "Available themes:"
+  for t in ${AVAILABLE_THEMES}; do
+    echo "  - ${t}"
+  done
+  exit 1
+fi
+
+HOSTNAME="$(hostname)"
+CONFIG="${USER}@${HOSTNAME}-${THEME}"
+
+echo "Switching to theme: ${THEME}"
+echo "Config: ${CONFIG}"
+nh home switch "${FLAKE_DIR}" -c "${CONFIG}"
+echo "Theme switched to: ${THEME}"
