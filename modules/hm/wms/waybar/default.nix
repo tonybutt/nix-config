@@ -124,11 +124,11 @@ in
             "clock"
           ];
           modules-right = [
+            "custom/agility"
             "group/tray-expander"
             "custom/lock"
             "network"
             "bluetooth"
-            "custom/agility"
             "custom/webcam"
             "pulseaudio"
             "cpu"
@@ -199,9 +199,9 @@ in
           };
 
           "custom/agility" = {
-            exec = "${pcStatus} AGI 8088 backend,frontend,postgres";
+            exec = "${pcStatus} AGI 8088 backend,frontend,postgres,zitadel,openfga,rustfs,mailpit";
             return-type = "json";
-            interval = 10;
+            interval = 5;
           };
 
           "group/tray-expander" = {
