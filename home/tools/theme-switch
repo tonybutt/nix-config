@@ -35,7 +35,15 @@ fi
 HOSTNAME="$(hostname)"
 CONFIG="${USER}@${HOSTNAME}-${THEME}"
 
+notify-send "Theme Switch" "Switching to ${THEME}..." -i preferences-desktop-theme
+
 echo "Switching to theme: ${THEME}"
 echo "Config: ${CONFIG}"
-nh home switch "${FLAKE_DIR}" -c "${CONFIG}"
-echo "Theme switched to: ${THEME}"
+if nh home switch "${FLAKE_DIR}" -c "${CONFIG}"; then
+  notify-send "Theme Switch" "Switched to ${THEME}" -i preferences-desktop-theme
+  echo "Theme switched to: ${THEME}"
+else
+  notify-send -u critical "Theme Switch" "Failed to switch to ${THEME}" -i dialog-error
+  echo "Error: Failed to switch to ${THEME}" >&2
+  exit 1
+fi
