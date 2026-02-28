@@ -52,6 +52,47 @@ let
       echo '{"text": "󰖠", "tooltip": "Webcam available", "class": "available"}'
     fi
   '';
+
+  pcStatus = pkgs.writeShellScript "pc-status" ''
+    LABEL="$1"
+    PORT="$2"
+    PROCS="$3"
+
+    RAW=$(${pkgs.process-compose}/bin/process-compose process list -o json -p "''${PORT}" 2>/dev/null)
+    if [ $? -ne 0 ] || [ -z "$RAW" ]; then
+      echo "{\"text\": \"''${LABEL}: 󱎘\", \"tooltip\": \"''${LABEL}: not reachable\", \"class\": \"offline\"}"
+      exit 0
+    fi
+
+    IFS=',' read -ra PROC_ARR <<< "''${PROCS}"
+    TOTAL=0
+    RUNNING=0
+    TOOLTIP="''${LABEL}:"
+    for proc in "''${PROC_ARR[@]}"; do
+      STATUS=$(echo "$RAW" | ${pkgs.jq}/bin/jq -r --arg name "$proc" '.[] | select(.name == $name) | .status')
+      TOTAL=$((TOTAL + 1))
+      if [ "$STATUS" = "Running" ]; then
+        RUNNING=$((RUNNING + 1))
+        TOOLTIP="''${TOOLTIP}\n  ✓ ''${proc}"
+      else
+        TOOLTIP="''${TOOLTIP}\n  ✗ ''${proc} (''${STATUS:-unknown})"
+      fi
+    done
+
+    if [ "$RUNNING" -eq "$TOTAL" ]; then
+      ICON="󰐾"
+      CLASS="online"
+    elif [ "$RUNNING" -gt 0 ]; then
+      ICON="󰍷"
+      CLASS="degraded"
+    else
+      ICON="󱎘"
+      CLASS="offline"
+    fi
+
+    TOOLTIP="''${TOOLTIP}\n  ''${RUNNING}/''${TOTAL} running"
+    echo "{\"text\": \"''${LABEL}: ''${ICON}\", \"tooltip\": \"''${TOOLTIP}\", \"class\": \"''${CLASS}\"}"
+  '';
 in
 {
   options = {
@@ -87,6 +128,7 @@ in
             "custom/lock"
             "network"
             "bluetooth"
+            "custom/agility"
             "custom/webcam"
             "pulseaudio"
             "cpu"
@@ -154,6 +196,12 @@ in
             on-click = "${pkgs.cameractrls-gtk4}/bin/cameractrlsgtk4";
             on-click-middle = "${webcamToggle}";
             on-click-right = "${webcamToggle}";
+          };
+
+          "custom/agility" = {
+            exec = "${pcStatus} AGI 8088 backend,frontend,postgres";
+            return-type = "json";
+            interval = 10;
           };
 
           "group/tray-expander" = {
