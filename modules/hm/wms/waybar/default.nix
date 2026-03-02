@@ -124,6 +124,7 @@ in
             "clock"
           ];
           modules-right = [
+            "custom/lethality"
             "custom/agility"
             "group/tray-expander"
             "custom/lock"
@@ -200,6 +201,12 @@ in
 
           "custom/agility" = {
             exec = "${pcStatus} AGI 8088 backend,frontend,postgres,zitadel,openfga,rustfs,mailpit";
+            return-type = "json";
+            interval = 5;
+          };
+
+          "custom/lethality" = {
+            exec = "${pcStatus} LETH 8080 backend,frontend,postgres,openfga,rustfs,zitadel,zitadel-login,zitadel-db,golang-ai";
             return-type = "json";
             interval = 5;
           };

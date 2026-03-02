@@ -19,7 +19,7 @@ let
   themeDesktopEntries = builtins.mapAttrs (name: _: {
     name = "Theme: ${name}";
     exec = "${theme-switch}/bin/theme-switch ${name}";
-    icon = "preferences-desktop-theme";
+    icon = "${pkgs.colloid-icon-theme}/share/icons/Colloid/apps/scalable/preferences-desktop-color.svg";
     comment = "Switch to the ${name} theme";
     categories = [ "Settings" ];
   }) themes;

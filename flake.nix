@@ -126,11 +126,12 @@
             hostname:
             { hardwareModules }:
             nixpkgs.lib.nixosSystem {
-              inherit pkgs system;
+              inherit pkgs;
               specialArgs = {
                 inherit user inputs hyprland;
               };
               modules = hardwareModules ++ [
+                { nixpkgs.hostPlatform = system; }
                 ./hosts/${hostname}/configuration.nix
                 stylix.nixosModules.stylix
                 disko.nixosModules.disko
@@ -141,11 +142,14 @@
         // {
           # Minimal Installation ISO (special case)
           iso = nixpkgs.lib.nixosSystem {
-            inherit pkgs system;
+            inherit pkgs;
             specialArgs = {
               inherit user;
             };
-            modules = [ ./hosts/iso/configuration.nix ];
+            modules = [
+              { nixpkgs.hostPlatform = system; }
+              ./hosts/iso/configuration.nix
+            ];
           };
         };
       homeConfigurations =

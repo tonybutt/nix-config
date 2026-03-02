@@ -70,6 +70,60 @@ flake.nix                 # Entry point: inputs, outputs, host definitions
 
 4. Optionally add host-specific homeConfiguration with overrides
 
+## Adding a New Theme
+
+### Using a community base16 scheme
+
+1. Find the scheme name from [base16-schemes](https://github.com/tinted-theming/schemes/tree/spec-0.11/base16) (e.g., `dracula`)
+2. Add a wallpaper image to `modules/stylix/assets/walls/`
+3. Add an entry to `themes.nix`:
+
+```nix
+dracula = {
+  scheme = "${pkgs.base16-schemes}/share/themes/dracula.yaml";
+  wallpaper = ./modules/stylix/assets/walls/dracula.png;
+};
+```
+
+### Using a custom scheme
+
+1. Create a base16 YAML file in `modules/stylix/assets/themes/` with all 16 colors (`base00`–`base0F`):
+
+```yaml
+scheme: "My Theme"
+author: "Your Name"
+base00: "1a1b26" # background (darkest)
+base01: "1f2233" # lighter background (status bars)
+base02: "292e42" # selection background
+base03: "444b6a" # comments, inactive borders
+base04: "787c99" # subdued UI text
+base05: "a9b1d6" # default foreground
+base06: "cbccd1" # light foreground
+base07: "d5d6db" # lightest foreground
+base08: "f7768e" # red — errors, danger
+base09: "ff9e64" # orange — warnings, constants
+base0A: "e0af68" # yellow — caution, search highlights
+base0B: "9ece6a" # green — success, strings
+base0C: "7dcfff" # cyan — info, links
+base0D: "7aa2f7" # blue — primary accent, functions
+base0E: "bb9af7" # purple — secondary accent, keywords
+base0F: "c0caf5" # tertiary accent
+```
+
+2. Add a wallpaper image to `modules/stylix/assets/walls/`
+3. Add an entry to `themes.nix`:
+
+```nix
+my-theme = {
+  scheme = ./modules/stylix/assets/themes/my_theme.yaml;
+  wallpaper = ./modules/stylix/assets/walls/my-theme.png;
+};
+```
+
+### After adding
+
+Rebuild home (`rbh`) and the new theme will be available via `theme-switch <name>` and in the application launcher.
+
 ## Fresh Install
 
 ### Modify the with your machine's name [flake](./flake.nix)

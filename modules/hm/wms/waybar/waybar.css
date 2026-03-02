@@ -197,19 +197,23 @@ tooltip label {
   padding: 0 4px;
 }
 
-#custom-agility {
+#custom-agility,
+#custom-lethality {
   margin: 0 4px;
 }
 
-#custom-agility.online {
+#custom-agility.online,
+#custom-lethality.online {
   color: @base0B;
 }
 
-#custom-agility.degraded {
+#custom-agility.degraded,
+#custom-lethality.degraded {
   color: @base0A;
 }
 
-#custom-agility.offline {
+#custom-agility.offline,
+#custom-lethality.offline {
   color: @base03;
 }
 

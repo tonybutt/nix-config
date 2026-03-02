@@ -233,8 +233,8 @@ in
 
           # Omarchy look and feel
           general = {
-            "col.active_border" = lib.mkDefault "${activeGradient}";
-            "col.inactive_border" = lib.mkDefault "${inactiveGradient}";
+            "col.active_border" = lib.mkForce "${activeGradient}";
+            "col.inactive_border" = lib.mkForce "${inactiveGradient}";
             gaps_in = 2;
             gaps_out = 4;
             border_size = 2;
@@ -305,10 +305,10 @@ in
           };
 
           group = {
-            "col.border_active" = lib.mkDefault "${activeGradient}";
-            "col.border_inactive" = lib.mkDefault "${inactiveGradient}";
-            "col.border_locked_active" = lib.mkDefault "-1";
-            "col.border_locked_inactive" = lib.mkDefault "-1";
+            "col.border_active" = lib.mkForce "${activeGradient}";
+            "col.border_inactive" = lib.mkForce "${inactiveGradient}";
+            "col.border_locked_active" = lib.mkForce "-1";
+            "col.border_locked_inactive" = lib.mkForce "-1";
 
             groupbar = {
               font_size = 12;
@@ -357,7 +357,7 @@ in
             "match:class .*, suppress_event maximize"
             # Blur only for terminals — disable globally then re-enable for kitty
             "match:class .*, no_blur on"
-            "match:class (kitty|Alacritty), no_blur off"
+            "match:class (kitty|Alacritty|dev.zed.Zed), no_blur off"
             "match:class ^$, match:title ^$, match:xwayland true, match:float true, match:fullscreen false, match:pin false, no_focus on"
             "match:class (Alacritty|kitty), scroll_touchpad 1.5"
             "match:class com.mitchell.ghostty, scroll_touchpad 0.2"
