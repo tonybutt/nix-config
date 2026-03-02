@@ -17,7 +17,6 @@ in
     ./users
     ./virtualizations
     ./laptop.nix
-    ../stylix
   ];
   options = {
     modules.enable = mkEnableOption "Enable NixOS modules" // {

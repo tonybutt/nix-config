@@ -105,26 +105,35 @@
       };
       nixosConfigurations =
         let
+          themes = import ./themes.nix { inherit pkgs; };
+
           hosts = {
             tiberius = {
               hardwareModules = [
                 nixos-hardware.nixosModules.dell-precision-3490-intel
                 nixos-hardware.nixosModules.common-gpu-intel
               ];
+              theme = "final-fantasy";
             };
             atlas = {
               hardwareModules = [ nixos-hardware.nixosModules.framework-16-7040-amd ];
+              theme = "final-fantasy";
             };
             mantra = {
               hardwareModules = [ ];
+              theme = "final-fantasy";
             };
             lapnix = {
               hardwareModules = [ nixos-hardware.nixosModules.framework-13-7040-amd ];
+              theme = "final-fantasy";
             };
           };
           mkSystem =
             hostname:
-            { hardwareModules }:
+            { hardwareModules, theme }:
+            let
+              themeConfig = themes.${theme};
+            in
             nixpkgs.lib.nixosSystem {
               inherit pkgs;
               specialArgs = {
@@ -135,6 +144,11 @@
                 ./hosts/${hostname}/configuration.nix
                 stylix.nixosModules.stylix
                 disko.nixosModules.disko
+                ./modules/stylix
+                {
+                  modules.themes.theme = themeConfig.scheme;
+                  modules.themes.wallpaper = themeConfig.wallpaper;
+                }
               ];
             };
         in
