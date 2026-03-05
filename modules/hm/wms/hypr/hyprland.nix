@@ -16,7 +16,7 @@ let
   inherit (builtins) map toString;
 
   # Binary paths
-  kitty = "${pkgs.kitty}/bin/kitty";
+  term = "${pkgs.ghostty}/bin/ghostty";
   thunar = "${pkgs.thunar}/bin/thunar";
   fuzzel = "${pkgs.fuzzel}/bin/fuzzel";
   cliphist = "${pkgs.cliphist}/bin/cliphist";
@@ -348,7 +348,7 @@ in
 
           # Special workspaces
           workspace = [
-            "special:monitor, on-created-empty: ${kitty} ${btop}"
+            "special:monitor, on-created-empty: ${term} -e ${btop}"
           ];
 
           # Omarchy window rules + personal rules (Hyprland 0.53+ syntax)
@@ -357,9 +357,9 @@ in
             "match:class .*, suppress_event maximize"
             # Blur only for terminals — disable globally then re-enable for kitty
             "match:class .*, no_blur on"
-            "match:class (kitty|Alacritty|dev.zed.Zed), no_blur off"
+            "match:class (kitty|Alacritty|com.mitchell.ghostty|dev.zed.Zed), no_blur off"
             "match:class ^$, match:title ^$, match:xwayland true, match:float true, match:fullscreen false, match:pin false, no_focus on"
-            "match:class (Alacritty|kitty), scroll_touchpad 1.5"
+            "match:class (Alacritty|kitty|com.mitchell.ghostty), scroll_touchpad 1.5"
             "match:class com.mitchell.ghostty, scroll_touchpad 0.2"
             # Personal window rules
             "match:title ^(MainPicker)$, float on"
@@ -387,7 +387,7 @@ in
             "$mainMod CTRL, F, fullscreenstate, 0 2"
             "$mainMod ALT, F, fullscreen, 1"
             # Applications
-            "$mainMod, Return, exec, ${kitty}"
+            "$mainMod, Return, exec, ${term}"
             "$mainMod, E, exec, ${thunar}"
             "$mainMod, SPACE, exec, ${fuzzel}"
             "$mainMod, Y, exec, oath 22293570"
