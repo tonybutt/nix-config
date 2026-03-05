@@ -172,7 +172,7 @@
 
           hostDefaults = {
             tiberius = "final-fantasy";
-            atlas = "final-fantasy";
+            atlas = "ugrain";
             lapnix = "final-fantasy";
             mantra = "final-fantasy";
           };

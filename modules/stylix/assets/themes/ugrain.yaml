@@ -1,0 +1,44 @@
+scheme: "Ugrain"
+author: "Anthony Butt (sampled from Ukrainian wheat field)"
+# Dark theme drawn from a golden wheat field under vivid blue sky.
+# Backgrounds: deep midnight blues from the sky. Accents: wheat golds, warm ambers.
+#
+# base16 role guide:
+#   base00-03  backgrounds (darkest → highlight/comment)
+#   base04-07  foregrounds (muted UI text → brightest)
+#   base08-0F  accent/syntax colors (semantic meaning below)
+#
+# Slot   Role (syntax)                     Role (UI)
+# base00 default background                app/terminal background
+# base01 lighter background                status bars, gutters
+# base02 selection background              active selection, highlights
+# base03 comments, invisibles              inactive borders, placeholders
+# base04 dark foreground                   subdued UI text (e.g. status bar text)
+# base05 default foreground                body text, icons, cursors
+# base06 light foreground                  bright body text (rarely used)
+# base07 lightest foreground               headings on dark bg (rarely used)
+# base08 variables, errors, diff deleted   danger / destructive actions
+# base09 integers, booleans, constants     warnings, numbers, URLs
+# base0A classes, search highlight         caution, highlighted labels
+# base0B strings, success, diff inserted   success, positive states
+# base0C support, regex, escape chars      info, special values, links
+# base0D functions, methods, headings      primary accent, interactive elements
+# base0E keywords, storage, diff changed   secondary accent, toggles
+# base0F deprecated, embedded lang tags    tertiary accent, subtle highlights
+
+base00: "0A1428" # Deep Night     - deepest sky at the horizon edge
+base01: "0F1E38" # Midnight Blue  - secondary background
+base02: "1A2E4A" # Dusk Field     - selection / highlight
+base03: "2B4570" # Haze Blue      - comments / inactive borders
+base04: "6690F1" # Open Sky       - subdued UI text
+base05: "DAE0F7" # Cloud Light    - default foreground (pale sky white-blue)
+base06: "EAE8F2" # Cirrus         - bright foreground
+base07: "F8F6FA" # Noon White     - brightest foreground
+base08: "CB4B16" # Harvest Rust   - errors, variables, danger
+base09: "DC891E" # Amber Stalk    - constants, numbers, warnings
+base0A: "F3A937" # Golden Wheat   - classes, search highlights, caution
+base0B: "5A9E3A" # Sprouted Green - strings, success, positive states
+base0C: "4482F7" # Clear Sky      - support, regex, info, links
+base0D: "316FF3" # Horizon Blue   - functions, headings, primary interactive accent
+base0E: "9060D0" # Twilight Mauve - keywords, secondary accent
+base0F: "72493E" # Tilled Earth   - deprecated, embedded, tertiary accent
