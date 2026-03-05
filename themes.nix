@@ -20,6 +20,10 @@
     scheme = "${pkgs.base16-schemes}/share/themes/tokyo-night-dark.yaml";
     wallpaper = ./modules/stylix/assets/walls/tokyo-night.png;
   };
+  material-darker = {
+    scheme = "${pkgs.base16-schemes}/share/themes/material-darker.yaml";
+    wallpaper = ./modules/stylix/assets/walls/AI_UKRAINE.png;
+  };
   hyprland-default = {
     scheme = ./modules/stylix/assets/themes/hyprland_default.yaml;
     wallpaper = ./modules/stylix/assets/walls/hyprland-default.png;

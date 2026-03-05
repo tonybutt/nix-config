@@ -357,10 +357,10 @@ in
             "match:class .*, suppress_event maximize"
             # Blur only for terminals — disable globally then re-enable for kitty
             "match:class .*, no_blur on"
-            "match:class (kitty|Alacritty|com.mitchell.ghostty|dev.zed.Zed), no_blur off"
+            "match:class (kitty|Alacritty|com.mitchellh.ghostty|dev.zed.Zed), no_blur off"
             "match:class ^$, match:title ^$, match:xwayland true, match:float true, match:fullscreen false, match:pin false, no_focus on"
-            "match:class (Alacritty|kitty|com.mitchell.ghostty), scroll_touchpad 1.5"
-            "match:class com.mitchell.ghostty, scroll_touchpad 0.2"
+            "match:class (Alacritty|kitty|com.mitchellh.ghostty), scroll_touchpad 1.5"
+            "match:class com.mitchellh.ghostty, scroll_touchpad 0.2"
             # Personal window rules
             "match:title ^(MainPicker)$, float on"
             "match:title ^(Sign in to Security Device)$, float on"

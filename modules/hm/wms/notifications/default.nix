@@ -23,9 +23,11 @@ in
     services.mako.settings = {
       "default-timeout" = 5000;
 
-      # Route Signal notifications to HDMI monitor
       "app-name=Signal" = {
-        output = "HDMI-A-1";
+        format = "<b>%a</b>\\nNew Message";
+      };
+      "app-name=Slack" = {
+        format = "<b>%a</b>\\nNew Message";
       };
       "app-name=yubikey-touch-detector" = {
         "icon-path" = "${config.home.homeDirectory}/.nix-profile/share/icons/hicolor";

@@ -8,7 +8,6 @@ with lib;
 let
   cfg = config.modules.hyprland.waybar;
   inherit (config.lib.stylix) colors;
-
   webcamToggle = pkgs.writeShellScript "webcam-toggle" ''
     sudo /run/current-system/sw/bin/webcam-toggle toggle
     ${pkgs.procps}/bin/pkill -RTMIN+10 waybar
@@ -57,6 +56,7 @@ let
     LABEL="$1"
     PORT="$2"
     PROCS="$3"
+    TUNNEL_PROC="$4"
 
     RAW=$(${pkgs.process-compose}/bin/process-compose process list -o json -p "''${PORT}" 2>/dev/null)
     if [ $? -ne 0 ] || [ -z "$RAW" ]; then
@@ -90,8 +90,17 @@ let
       CLASS="offline"
     fi
 
+    TUNNEL=""
+    if [ -n "''${TUNNEL_PROC}" ]; then
+      TSTATUS=$(echo "$RAW" | ${pkgs.jq}/bin/jq -r --arg name "''${TUNNEL_PROC}" '.[] | select(.name == $name) | .status')
+      if [ "$TSTATUS" = "Running" ]; then
+        TUNNEL="<span color='#${colors.base09}'>󰅟</span> "
+        TOOLTIP="''${TOOLTIP}\n  󰅟 tunnel active"
+      fi
+    fi
+
     TOOLTIP="''${TOOLTIP}\n  ''${RUNNING}/''${TOTAL} running"
-    echo "{\"text\": \"''${LABEL}: ''${ICON}\", \"tooltip\": \"''${TOOLTIP}\", \"class\": \"''${CLASS}\"}"
+    echo "{\"text\": \"''${TUNNEL}''${LABEL}: ''${ICON}\", \"tooltip\": \"''${TOOLTIP}\", \"class\": \"''${CLASS}\"}"
   '';
 in
 {
@@ -200,7 +209,7 @@ in
           };
 
           "custom/agility" = {
-            exec = "${pcStatus} AGI 8088 backend,frontend,postgres,zitadel,openfga,rustfs,mailpit";
+            exec = "${pcStatus} AGI 8088 backend,frontend,postgres,zitadel,openfga,rustfs,mailpit cloudflared";
             return-type = "json";
             interval = 5;
           };
