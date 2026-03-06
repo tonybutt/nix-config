@@ -161,10 +161,10 @@ in
 
     powerManagement.enable = true;
 
-    systemd.sleep.extraConfig = ''
-      HibernateDelaySec=1h
-      HibernateOnACPower=no
-    '';
+    systemd.sleep.settings.Sleep = {
+      HibernateDelaySec = "1h";
+      HibernateOnACPower = "no";
+    };
 
     services = {
       upower.enable = true;

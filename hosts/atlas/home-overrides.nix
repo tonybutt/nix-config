@@ -1,28 +1,28 @@
 {
   programs.waybar.settings.mainBar."hyprland/workspaces".persistent-workspaces = {
-    "1" = [ "DP-4" ];
-    "2" = [ "DP-4" ];
-    "3" = [ "DP-4" ];
-    "4" = [ "DP-4" ];
-    "5" = [ "DP-4" ];
-    "6" = [ "DP-3" ];
-    "7" = [ "DP-3" ];
-    "8" = [ "DP-3" ];
-    "9" = [ "DP-3" ];
-    "10" = [ "DP-3" ];
+    "1" = [ "*" ];
+    "2" = [ "*" ];
+    "3" = [ "*" ];
+    "4" = [ "*" ];
+    "5" = [ "*" ];
+    "6" = [ "*" ];
+    "7" = [ "*" ];
+    "8" = [ "*" ];
+    "9" = [ "*" ];
+    "10" = [ "*" ];
   };
 
   wayland.windowManager.hyprland.settings.workspace = [
-    "1, monitor:DP-4, default:true"
-    "2, monitor:DP-4"
-    "3, monitor:DP-4"
-    "4, monitor:DP-4"
-    "5, monitor:DP-4"
-    "6, monitor:DP-3, default:true"
-    "7, monitor:DP-3"
-    "8, monitor:DP-3"
-    "9, monitor:DP-3"
-    "10, monitor:DP-3"
+    "1, monitor:desc:Dell Inc. DELL S3220DGF BG9TF43, default:true"
+    "2, monitor:desc:Dell Inc. DELL S3220DGF BG9TF43"
+    "3, monitor:desc:Dell Inc. DELL S3220DGF BG9TF43"
+    "4, monitor:desc:Dell Inc. DELL S3220DGF BG9TF43"
+    "5, monitor:desc:Dell Inc. DELL S3220DGF BG9TF43"
+    "6, monitor:desc:Dell Inc. DELL U2718Q 4K8X703P0N8L, default:true"
+    "7, monitor:desc:Dell Inc. DELL U2718Q 4K8X703P0N8L"
+    "8, monitor:desc:Dell Inc. DELL U2718Q 4K8X703P0N8L"
+    "9, monitor:desc:Dell Inc. DELL U2718Q 4K8X703P0N8L"
+    "10, monitor:desc:Dell Inc. DELL U2718Q 4K8X703P0N8L"
   ];
   modules = {
     hyprland.monitors = [
@@ -33,11 +33,11 @@
         enabled = false;
       }
       {
-        name = "DP-4";
+        name = "desc:Dell Inc. DELL S3220DGF BG9TF43";
         position = "0x0";
       }
       {
-        name = "DP-3";
+        name = "desc:Dell Inc. DELL U2718Q 4K8X703P0N8L";
         position = "auto-right";
         resolution = "highres@high";
       }

@@ -22,6 +22,7 @@ in
       default = [
         "rfd-check"
         "tiberius-development-workflow"
+        "pr-check"
       ];
       description = "List of skill directory names to install from team-claude-skills";
     };
