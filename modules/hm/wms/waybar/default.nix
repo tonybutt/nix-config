@@ -166,6 +166,9 @@ in
               "class<Signal>" = "<span color='#${colors.base0C}'>󰭹</span>";
               "class<dev.zed.Zed>" = "<span color='#${colors.base0A}'>󱐋</span>";
               "class<spotify>" = "<span color='#${colors.base0B}'>󰓇</span>";
+              "class<steam>" = "<span color='#${colors.base0D}'>󰓓</span>";
+              "class<steam_app_.*>" = "<span color='#${colors.base0B}'>󰊗</span>";
+              "class<gamescope>" = "<span color='#${colors.base0B}'>󰊗</span>";
               "title<(.*) - (.*) - Visual Studio Code>" = "<span color='#${colors.base0D}'>[󰨞 $2]</span>";
             };
             format-icons = {

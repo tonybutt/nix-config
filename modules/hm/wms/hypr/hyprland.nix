@@ -373,6 +373,17 @@ in
             "match:class ^(dropdown)$, size 800 400"
             "match:class ^(dropdown)$, center on"
             "match:class ^(dropdown)$, animation slide"
+            "match:class ^(ssh-askpass)$, float on, center on, size 400 200"
+            # Steam
+            "match:class ^(steam)$, float on"
+            "match:class ^(steam)$, match:title ^(Steam)$, size 80% 80%"
+            "match:class ^(steam)$, match:title ^(Steam)$, center on"
+            "match:class ^(steam)$, match:title ^(Friends List)$, size 400 600"
+            "match:class ^(steam)$, match:title ^(Steam Settings)$, size 800 600"
+            # Steam games
+            "match:class ^(steam_app_.*)$, fullscreen on"
+            "match:class ^(steam_app_.*)$, no_blur on"
+            "match:class ^(steam_app_.*)$, immediate on"
           ];
 
           # Tiling bindings (Omarchy + personal vim keys)
