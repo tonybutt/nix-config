@@ -1,7 +1,23 @@
-accounts=$(ykman --device "$1" oath accounts code)
+if [[ $# -eq 0 ]]; then
+    notify-send "Error" "Usage: oath <serial> [serial...]"
+    exit 1
+fi
+
+accounts=""
+for serial in "$@"; do
+    device_accounts=$(ykman --device "$serial" oath accounts code 2>&1) || {
+        notify-send "Warning" "Failed to read from device $serial"
+        continue
+    }
+    if [[ -n "$device_accounts" ]]; then
+        accounts+="${device_accounts}"$'\n'
+    fi
+done
+
+accounts=$(echo "$accounts" | sed '/^$/d')
 
 if [[ -z "$accounts" ]]; then
-    notify-send "Error" "No OTP accounts found."
+    notify-send "Error" "No OTP accounts found on any device."
     exit 1
 fi
 
@@ -12,8 +28,8 @@ if [[ -z "$selected" ]]; then
     exit 0
 fi
 
-code=$(echo "$selected" | awk '{print $NF}') # The last field is the OTP code
-account=${selected//$code$///sed "s/ $code$//")} # Remove the OTP code from the end to get the account name
+code=$(echo "$selected" | awk '{print $NF}')
+account="${selected% "$code"}"
 
 echo -n "$code" | wl-copy
 notify-send "OTP Copied" "The OTP code for \"$account\" has been copied to the clipboard."

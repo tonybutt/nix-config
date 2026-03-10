@@ -401,7 +401,7 @@ in
             "$mainMod, Return, exec, ${term}"
             "$mainMod, E, exec, ${thunar}"
             "$mainMod, SPACE, exec, ${fuzzel}"
-            "$mainMod, Y, exec, oath 22293570"
+            "$mainMod, Y, exec, oath 22293570 19125157"
             "$mainMod, V, exec, ${cliphist} list | ${fuzzel} --dmenu | ${cliphist} decode | ${wl-copy}"
             # Web apps
             "$mainMod SHIFT, A, exec, launch-webapp https://chatgpt.com"
