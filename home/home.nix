@@ -3,6 +3,7 @@
   imports = [
     ./tools/oath.nix
     ./tools/wf-recorder.nix
+    ./tools/mp4-to-gif.nix
     ./tools/theme-switch.nix
     ../modules/hm
   ];
