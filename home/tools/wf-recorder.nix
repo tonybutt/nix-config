@@ -7,6 +7,8 @@ let
       wf-recorder
       procps
       libnotify
+      jq
+      hyprland
     ];
 
     text = builtins.readFile ./wf-recorder;
