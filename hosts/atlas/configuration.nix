@@ -23,6 +23,7 @@
       enable = true;
       obs.enable = true;
       scarlettRite.enable = true;
+      openrazer.enable = true;
     };
   };
 

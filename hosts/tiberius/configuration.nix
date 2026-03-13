@@ -17,6 +17,7 @@
       enable = true;
       obs.enable = true;
       scarlettRite.enable = true;
+      openrazer.enable = true;
     };
   };
   boot.resumeDevice = "/dev/mapper/crypted";
