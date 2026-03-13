@@ -34,6 +34,7 @@
     gimp3
     unzip
     claude-code
+    sox
     pavucontrol
     cloudflared
     openssl
