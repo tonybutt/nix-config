@@ -391,7 +391,7 @@ in
             # Close windows
             "$mainMod, Q, killactive,"
             # Control tiling
-            "$mainMod, S, togglesplit,"
+            "$mainMod, S, layoutmsg, togglesplit"
             "$mainMod, P, pseudo,"
             "$mainMod, F, togglefloating,"
             ",F11,fullscreen"
