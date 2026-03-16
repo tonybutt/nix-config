@@ -31,7 +31,7 @@ in
           condition = "hasconfig:remote.*.url:git@github.com:${user.personal.githubUsername}/**";
           contents = {
             user.email = user.personal.email;
-            user.signingkey = user.personal.signingKey;
+            user.signingKey = user.personal.signingKey;
           };
         }
         # Personal repos via HTTPS
@@ -39,14 +39,14 @@ in
           condition = "hasconfig:remote.*.url:https://github.com/${user.personal.githubUsername}/**";
           contents = {
             user.email = user.personal.email;
-            user.signingkey = user.personal.signingKey;
+            user.signingKey = user.personal.signingKey;
           };
         }
       ];
       settings = {
         user.email = user.work.email;
         user.name = user.fullName;
-        user.signingkey = user.work.signingKey;
+        user.signingKey = user.work.signingKey;
         core.askPass = "";
         core.editor = "vim";
         commit.template = "${commitTemplate}";
