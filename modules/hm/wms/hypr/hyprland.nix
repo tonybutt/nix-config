@@ -141,6 +141,7 @@ in
       settings =
         let
           inherit (config.lib.stylix) colors;
+          isDark = config.modules.themes.polarity == "dark";
           rgb = color: "rgb(${color})";
           activeGradient = "${rgb colors.base0B} ${rgb colors.base0A} 45deg";
           inactiveGradient = "${rgb colors.base00}";
@@ -320,21 +321,19 @@ in
               height = 22;
               gaps_in = 5;
               gaps_out = 0;
-              text_color = lib.mkForce (rgb colors.base00);
-              text_color_inactive = lib.mkForce "rgba(${colors.base01}cc)";
-              "col.active" = lib.mkForce "rgba(${colors.base0B}bf)";
-              "col.inactive" = lib.mkForce "rgba(${colors.base03}80)";
+              text_color = lib.mkForce (rgb (if isDark then colors.base00 else colors.base07));
+              text_color_inactive = lib.mkForce (rgb (if isDark then colors.base04 else colors.base02));
+              "col.active" = lib.mkForce (rgb colors.base0B);
+              "col.inactive" = lib.mkForce (rgb (if isDark then colors.base02 else colors.base05));
               gradients = true;
               gradient_rounding = 0;
               gradient_round_only_edges = false;
             };
           };
 
-          gestures = {
-            workspace_swipe_invert = false;
-            workspace_swipe_distance = 200;
-            workspace_swipe_forever = true;
-          };
+          gesture = [
+            "3, horizontal, workspace"
+          ];
 
           misc = {
             disable_hyprland_logo = true;

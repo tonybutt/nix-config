@@ -148,6 +148,7 @@
                 {
                   modules.themes.theme = themeConfig.scheme;
                   modules.themes.wallpaper = themeConfig.wallpaper;
+                  modules.themes.polarity = themeConfig.polarity;
                 }
               ];
             };
@@ -199,6 +200,7 @@
                 {
                   modules.themes.theme = theme.scheme;
                   modules.themes.wallpaper = theme.wallpaper;
+                  modules.themes.polarity = theme.polarity;
                   modules.hyprpaper.wallpaper = builtins.toString theme.wallpaper;
                 }
               ];

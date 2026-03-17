@@ -34,6 +34,14 @@ in
         ~/Wallpapers/Eric.png
       '';
     };
+    modules.themes.polarity = mkOption {
+      type = types.enum [
+        "dark"
+        "light"
+      ];
+      default = "dark";
+      description = "Whether the theme is dark or light, used to pick contrasting UI colors";
+    };
   };
   config = mkIf cfg.enable {
     stylix = {
@@ -66,6 +74,7 @@ in
         };
       image = cfg.wallpaper;
       base16Scheme = cfg.theme;
+      polarity = cfg.polarity;
       opacity = {
         terminal = 0.65;
       };
