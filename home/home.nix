@@ -39,6 +39,7 @@
     cloudflared
     openssl
     spotify
+    stremio-linux-shell
     libnotify
     yubioath-flutter
     signal-desktop
