@@ -2,6 +2,7 @@
   inputs,
   config,
   lib,
+  pkgs,
   ...
 }:
 let
@@ -11,24 +12,8 @@ let
     mkEnableOption
     ;
 
-  # Recursively find all directories containing SKILL.md
-  findSkillPaths =
-    path:
-    let
-      entries = builtins.readDir path;
-      hasSkillMd = entries ? "SKILL.md" && entries."SKILL.md" == "regular";
-      subdirs = lib.filterAttrs (_: v: v == "directory") entries;
-    in
-    if hasSkillMd then
-      [ path ]
-    else
-      lib.concatLists (lib.mapAttrsToList (name: _: findSkillPaths "${path}/${name}") subdirs);
-
-  allSkillPaths = lib.concatLists (
-    lib.mapAttrsToList (name: _: findSkillPaths "${inputs.team-claude-skills}/${name}") (
-      lib.filterAttrs (_: v: v == "directory") (builtins.readDir inputs.team-claude-skills)
-    )
-  );
+  skills = inputs.team-claude-skills.packages.${pkgs.system};
+  managedSkills = inputs.team-claude-skills.lib.managedSkillNames;
 in
 {
   options.modules.ai.team-skills = {
@@ -36,13 +21,15 @@ in
   };
 
   config = mkIf cfg.enable {
-    home.file = lib.listToAttrs (
-      map (skillPath: {
-        name = ".claude/skills/${builtins.unsafeDiscardStringContext (builtins.baseNameOf skillPath)}";
-        value = {
-          source = skillPath;
-        };
-      }) allSkillPaths
-    );
+    # Use cp -rL activation instead of home.file symlinks because
+    # Claude Code's skill discovery does not follow symlinks.
+    home.activation.claude-skills = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      mkdir -p $HOME/.claude/skills
+      for skill in ${lib.concatStringsSep " " managedSkills}; do
+        rm -rf $HOME/.claude/skills/$skill
+      done
+      cp -rL ${skills.claude-skills-all}/share/claude-skills/* $HOME/.claude/skills/
+      chmod -R u+rw $HOME/.claude/skills
+    '';
   };
 }
