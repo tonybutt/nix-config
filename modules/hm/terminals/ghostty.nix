@@ -13,9 +13,9 @@ in
     programs.ghostty = {
       enable = true;
       settings = {
+        gtk-single-instance = true;
         copy-on-select = "clipboard";
         clipboard-trim-trailing-spaces = true;
-        font-family = "FiraMono Nerd Font Mono";
         font-size = 14;
         window-decoration = false;
         background-opacity = 0.8;
