@@ -994,11 +994,11 @@
     "team-claude-skills": {
       "flake": false,
       "locked": {
-        "lastModified": 1772822401,
-        "narHash": "sha256-JOt0EsuWGzy/VAuQnBVl9GuVUYK6U2d3P7w2f1TxLW8=",
+        "lastModified": 1773775248,
+        "narHash": "sha256-eJfDFwwf9uzjFFQBlIKS7tNksZGOjVGnzkCQv+pAY0U=",
         "ref": "refs/heads/main",
-        "rev": "00d825f64d2c1f5ba5d767b23c9d78e4fb259d12",
-        "revCount": 26,
+        "rev": "6266da592d5522483ea59e3d3c6600eee3dd357d",
+        "revCount": 47,
         "type": "git",
         "url": "ssh://git@github.com/tiberius-grail/team-claude-skills"
       },

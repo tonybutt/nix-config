@@ -9,33 +9,40 @@ let
   inherit (lib)
     mkIf
     mkEnableOption
-    mkOption
-    types
     ;
+
+  # Recursively find all directories containing SKILL.md
+  findSkillPaths =
+    path:
+    let
+      entries = builtins.readDir path;
+      hasSkillMd = entries ? "SKILL.md" && entries."SKILL.md" == "regular";
+      subdirs = lib.filterAttrs (_: v: v == "directory") entries;
+    in
+    if hasSkillMd then
+      [ path ]
+    else
+      lib.concatLists (lib.mapAttrsToList (name: _: findSkillPaths "${path}/${name}") subdirs);
+
+  allSkillPaths = lib.concatLists (
+    lib.mapAttrsToList (name: _: findSkillPaths "${inputs.team-claude-skills}/${name}") (
+      lib.filterAttrs (_: v: v == "directory") (builtins.readDir inputs.team-claude-skills)
+    )
+  );
 in
 {
   options.modules.ai.team-skills = {
     enable = mkEnableOption "Enable team Claude skills from the shared skills repository";
-
-    skills = mkOption {
-      type = types.listOf types.str;
-      default = [
-        "rfd-check"
-        "tiberius-development-workflow"
-        "pr-check"
-      ];
-      description = "List of skill directory names to install from team-claude-skills";
-    };
   };
 
   config = mkIf cfg.enable {
     home.file = lib.listToAttrs (
-      map (skill: {
-        name = ".claude/skills/${skill}";
+      map (skillPath: {
+        name = ".claude/skills/${builtins.unsafeDiscardStringContext (builtins.baseNameOf skillPath)}";
         value = {
-          source = "${inputs.team-claude-skills}/${skill}";
+          source = skillPath;
         };
-      }) cfg.skills
+      }) allSkillPaths
     );
   };
 }
