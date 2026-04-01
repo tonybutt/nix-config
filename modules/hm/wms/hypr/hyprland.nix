@@ -30,7 +30,13 @@ let
   btop = "${pkgs.btop}/bin/btop";
   hyprlock = "${pkgs.hyprlock}/bin/hyprlock";
   spotify = "${pkgs.spotify}/bin/spotify";
-  obs = "${pkgs.obs-studio}/bin/obs";
+  # clear stale sentinel files before launching obs to suppress the
+  # "OBS didn't shut down properly" dialog caused by fast shutdown
+  # ref: https://obsproject.com/forum/threads/190590/
+  obs = pkgs.writeShellScript "obs-clean-start" ''
+    rm -rf ~/.config/obs-studio/.sentinel
+    exec ${pkgs.obs-studio}/bin/obs "$@"
+  '';
   slack = "${pkgs.slack}/bin/slack";
   signal = "${pkgs.signal-desktop}/bin/signal-desktop";
   brave = "${pkgs.brave}/bin/brave";

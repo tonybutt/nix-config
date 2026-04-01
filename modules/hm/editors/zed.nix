@@ -59,7 +59,7 @@ in
         cursor_blink = false;
         vertical_scroll_margin = 5;
         agent_servers = {
-          claude = {
+          claude-acp = {
             env = {
               CLAUDE_CODE_EXECUTABLE = "${pkgs.claude-code}/bin/claude";
             };
