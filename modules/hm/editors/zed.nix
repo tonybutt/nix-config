@@ -9,6 +9,18 @@ let
   cfg = config.modules.editors;
   inherit (lib) mkIf mkEnableOption;
   pkgs-color-lsp = import inputs.nixpkgs-color-lsp { inherit (pkgs) system; };
+
+  # Workaround for Zed's managed Node.js not working on NixOS.
+  # Zed downloads a generic Linux node binary that fails due to missing dynamic linker.
+  # We create a directory that symlinks to Nix's nodejs, with a writable cache dir.
+  # See: https://github.com/zed-industries/zed/issues/50828#issuecomment-4031736186
+  zedNodeVersion = "node-v24.11.0-linux-x64";
+  zedNodeShim = pkgs.runCommand "zed-node-shim" { } ''
+    mkdir -p $out
+    for item in ${pkgs.nodejs}/bin ${pkgs.nodejs}/include ${pkgs.nodejs}/lib ${pkgs.nodejs}/share; do
+      ln -s "$item" "$out/$(basename $item)"
+    done
+  '';
 in
 {
   options.modules.editors.zed.enable = mkEnableOption "Enable Zed" // {
@@ -16,6 +28,14 @@ in
   };
 
   config = mkIf cfg.zed.enable {
+    # Symlink Nix nodejs into the location Zed expects
+    home.file.".local/share/zed/node/${zedNodeVersion}".source = zedNodeShim;
+
+    # Zed's node runtime tries to write into a cache dir inside the node folder.
+    # Since the shim is read-only (nix store), we provide a writable cache dir separately.
+    home.file.".local/share/zed/node/cache".source =
+      config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.cache/zed-node";
+
     programs.zed-editor = {
       enable = true;
       extraPackages = with pkgs; [
@@ -28,7 +48,6 @@ in
         typescript-language-server
         pkgs-color-lsp.color-lsp
         slint-lsp
-        claude-code-acp
       ];
       extensions = [
         "nix"
