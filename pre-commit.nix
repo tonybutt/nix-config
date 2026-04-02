@@ -3,7 +3,7 @@
   pre-commit-hooks,
   treefmtEval,
 }:
-pre-commit-hooks.lib.${pkgs.system}.run {
+pre-commit-hooks.lib.${pkgs.stdenv.hostPlatform.system}.run {
   src = ./.;
   hooks = {
     flake-checker.enable = true;

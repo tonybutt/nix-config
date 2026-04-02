@@ -20,6 +20,7 @@ let
     for item in ${pkgs.nodejs}/bin ${pkgs.nodejs}/include ${pkgs.nodejs}/lib ${pkgs.nodejs}/share; do
       ln -s "$item" "$out/$(basename $item)"
     done
+    ln -s ${config.home.homeDirectory}/.cache/zed-node $out/cache
   '';
 in
 {
@@ -30,11 +31,6 @@ in
   config = mkIf cfg.zed.enable {
     # Symlink Nix nodejs into the location Zed expects
     home.file.".local/share/zed/node/${zedNodeVersion}".source = zedNodeShim;
-
-    # Zed's node runtime tries to write into a cache dir inside the node folder.
-    # Since the shim is read-only (nix store), we provide a writable cache dir separately.
-    home.file.".local/share/zed/node/cache".source =
-      config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.cache/zed-node";
 
     programs.zed-editor = {
       enable = true;
@@ -48,6 +44,8 @@ in
         typescript-language-server
         pkgs-color-lsp.color-lsp
         slint-lsp
+        claude-agent-acp
+        docker-language-server
       ];
       extensions = [
         "nix"
@@ -63,6 +61,7 @@ in
         "scss"
         "typst"
         "slint"
+        "sql"
       ];
       userSettings = {
         # Appearance
@@ -79,6 +78,7 @@ in
         vertical_scroll_margin = 5;
         agent_servers = {
           claude-acp = {
+            type = "registry";
             env = {
               CLAUDE_CODE_EXECUTABLE = "${pkgs.claude-code}/bin/claude";
             };
