@@ -55,6 +55,7 @@
       hyprland,
       disko,
       sops-nix,
+      deploy-rs,
       nixos-hardware,
       nur,
       treefmt-nix,
@@ -97,12 +98,14 @@
         pre-commit-check = pkgs.callPackage ./pre-commit.nix {
           inherit pre-commit-hooks treefmtEval;
         };
-      };
+      }
+      // (deploy-rs.lib.${system}.deployChecks self.deploy);
       devShells.${system}.default = pkgs.mkShell {
         inherit (self.checks.${system}.pre-commit-check) shellHook;
         packages = [
           (self.checks.${system}.pre-commit-check.enabledPackages)
           treefmtEval.config.build.wrapper
+          deploy-rs.packages.${system}.default
         ];
         env = {
           CLAUDE_INSTANCE = "nix-config";
@@ -242,5 +245,13 @@
           );
         in
         allConfigs;
+      deploy.nodes.mantra = {
+        hostname = "mantra";
+        profiles.system = {
+          user = "root";
+          sshUser = user.username;
+          path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.mantra;
+        };
+      };
     };
 }
