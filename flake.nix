@@ -125,10 +125,16 @@
               hardwareModules = [ nixos-hardware.nixosModules.framework-16-7040-amd ];
               theme = "final-fantasy";
             };
-            # mantra = {
-            #   hardwareModules = [ ];
-            #   theme = "final-fantasy";
-            # };
+            mantra = {
+              hardwareModules = [
+                nixos-hardware.nixosModules.common-cpu-amd
+                nixos-hardware.nixosModules.common-cpu-amd-pstate
+                nixos-hardware.nixosModules.common-gpu-amd
+                nixos-hardware.nixosModules.common-pc
+                nixos-hardware.nixosModules.common-pc-ssd
+              ];
+              theme = "final-fantasy";
+            };
             lapnix = {
               hardwareModules = [ nixos-hardware.nixosModules.framework-13-7040-amd ];
               theme = "final-fantasy";
@@ -182,7 +188,7 @@
             tiberius = "final-fantasy";
             atlas = "ugrain";
             lapnix = "final-fantasy";
-            # mantra = "final-fantasy";
+            mantra = "final-fantasy";
           };
 
           mkHome =
