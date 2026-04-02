@@ -1,5 +1,6 @@
 {
   pkgs,
+  lib,
   user,
   config,
   ...
@@ -32,33 +33,25 @@
   };
 
   # Mantra is a desktop on ethernet — disable wireless from shared modules
-  networking.wireless.enable = false;
+  networking.wireless.enable = lib.mkForce false;
 
-  # GPU — RX 6900 XT (RDNA 2)
+  # GPU — RX 6900 XT (RDNA 2, RADV is default)
   hardware = {
     enableRedistributableFirmware = true;
     graphics = {
       enable = true;
       enable32Bit = true;
     };
-    amdgpu.amdvlk = {
-      enable = true;
-      support32Bit.enable = true;
-    };
   };
 
   # Fonts
   fonts.packages = with pkgs; [
     noto-fonts
-    noto-fonts-emoji
+    noto-fonts-color-emoji
     font-awesome
     cascadia-code
-    (nerdfonts.override {
-      fonts = [
-        "NerdFontsSymbolsOnly"
-        "FiraCode"
-      ];
-    })
+    nerd-fonts.symbols-only
+    nerd-fonts.fira-code
   ];
 
   # SSH server — hardened, yubikey-sk only

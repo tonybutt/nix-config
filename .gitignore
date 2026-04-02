@@ -25,8 +25,8 @@ result-*
 .DS_Store
 Thumbs.db
 
-# Secrets (never commit these)
-secrets/
+# Secrets — sops-encrypted files ARE safe to commit
+# Raw keys and unencrypted secrets are not
 *.age
 !*.age.pub
 *.key
