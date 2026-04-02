@@ -17,6 +17,7 @@ in
     ./users
     ./virtualizations
     ./laptop.nix
+    ./sops
   ];
   options = {
     modules.enable = mkEnableOption "Enable NixOS modules" // {

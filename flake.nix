@@ -54,6 +54,7 @@
       home-manager,
       hyprland,
       disko,
+      sops-nix,
       nixos-hardware,
       nur,
       treefmt-nix,
@@ -149,6 +150,7 @@
                 ./hosts/${hostname}/configuration.nix
                 stylix.nixosModules.stylix
                 disko.nixosModules.disko
+                sops-nix.nixosModules.sops
                 ./modules/stylix
                 {
                   modules.themes.theme = themeConfig.scheme;

@@ -1,0 +1,10 @@
+# Add host age public keys here after install.
+# Convert SSH host key to age key:
+#   nix-shell -p ssh-to-age --run 'cat /etc/ssh/ssh_host_ed25519_key.pub | ssh-to-age'
+#
+# Then run: sops secrets/secrets.yaml
+keys: []
+creation_rules:
+  - path_regex: secrets/secrets\.yaml$
+    key_groups:
+      - age: []
