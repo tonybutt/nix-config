@@ -1,75 +1,57 @@
 {
   pkgs,
+  user,
   config,
-  hyprland,
   ...
 }:
-let
-  user = "anthony";
-  hypr-pkgs = hyprland.packages.${pkgs.stdenv.hostPlatform.system};
-  hypr-nixpkgs = hyprland.inputs.nixpkgs.legacyPackages.${pkgs.stdenv.hostPlatform.system};
-in
 {
   imports = [
     ./hardware-configuration.nix
     ./disko.nix
+    ../../modules/nixos
   ];
 
-  boot = {
-    loader.grub = {
+  modules = {
+    hostName = "mantra";
+    grub = true;
+    laptop = false;
+    virtualization.vms.enable = true;
+    sops.enable = true;
+    peripherals = {
       enable = true;
-      efiSupport = true;
+      obs.enable = true;
     };
-
-    # Plymouth (Theming for booting screen and drive unlock screen)
-    plymouth.enable = true;
-
-    # Disable(quiet) most of the logging that happens during boot
-    initrd = {
-      verbose = false;
-      systemd.enable = true;
-    };
-
-    consoleLogLevel = 0;
-
-    kernelParams = [
-      "quiet"
-      "udev.log_level=0"
-    ];
-
-    kernelModules = [
-      "v4l2loopback"
-      "snd-aloop"
-      "vfio-pci"
-    ];
-
-    extraModulePackages = [ config.boot.kernelPackages.v4l2loopback.out ];
-    extraModprobeConfig = ''
-      options v4l2loopback exclusive_caps=1 card_label="OBS Camera"
-      options snd_usb_audio vid=0x1235 pid=0x8212 device_setup=1
-    '';
   };
 
-  environment = {
-    systemPackages = with pkgs; [
-      virt-manager
-      virt-viewer
-      qemu_kvm
-      qemu
-      xdg-utils
-      seatd
-      pavucontrol
-    ];
-    sessionVariables.NIXOS_OZONE_WL = "1";
+  # Steam
+  programs.steam = {
+    enable = true;
+    remotePlay.openFirewall = true;
+    dedicatedServer.openFirewall = true;
+    localNetworkGameTransfers.openFirewall = true;
   };
 
+  # Mantra is a desktop on ethernet — disable wireless from shared modules
+  networking.wireless.enable = false;
+
+  # GPU — RX 6900 XT (RDNA 2)
+  hardware = {
+    enableRedistributableFirmware = true;
+    graphics = {
+      enable = true;
+      enable32Bit = true;
+    };
+    amdgpu.amdvlk = {
+      enable = true;
+      support32Bit.enable = true;
+    };
+  };
+
+  # Fonts
   fonts.packages = with pkgs; [
     noto-fonts
     noto-fonts-emoji
-    twemoji-color-font
     font-awesome
-    powerline-fonts
-    powerline-symbols
     cascadia-code
     (nerdfonts.override {
       fonts = [
@@ -79,225 +61,46 @@ in
     })
   ];
 
-  services = {
-    devmon.enable = true;
-    gvfs.enable = true;
-    udisks2.enable = true;
-    tumbler.enable = true;
-    printing.enable = true;
-    blueman.enable = true;
-    pcscd.enable = true;
-    gnome.gnome-keyring.enable = true;
-    greetd = {
-      enable = true;
-      settings = {
-        default_session = {
-          command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --remember --remember-session --sessions ${pkgs.hyprland}/share/wayland-sessions";
-          user = "greeter";
-        };
-      };
-    };
-    udev.extraRules = ''
-      # Supporting VFIO
-      SUBSYSTEM=="vfio", OWNER="root", GROUP="kvm"
-    '';
-
-    xserver = {
-      enable = true;
-      xkb.layout = "us";
-    };
-  };
-
-  systemd.services.greetd.serviceConfig = {
-    Type = "idle";
-    StandardInput = "tty";
-    StandardOutput = "tty";
-    StandardError = "journal"; # Without this errors will spam on screen
-    # Without these bootlogs will spam on screen
-    TTYReset = true;
-    TTYVHangup = true;
-    TTYVTDisallocate = true;
-  };
-
-  programs = {
-    zsh.enable = true;
-    ssh.startAgent = false;
-    seahorse.enable = true;
-
-    steam = {
-      enable = true;
-      remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
-      dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
-      localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
-    };
-
-    hyprland = {
-      enable = true;
-      package = hypr-pkgs.hyprland;
-      portalPackage = hypr-pkgs.xdg-desktop-portal-hyprland;
-      xwayland.enable = true;
-    };
-
-    nh = {
-      enable = true;
-      clean.enable = true;
-      clean.extraArgs = "--keep-since 4d --keep 3";
-      flake = "/home/${user}/nix-config";
-    };
-
-    gnupg.agent = {
-      enable = true;
-      enableSSHSupport = true;
-    };
-
-    thunar = {
-      enable = true;
-      plugins = with pkgs.xfce; [
-        thunar-archive-plugin
-        thunar-volman
-      ];
-    };
-    xfconf.enable = true;
-  };
-
-  security = {
-    sudo.execWheelOnly = true;
-    auditd.enable = true;
-    audit.enable = true;
-    rtkit.enable = true;
-    pam.services = {
-      hyprlock = { };
-      greetd.enableGnomeKeyring = true;
-    };
-  };
-
-  xdg.portal = {
+  # SSH server — hardened, yubikey-sk only
+  services.openssh = {
     enable = true;
-    config.common.default = [ "hyprland" ];
-    extraPortals = [
-      pkgs.xdg-desktop-portal-gtk
-      hypr-pkgs.xdg-desktop-portal-hyprland
-    ];
-  };
-
-  hardware = {
-    gpgSmartcards.enable = true;
-    graphics = {
-      enable = true;
-      package = hypr-nixpkgs.mesa;
-      package32 = hypr-nixpkgs.pkgsi686Linux.mesa;
-      enable32Bit = true;
-    };
-    amdgpu.amdvlk = {
-      enable = true;
-      support32Bit.enable = true;
-    };
-    bluetooth = {
-      enable = true;
-      powerOnBoot = true;
-      settings = {
-        General = {
-          Enable = "Source,Sink,Media,Socket";
-          Experimental = true;
-          ControllerMode = "Dual";
-          FastConnectable = true;
-        };
-        Policy = {
-          AutoEnable = "true";
-        };
-        LE = {
-          EnableAdvMonInterleaveScan = "true";
-        };
-      };
-    };
-  };
-
-  # Enable common container config files in /etc/containers
-  virtualisation = {
-    docker.enable = true;
-    containers.enable = true;
-    kvmgt.enable = true;
-    spiceUSBRedirection.enable = true;
-
-    libvirtd = {
-      enable = true;
-      qemu = {
-        package = pkgs.qemu_kvm;
-        runAsRoot = false;
-        swtpm.enable = true;
-
-        ovmf = {
-          enable = true;
-          packages = [ pkgs.OVMFFull.fd ];
-        };
-
-        verbatimConfig = ''
-          namespaces = []
-
-          # Whether libvirt should dynamically change file ownership
-          dynamic_ownership = 0
-        '';
-      };
-
-      onBoot = "ignore";
-      onShutdown = "shutdown";
-    };
-  };
-
-  nix = {
-    channel.enable = false;
     settings = {
-      substituters = [ "https://hyprland.cachix.org" ];
-      trusted-public-keys = [ "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc=" ];
-
-      experimental-features = [
-        "nix-command"
-        "flakes"
-      ];
+      PasswordAuthentication = false;
+      KbdInteractiveAuthentication = false;
+      PermitRootLogin = "no";
+      X11Forwarding = false;
+      AuthenticationMethods = "publickey";
     };
   };
+  users.users.${user.username}.openssh.authorizedKeys.keys = [
+    # ed25519-sk yubikey key — replace with your actual public key
+    "sk-ssh-ed25519@openssh.com REPLACE_WITH_YOUR_YUBIKEY_SK_PUBKEY"
+  ];
 
-  users = {
-    defaultUserShell = pkgs.zsh;
-    users.${user} = {
-      isNormalUser = true;
-      home = "/home/${user}";
-      extraGroups = [
-        "wheel"
-        "networkmanager"
-        "input"
-        "docker"
-        "libvirtd"
-        "qemu-libvirtd"
-        "kvm"
-      ];
-    };
-  };
+  # GitHub Actions runners (4x user-level for tonybutt)
+  services.github-runners = builtins.listToAttrs (
+    map
+      (n: {
+        name = "mantra-${toString n}";
+        value = {
+          enable = true;
+          url = "https://github.com/tonybutt";
+          tokenFile = config.sops.secrets.github-runner-token.path;
+          extraLabels = [ "nix" ];
+          replace = true;
+          extraPackages = with pkgs; [
+            git
+            nix
+          ];
+        };
+      })
+      [
+        1
+        2
+        3
+        4
+      ]
+  );
 
-  networking = {
-    hostName = "nixdesk";
-    firewall = {
-      enable = true;
-      trustedInterfaces = [
-        "virbr0"
-        "br0"
-      ];
-    };
-    networkmanager.enable = true;
-  };
-
-  time.timeZone = "America/New_York";
-  i18n.defaultLocale = "en_US.UTF-8";
-  i18n.extraLocaleSettings = {
-    LC_ADDRESS = "en_US.UTF-8";
-    LC_IDENTIFICATION = "en_US.UTF-8";
-    LC_MEASUREMENT = "en_US.UTF-8";
-    LC_MONETARY = "en_US.UTF-8";
-    LC_NAME = "en_US.UTF-8";
-    LC_NUMERIC = "en_US.UTF-8";
-    LC_PAPER = "en_US.UTF-8";
-    LC_TELEPHONE = "en_US.UTF-8";
-    LC_TIME = "en_US.UTF-8";
-  };
   system.stateVersion = "24.05";
 }
