@@ -17,6 +17,7 @@ in
     ./users
     ./virtualizations
     ./laptop.nix
+    ./ssh
     ./sops
   ];
   options = {

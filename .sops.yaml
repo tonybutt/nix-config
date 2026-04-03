@@ -2,9 +2,11 @@
 #   nix-shell -p ssh-to-age --run 'cat /etc/ssh/ssh_host_ed25519_key.pub | ssh-to-age'
 keys:
   - &atlas age1f4870gc6qqrqznk3hm88jqaehymz056zayqqyljg3nngnk45hqas5tk0yv
+  - &mantra age1fkqne0n5ksw3v2yhlc995s09rt5gyzt8eta6xfrwg95yx8mqmsvs096aa8
 creation_rules:
   - path_regex: secrets/secrets\.yaml$
     encrypted_regex: ^github-runner-token$
     key_groups:
       - age:
           - *atlas
+          - *mantra
