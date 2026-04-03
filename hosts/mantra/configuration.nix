@@ -32,6 +32,8 @@
     localNetworkGameTransfers.openFirewall = true;
   };
 
+  environment.systemPackages = [ pkgs.htop ];
+
   # Mantra is a desktop on ethernet — disable wireless from shared modules
   networking.wireless.enable = lib.mkForce false;
 
