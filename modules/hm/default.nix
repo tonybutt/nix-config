@@ -12,6 +12,7 @@
     ./editors
     ./shells
     ./terminals
+    ./ssh
     ./ai
     ../stylix
   ];
