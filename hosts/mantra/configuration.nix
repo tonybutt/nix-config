@@ -63,6 +63,7 @@
       PermitRootLogin = "no";
       X11Forwarding = false;
       AuthenticationMethods = "publickey";
+      PubkeyAuthOptions = "verify-required";
     };
   };
   networking.firewall.extraCommands = ''
