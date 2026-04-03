@@ -34,6 +34,27 @@
 
   environment.systemPackages = [ pkgs.htop ];
 
+  # Passwordless sudo for deploy-rs
+  security.sudo.extraRules = [
+    {
+      users = [ "anthony" ];
+      commands = [
+        {
+          command = "/nix/store/*/activate-rs";
+          options = [ "NOPASSWD" ];
+        }
+        {
+          command = "/nix/store/*/switch-to-configuration";
+          options = [ "NOPASSWD" ];
+        }
+        {
+          command = "/run/current-system/sw/bin/nix-env";
+          options = [ "NOPASSWD" ];
+        }
+      ];
+    }
+  ];
+
   # Mantra is a desktop on ethernet — disable wireless from shared modules
   networking.wireless.enable = lib.mkForce false;
 
