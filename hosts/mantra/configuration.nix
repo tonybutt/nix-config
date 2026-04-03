@@ -70,14 +70,14 @@
     "sk-ssh-ed25519@openssh.com REPLACE_WITH_YOUR_YUBIKEY_SK_PUBKEY"
   ];
 
-  # GitHub Actions runners (4x user-level for tonybutt)
+  # GitHub Actions runners (repo-level)
   services.github-runners = builtins.listToAttrs (
     map
       (n: {
-        name = "mantra-${toString n}";
+        name = "mantra-jcu-${toString n}";
         value = {
           enable = true;
-          url = "https://github.com/tonybutt";
+          url = "https://github.com/tonybutt/jcu-site";
           tokenFile = config.sops.secrets.github-runner-token.path;
           extraLabels = [ "nix" ];
           replace = true;
