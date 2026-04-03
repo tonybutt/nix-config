@@ -247,7 +247,7 @@
         in
         allConfigs;
       deploy.nodes.mantra = {
-        hostname = "mantra";
+        hostname = "mantra.lan";
         profiles.system = {
           user = "root";
           sshUser = user.username;
