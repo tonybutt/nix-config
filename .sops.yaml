@@ -1,10 +1,10 @@
-# Add host age public keys here after install.
 # Convert SSH host key to age key:
 #   nix-shell -p ssh-to-age --run 'cat /etc/ssh/ssh_host_ed25519_key.pub | ssh-to-age'
-#
-# Then run: sops secrets/secrets.yaml
-keys: []
+keys:
+  - &atlas age1f4870gc6qqrqznk3hm88jqaehymz056zayqqyljg3nngnk45hqas5tk0yv
 creation_rules:
   - path_regex: secrets/secrets\.yaml$
+    encrypted_regex: ^github-runner-token$
     key_groups:
-      - age: []
+      - age:
+          - *atlas

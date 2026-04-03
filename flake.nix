@@ -106,6 +106,7 @@
           (self.checks.${system}.pre-commit-check.enabledPackages)
           treefmtEval.config.build.wrapper
           deploy-rs.packages.${system}.default
+          pkgs.sops
         ];
         env = {
           CLAUDE_INSTANCE = "nix-config";
