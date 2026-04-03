@@ -65,9 +65,13 @@
       AuthenticationMethods = "publickey";
     };
   };
+  networking.firewall.extraCommands = ''
+    iptables -A nixos-fw -p tcp --dport 22 -s 192.168.86.0/24 -j nixos-fw-accept
+    iptables -A nixos-fw -p tcp --dport 22 -j nixos-fw-drop
+  '';
   users.users.${user.username}.openssh.authorizedKeys.keys = [
-    # ed25519-sk yubikey key — replace with your actual public key
-    "sk-ssh-ed25519@openssh.com REPLACE_WITH_YOUR_YUBIKEY_SK_PUBKEY"
+    "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIO9ZH1VvOc2+1tAkzQzNwhyT+LT6wCBmt9gP2yeH8g+oAAAABHNzaDo= abutt@tiberius.com"
+    "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIKoZU8AWvPjbgJfQXA3Kl6Ep9PzO6tGdN3GP4BRcTitOAAAABHNzaDo= anthony@abutt.io"
   ];
 
   # GitHub Actions runners (repo-level)
