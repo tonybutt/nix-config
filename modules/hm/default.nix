@@ -27,6 +27,13 @@
           "x-scheme-handler/https" = [ "brave-browser.desktop" ];
           "x-scheme-handler/http" = [ "brave-browser.desktop" ];
           "text/html" = [ "brave-browser.desktop" ];
+          "image/png" = [ "imv.desktop" ];
+          "image/jpeg" = [ "imv.desktop" ];
+          "image/gif" = [ "imv.desktop" ];
+          "image/webp" = [ "imv.desktop" ];
+          "image/bmp" = [ "imv.desktop" ];
+          "image/tiff" = [ "imv.desktop" ];
+          "image/svg+xml" = [ "imv.desktop" ];
         };
       };
     };

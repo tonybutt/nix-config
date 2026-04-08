@@ -35,6 +35,11 @@
     wallpaper = ./modules/stylix/assets/walls/hyprland-default.png;
     polarity = "dark";
   };
+  pokemon-starters = {
+    scheme = ./modules/stylix/assets/themes/pokemon_starters.yaml;
+    wallpaper = ./modules/stylix/assets/walls/starters.png;
+    polarity = "dark";
+  };
   everforest = {
     scheme = "${pkgs.base16-schemes}/share/themes/everforest-dark-hard.yaml";
     wallpaper = ./modules/stylix/assets/walls/everforest.png;

@@ -31,6 +31,7 @@
   home.packages = with pkgs; [
     nixpkgs-review
     mpv
+    imv
     gimp3
     unzip
     claude-code

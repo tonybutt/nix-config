@@ -71,6 +71,7 @@
         overlays = [
           nur.overlays.default
           claude-code.overlays.default
+          (import ./overlays/claude-code-salt.nix { salt = "cd138956494c572"; })
         ];
       };
       user = {
@@ -247,7 +248,7 @@
         in
         allConfigs;
       deploy.nodes.mantra = {
-        hostname = "mantra.lan";
+        hostname = "mantra";
         profiles.system = {
           user = "root";
           sshUser = user.username;

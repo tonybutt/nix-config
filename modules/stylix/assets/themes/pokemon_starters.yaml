@@ -1,0 +1,28 @@
+scheme: "Pokemon Starters"
+author: "Anthony Butt (sampled from Gen 1 starters fractal art)"
+# Dark theme built from the original trio: Bulbasaur, Squirtle, Charmander.
+# Backgrounds: near-black with warm and cool undertones from the neon glow.
+# Accents: Charmander's fire oranges, Squirtle's water blues, Bulbasaur's grass greens,
+#          plus the warm gold from Squirtle's shell and the white neon glow.
+#
+# base16 role guide:
+#   base00-03  backgrounds (darkest -> highlight/comment)
+#   base04-07  foregrounds (muted UI text -> brightest)
+#   base08-0F  accent/syntax colors
+
+base00: "0A0A0A" # Void Black     - deepest background (image backdrop)
+base01: "1A1008" # Ember Dark     - secondary background (warm black)
+base02: "102020" # Teal Shadow    - selection / highlight (cool black)
+base03: "302818" # Smolder        - comments / inactive borders
+base04: "607060" # Moss Muted     - subdued UI text
+base05: "C0B8A0" # Warm Glow      - default foreground
+base06: "E0DCC8" # Pale Shell     - bright foreground
+base07: "F0F0F0" # Neon White     - brightest foreground (glow highlight)
+base08: "E05000" # Charmander     - errors, variables, danger (deep fire orange)
+base09: "F0D080" # Shell Gold     - constants, numbers, warnings (Squirtle's belly)
+base0A: "E07000" # Flame          - classes, search highlights (fire tip)
+base0B: "10B060" # Bulbasaur      - strings, success, positive (bright emerald)
+base0C: "0080C0" # Squirtle       - support, regex, info, links (bright water blue)
+base0D: "006090" # Deep Tide      - functions, headings, primary accent (deep blue)
+base0E: "009010" # Grass Green    - keywords, secondary accent (leaf green)
+base0F: "A04000" # Burnt Ember    - deprecated, embedded, tertiary (dark fire)
