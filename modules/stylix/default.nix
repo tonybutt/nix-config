@@ -34,6 +34,16 @@ in
         ~/Wallpapers/Eric.png
       '';
     };
+    modules.themes.fastfetchLogo = mkOption {
+      type = types.nullOr (types.either types.str types.path);
+      default = null;
+      description = "Custom fastfetch logo source. Path to a file or inline data string. Null uses built-in NixOS logo.";
+    };
+    modules.themes.fastfetchLogoType = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = "Fastfetch logo type (e.g. 'data', 'file-raw'). Null auto-detects.";
+    };
     modules.themes.polarity = mkOption {
       type = types.enum [
         "dark"

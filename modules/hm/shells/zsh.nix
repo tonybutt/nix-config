@@ -162,6 +162,9 @@ in
           upd = "nh home switch ${flakeDir} --update";
           zed = "zeditor";
           gct = "git commit";
+        }
+        // lib.optionalAttrs (config.modules.themes.fastfetchLogoType == "pokeget") {
+          fastfetch = "pokeget random --hide-name | ${pkgs.fastfetch}/bin/fastfetch --logo-type file-raw --logo -";
         };
       historySubstringSearch.enable = true;
       oh-my-zsh = {

@@ -1,9 +1,14 @@
 {
   pkgs,
   lib,
+  config,
   user,
   ...
 }:
+let
+  c = config.lib.stylix.colors;
+  toAnsi = base: "38;2;${c."${base}-rgb-r"};${c."${base}-rgb-g"};${c."${base}-rgb-b"}";
+in
 {
   imports = [
     ./wms
@@ -80,6 +85,7 @@
     xdg.userDirs = {
       enable = true;
       createDirectories = true;
+      setSessionVariables = true;
     };
     services.cliphist = {
       enable = true;
@@ -96,7 +102,60 @@
         enable = true;
         enableZshIntegration = true;
       };
-      fastfetch.enable = true;
+      fastfetch = {
+        enable = true;
+        settings = {
+          logo =
+            if config.modules.themes.fastfetchLogoType == "pokeget" then
+              {
+                source = "-";
+                type = "file-raw";
+              }
+            else if config.modules.themes.fastfetchLogo != null then
+              {
+                source = config.modules.themes.fastfetchLogo;
+                type =
+                  if config.modules.themes.fastfetchLogoType != null then
+                    config.modules.themes.fastfetchLogoType
+                  else
+                    "auto";
+              }
+            else
+              {
+                source = "NixOS";
+                color = {
+                  "1" = toAnsi "base08";
+                  "2" = toAnsi "base09";
+                  "3" = toAnsi "base0D";
+                  "4" = toAnsi "base0C";
+                  "5" = toAnsi "base0B";
+                  "6" = toAnsi "base0E";
+                };
+              };
+          modules = [
+            "title"
+            "separator"
+            "os"
+            "host"
+            "kernel"
+            "uptime"
+            "packages"
+            "shell"
+            "display"
+            "wm"
+            "terminal"
+            "cpu"
+            "gpu"
+            "memory"
+            "disk"
+            "break"
+            {
+              type = "colors";
+              symbol = "circle";
+            }
+          ];
+        };
+      };
     };
   };
 }

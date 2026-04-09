@@ -71,7 +71,6 @@
         overlays = [
           nur.overlays.default
           claude-code.overlays.default
-          (import ./overlays/claude-code-salt.nix { salt = "cd138956494c572"; })
         ];
       };
       user = {
@@ -219,6 +218,8 @@
                   modules.themes.theme = theme.scheme;
                   modules.themes.wallpaper = theme.wallpaper;
                   modules.themes.polarity = theme.polarity;
+                  modules.themes.fastfetchLogo = theme.fastfetchLogo or null;
+                  modules.themes.fastfetchLogoType = theme.fastfetchLogoType or null;
                   modules.hyprpaper.wallpaper = builtins.toString theme.wallpaper;
                 }
               ];

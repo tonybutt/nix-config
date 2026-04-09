@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 {
   imports = [
     ./tools/oath.nix
@@ -32,6 +32,7 @@
     nixpkgs-review
     mpv
     imv
+    pokeget-rs
     gimp3
     unzip
     claude-code
@@ -97,8 +98,11 @@
     gtk3.extraConfig = {
       gtk-application-prefer-dark-theme = true;
     };
-    gtk4.extraConfig = {
-      gtk-application-prefer-dark-theme = true;
+    gtk4 = {
+      theme = config.gtk.theme;
+      extraConfig = {
+        gtk-application-prefer-dark-theme = true;
+      };
     };
   };
 }

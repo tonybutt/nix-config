@@ -10,12 +10,12 @@ author: "Anthony Butt (sampled from Gen 1 starters fractal art)"
 #   base04-07  foregrounds (muted UI text -> brightest)
 #   base08-0F  accent/syntax colors
 
-base00: "0A0A0A" # Void Black     - deepest background (image backdrop)
-base01: "1A1008" # Ember Dark     - secondary background (warm black)
-base02: "102020" # Teal Shadow    - selection / highlight (cool black)
-base03: "302818" # Smolder        - comments / inactive borders
-base04: "607060" # Moss Muted     - subdued UI text
-base05: "C0B8A0" # Warm Glow      - default foreground
+base00: "161616" # Void Black     - deepest background (image backdrop)
+base01: "242018" # Ember Dark     - secondary background (warm tint)
+base02: "1E2C2C" # Teal Shadow    - selection / highlight (cool tint)
+base03: "484038" # Smolder        - comments / inactive borders
+base04: "788078" # Moss Muted     - subdued UI text
+base05: "D0C8B0" # Warm Glow      - default foreground
 base06: "E0DCC8" # Pale Shell     - bright foreground
 base07: "F0F0F0" # Neon White     - brightest foreground (glow highlight)
 base08: "E05000" # Charmander     - errors, variables, danger (deep fire orange)

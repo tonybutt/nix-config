@@ -39,6 +39,8 @@
     scheme = ./modules/stylix/assets/themes/pokemon_starters.yaml;
     wallpaper = ./modules/stylix/assets/walls/starters.png;
     polarity = "dark";
+    fastfetchLogo = "pokeget";
+    fastfetchLogoType = "pokeget";
   };
   everforest = {
     scheme = "${pkgs.base16-schemes}/share/themes/everforest-dark-hard.yaml";
