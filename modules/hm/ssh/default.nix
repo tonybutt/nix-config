@@ -21,21 +21,6 @@ in
       enable = true;
       # HM default values are deprecated and will be removed; manage everything explicitly
       enableDefaultConfig = false;
-      # Hash hostnames in known_hosts so a compromised file doesn't map your infrastructure (CIS benchmark)
-      hashKnownHosts = true;
-      # Add keys to agent but require confirmation on each use; pairs well with FIDO2 touch
-      addKeysToAgent = "confirm";
-      # Detect dead connections: keepalive every 5 min, disconnect after 3 misses (15 min total)
-      serverAliveInterval = 300;
-      serverAliveCountMax = 3;
-      # Compression adds BREACH-like attack surface for negligible gain on modern networks
-      compression = false;
-      # Agent forwarding exposes keys to the remote host; use ProxyJump instead
-      forwardAgent = false;
-      # Reuse TCP connections to the same host — faster subsequent sessions
-      controlMaster = "auto";
-      controlPath = "~/.ssh/sockets/%r@%h-%p";
-      controlPersist = "10m";
 
       extraOptionOverrides = {
         # AEAD ciphers first (ChaCha20 is constant-time without AES-NI, GCM is hw-accelerated)
@@ -65,6 +50,24 @@ in
       };
 
       matchBlocks = {
+        # Global defaults applied to all hosts
+        "*" = {
+          # Hash hostnames in known_hosts so a compromised file doesn't map your infrastructure (CIS benchmark)
+          hashKnownHosts = true;
+          # Add keys to agent but require confirmation on each use; pairs well with FIDO2 touch
+          addKeysToAgent = "confirm";
+          # Detect dead connections: keepalive every 5 min, disconnect after 3 misses (15 min total)
+          serverAliveInterval = 300;
+          serverAliveCountMax = 3;
+          # Compression adds BREACH-like attack surface for negligible gain on modern networks
+          compression = false;
+          # Agent forwarding exposes keys to the remote host; use ProxyJump instead
+          forwardAgent = false;
+          # Reuse TCP connections to the same host — faster subsequent sessions
+          controlMaster = "auto";
+          controlPath = "~/.ssh/sockets/%r@%h-%p";
+          controlPersist = "10m";
+        };
         mantra = {
           hostname = "mantra.lan";
           user = "anthony";
