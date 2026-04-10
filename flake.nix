@@ -88,12 +88,22 @@
         };
       };
       treefmtEval = treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
+      opnsenseConfig = import ./hosts/protectli {
+        inherit pkgs;
+        sshKeys = [
+          "no-touch-required sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIO9ZH1VvOc2+1tAkzQzNwhyT+LT6wCBmt9gP2yeH8g+oAAAABHNzaDo= abutt@tiberius.com"
+          "no-touch-required sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIKoZU8AWvPjbgJfQXA3Kl6Ep9PzO6tGdN3GP4BRcTitOAAAABHNzaDo= anthony@abutt.io"
+        ];
+        apiKey = "CHANGEME_GENERATE_API_KEY";
+        apiSecretHash = "CHANGEME_GENERATE_API_SECRET";
+      };
     in
     {
       homeModules = {
         claude-cognitive = import ./modules/hm/ai/claude-cognitive.nix;
       };
       formatter.${system} = treefmtEval.config.build.wrapper;
+      packages.${system}.opnsense-config = opnsenseConfig;
       checks.${system} = {
         pre-commit-check = pkgs.callPackage ./pre-commit.nix {
           inherit pre-commit-hooks treefmtEval;

@@ -1,0 +1,60 @@
+[connection]
+host = "192.168.1.1"
+api_key_file = "/run/secrets/opnsctl-api-key"
+api_secret_file = "/run/secrets/opnsctl-api-secret"
+verify_tls = false
+
+# --- Dual WAN Gateway Groups ---
+
+[gateway_groups.dual_wan]
+[gateway_groups.dual_wan.members.wan]
+tier = 1
+weight = 3
+monitor = "8.8.8.8"
+
+[gateway_groups.dual_wan.members.starlink]
+tier = 1
+weight = 1
+monitor = "1.1.1.1"
+trigger = "packet_loss_or_latency"
+
+# --- DNS ---
+
+[dns]
+[dns.host_overrides]
+"mantra.lan" = "192.168.1.10"
+"switch.lan" = "192.168.1.2"
+"protectli.lan" = "192.168.1.1"
+
+[dns.domain_overrides]
+"lan" = "192.168.1.1"
+
+[dns.blocklists]
+enabled = true
+lists = [
+  "https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts",
+  "https://s3.amazonaws.com/lists.disconnect.me/simple_tracking.txt",
+  "https://s3.amazonaws.com/lists.disconnect.me/simple_ad.txt",
+]
+
+# --- WireGuard ---
+
+# [wireguard.tunnels.wg0]
+# listen_port = 51820
+# private_key_file = "/run/secrets/wg-private-key"
+# address = "10.10.0.1/24"
+#
+# [wireguard.tunnels.wg0.peers.laptop]
+# public_key = "CHANGEME"
+# allowed_ips = "10.10.0.2/32"
+
+# --- Firewall ---
+
+[firewall]
+[[firewall.rules]]
+interface = "lan"
+action = "pass"
+direction = "in"
+source = "lan_net"
+destination = "any"
+description = "Allow LAN outbound"

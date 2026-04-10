@@ -36,9 +36,9 @@ in
       enable = true;
       extraPackages = with pkgs; [
         nil
-        nodePackages.vscode-langservers-extracted
+        vscode-langservers-extracted
         yaml-language-server
-        nodePackages.vscode-json-languageserver
+        vscode-json-languageserver
         package-version-server
         tailwindcss-language-server
         typescript-language-server
