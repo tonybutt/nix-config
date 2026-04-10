@@ -55,6 +55,8 @@ in
             "~/.ssh/id_ed25519_sk"
             "~/.ssh/id_ed25519"
           ];
+          # Git expects SSH to exit after the protocol exchange; ControlMaster keeps it alive
+          controlMaster = "no";
           extraOptions = {
             PubkeyAcceptedAlgorithms = "sk-ssh-ed25519@openssh.com,ssh-ed25519";
           };
