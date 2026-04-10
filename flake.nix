@@ -25,10 +25,7 @@
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    deploy-rs = {
-      url = "github:serokell/deploy-rs";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    deploy-rs.url = "github:serokell/deploy-rs";
     team-claude-skills.url = "git+ssh://git@github.com/tiberius-grail/team-claude-skills";
     superpowers = {
       url = "github:obra/superpowers";
@@ -39,10 +36,12 @@
     extra-substituters = [
       "https://hyprland.cachix.org"
       "https://claude-code.cachix.org"
+      "https://deploy-rs.cachix.org"
     ];
     extra-trusted-public-keys = [
       "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
       "claude-code.cachix.org-1:YeXf2aNu7UTX8Vwrze0za1WEDS+4DuI2kVeWEE4fsRk="
+      "deploy-rs.cachix.org-1:xfNobmiwF/vzvK1gpfediPwpdIP0rpDV2rYqx40zdSI="
     ];
   };
 
