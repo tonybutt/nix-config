@@ -36,8 +36,6 @@ in
         # Accept ed25519 and RSA-SHA2 host keys only (cert variants first for SSH CA environments)
         # No ECDSA (NIST curve concerns), no ssh-rsa (SHA-1)
         HostKeyAlgorithms = "sk-ssh-ed25519-cert-v01@openssh.com,ssh-ed25519-cert-v01@openssh.com,rsa-sha2-512-cert-v01@openssh.com,rsa-sha2-256-cert-v01@openssh.com,sk-ssh-ed25519@openssh.com,ssh-ed25519,rsa-sha2-512,rsa-sha2-256";
-        # Only allow FIDO2 ed25519-sk keys — YubiKey or nothing
-        PubkeyAcceptedAlgorithms = "sk-ssh-ed25519@openssh.com,sk-ssh-ed25519-cert-v01@openssh.com";
         # Restrict CA signature algorithms to modern options if SSH certificates are ever used
         CASignatureAlgorithms = "sk-ssh-ed25519@openssh.com,ssh-ed25519,rsa-sha2-512,rsa-sha2-256";
         # Only offer explicitly configured keys, never try all keys in agent
@@ -50,8 +48,24 @@ in
       };
 
       matchBlocks = {
+        "github.com" = {
+          hostname = "github.com";
+          user = "git";
+          identityFile = [
+            "~/.ssh/id_ed25519_sk"
+            "~/.ssh/id_ed25519"
+          ];
+          extraOptions = {
+            PubkeyAcceptedAlgorithms = "sk-ssh-ed25519@openssh.com,ssh-ed25519";
+          };
+        };
         # Global defaults applied to all hosts
         "*" = {
+          # Only allow FIDO2 ed25519-sk keys by default — YubiKey or nothing
+          # Per-host matchBlocks can override this (e.g. github.com also allows ssh-ed25519)
+          extraOptions = {
+            PubkeyAcceptedAlgorithms = "sk-ssh-ed25519@openssh.com,sk-ssh-ed25519-cert-v01@openssh.com";
+          };
           # Hash hostnames in known_hosts so a compromised file doesn't map your infrastructure (CIS benchmark)
           hashKnownHosts = true;
           # Add keys to agent but require confirmation on each use; pairs well with FIDO2 touch
