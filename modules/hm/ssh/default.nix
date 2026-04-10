@@ -52,8 +52,8 @@ in
           hostname = "github.com";
           user = "git";
           identityFile = [
-            "~/.ssh/id_ed25519_sk"
             "~/.ssh/id_ed25519"
+            "~/.ssh/id_ed25519_sk"
           ];
           # Git expects SSH to exit after the protocol exchange; ControlMaster keeps it alive
           controlMaster = "no";
