@@ -74,7 +74,10 @@ in
         enable = true;
         efiSupport = true;
       };
-      loader.systemd-boot.enable = mkIf (!cfg.grub) true;
+      loader.systemd-boot = mkIf (!cfg.grub) {
+        enable = true;
+        configurationLimit = 3;
+      };
       # Plymouth (Theming for booting screen and drive unlock screen)
       plymouth.enable = mkIf cfg.grub true;
       # Disable(quiet) most of the logging that happens during boot

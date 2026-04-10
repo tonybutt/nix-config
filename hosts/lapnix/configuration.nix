@@ -25,7 +25,11 @@
     pkgs.material-icons
   ];
 
-  services.fwupd.enable = true;
+  services.fwupd = {
+    enable = true;
+    # Disable EFI capsule updates to avoid 10+ second boot delay from "No updates to process"
+    daemonSettings.DisableCapsuleUpdateOnDisk = true;
+  };
 
   hardware = {
     keyboard.zsa.enable = true;
