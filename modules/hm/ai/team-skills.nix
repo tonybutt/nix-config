@@ -12,7 +12,7 @@ let
     mkEnableOption
     ;
 
-  skills = inputs.team-claude-skills.packages.${pkgs.system};
+  skills = inputs.team-claude-skills.packages.${pkgs.stdenv.hostPlatform.system};
   managedSkills = inputs.team-claude-skills.lib.managedSkillNames;
 in
 {

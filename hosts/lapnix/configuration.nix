@@ -1,4 +1,5 @@
 {
+  lib,
   pkgs,
   user,
   ...
@@ -24,6 +25,13 @@
     pkgs.font-awesome
     pkgs.material-icons
   ];
+
+  # Always on-the-go — no clamshell use, so always suspend on lid close
+  services.logind.settings.Login = {
+    HandleLidSwitchDocked = lib.mkForce "suspend-then-hibernate";
+    HandleLidSwitchExternalPower = lib.mkForce "suspend-then-hibernate";
+  };
+  specialisation = lib.mkForce { };
 
   services.fwupd = {
     enable = true;
