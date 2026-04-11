@@ -257,12 +257,30 @@
           );
         in
         allConfigs;
-      deploy.nodes.mantra = {
-        hostname = "mantra";
-        profiles.system = {
-          user = "root";
-          sshUser = user.username;
-          path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.mantra;
+      deploy.nodes = {
+        mantra = {
+          hostname = "mantra";
+          profiles.system = {
+            user = "root";
+            sshUser = user.username;
+            path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.mantra;
+          };
+        };
+        atlas = {
+          hostname = "atlas";
+          profiles.system = {
+            user = "root";
+            sshUser = user.username;
+            path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.atlas;
+          };
+        };
+        lapnix = {
+          hostname = "lapnix";
+          profiles.system = {
+            user = "root";
+            sshUser = user.username;
+            path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.lapnix;
+          };
         };
       };
     };

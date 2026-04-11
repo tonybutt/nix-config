@@ -83,6 +83,26 @@ in
       iptables -A nixos-fw -p tcp --dport 22 -s ${cfg.lanSubnet} -j nixos-fw-accept
       iptables -A nixos-fw -p tcp --dport 22 -j nixos-fw-drop
     '';
+    # Passwordless sudo for deploy-rs activation
+    security.sudo.extraRules = [
+      {
+        users = [ user.username ];
+        commands = [
+          {
+            command = "/nix/store/*/activate-rs";
+            options = [ "NOPASSWD" ];
+          }
+          {
+            command = "/nix/store/*/switch-to-configuration";
+            options = [ "NOPASSWD" ];
+          }
+          {
+            command = "/run/current-system/sw/bin/nix-env";
+            options = [ "NOPASSWD" ];
+          }
+        ];
+      }
+    ];
     users.users.${user.username}.openssh.authorizedKeys.keys = [
       "no-touch-required sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIO9ZH1VvOc2+1tAkzQzNwhyT+LT6wCBmt9gP2yeH8g+oAAAABHNzaDo= abutt@tiberius.com"
       "no-touch-required sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIKoZU8AWvPjbgJfQXA3Kl6Ep9PzO6tGdN3GP4BRcTitOAAAABHNzaDo= anthony@abutt.io"
