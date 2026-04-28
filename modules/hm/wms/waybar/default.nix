@@ -8,49 +8,6 @@ with lib;
 let
   cfg = config.modules.hyprland.waybar;
   inherit (config.lib.stylix) colors;
-  webcamToggle = pkgs.writeShellScript "webcam-toggle" ''
-    sudo /run/current-system/sw/bin/webcam-toggle toggle
-    ${pkgs.procps}/bin/pkill -RTMIN+10 waybar
-  '';
-
-  webcamStatus = pkgs.writeShellScript "webcam-status" ''
-    USB_IDS="0c45:6d50 046d:0946"
-    found=0
-    any_on=0
-    in_use=0
-    for id in $USB_IDS; do
-      vid="''${id%%:*}"
-      pid="''${id##*:}"
-      for devpath in /sys/bus/usb/devices/*/idVendor; do
-        dir="$(dirname "$devpath")"
-        if [ -f "$dir/idVendor" ] && [ -f "$dir/idProduct" ] && [ -f "$dir/authorized" ] \
-           && [ "$(cat "$dir/idVendor")" = "$vid" ] \
-           && [ "$(cat "$dir/idProduct")" = "$pid" ]; then
-          found=1
-          if [ "$(cat "$dir/authorized")" = "1" ]; then
-            any_on=1
-            for vdir in "$dir"/*/video4linux/video*; do
-              if [ -d "$vdir" ]; then
-                vdev="/dev/$(basename "$vdir")"
-                if [ -e "$vdev" ] && ${pkgs.psmisc}/bin/fuser "$vdev" >/dev/null 2>&1; then
-                  in_use=1
-                fi
-              fi
-            done
-          fi
-        fi
-      done
-    done
-    if [ "$found" = "0" ]; then
-      echo '{"text": "󰖠", "tooltip": "No cameras found", "class": "disconnected"}'
-    elif [ "$any_on" = "0" ]; then
-      echo '{"text": "󱜷", "tooltip": "Webcam muted", "class": "muted"}'
-    elif [ "$in_use" = "1" ]; then
-      echo '{"text": "󰖠", "tooltip": "Webcam in use", "class": "in-use"}'
-    else
-      echo '{"text": "󰖠", "tooltip": "Webcam available", "class": "available"}'
-    fi
-  '';
 
   pcStatus = pkgs.writeShellScript "pc-status" ''
     LABEL="$1"
@@ -139,7 +96,6 @@ in
             "custom/lock"
             "network"
             "bluetooth"
-            "custom/webcam"
             "pulseaudio"
             "cpu"
             "memory"
@@ -199,16 +155,6 @@ in
             format = "";
             on-click = "loginctl lock-session && ${pkgs.hyprlock}/bin/hyprlock";
             tooltip-format = "Lock Screen";
-          };
-
-          "custom/webcam" = {
-            exec = "${webcamStatus}";
-            return-type = "json";
-            interval = 2;
-            signal = 10;
-            on-click = "${pkgs.cameractrls-gtk4}/bin/cameractrlsgtk4";
-            on-click-middle = "${webcamToggle}";
-            on-click-right = "${webcamToggle}";
           };
 
           "custom/agility" = {

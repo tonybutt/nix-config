@@ -71,8 +71,8 @@ in
           };
           # Hash hostnames in known_hosts so a compromised file doesn't map your infrastructure (CIS benchmark)
           hashKnownHosts = true;
-          # Add keys to agent but require confirmation on each use; pairs well with FIDO2 touch
-          addKeysToAgent = "confirm";
+          # Auto-add keys to agent after first use
+          addKeysToAgent = "yes";
           # Detect dead connections: keepalive every 5 min, disconnect after 3 misses (15 min total)
           serverAliveInterval = 300;
           serverAliveCountMax = 3;

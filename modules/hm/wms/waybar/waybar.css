@@ -182,21 +182,6 @@ tooltip label {
   }
 }
 
-#custom-webcam {
-  margin: 0 4px;
-}
-
-#custom-webcam.muted {
-  color: @base03;
-}
-
-#custom-webcam.in-use {
-  color: @base00;
-  background-color: @base0B;
-  border-radius: 4px;
-  padding: 0 4px;
-}
-
 #custom-agility,
 #custom-lethality {
   margin: 0 4px;

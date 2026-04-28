@@ -177,7 +177,20 @@ in
       gvfs.enable = true;
       udisks2.enable = true;
       tumbler.enable = true;
-      printing.enable = true;
+      printing = {
+        enable = true;
+        drivers = with pkgs; [
+          gutenprint
+          brlaser
+          brgenml1lpr
+          brgenml1cupswrapper
+        ];
+      };
+      avahi = {
+        enable = true;
+        nssmdns4 = true;
+        openFirewall = true;
+      };
       blueman.enable = true;
       pcscd.enable = true;
       gnome.gnome-keyring.enable = true;
