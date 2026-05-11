@@ -313,8 +313,8 @@ in
           group = {
             "col.border_active" = lib.mkForce "${activeGradient}";
             "col.border_inactive" = lib.mkForce "${inactiveGradient}";
-            "col.border_locked_active" = lib.mkForce "-1";
-            "col.border_locked_inactive" = lib.mkForce "-1";
+            "col.border_locked_active" = lib.mkForce "${activeGradient}";
+            "col.border_locked_inactive" = lib.mkForce "${inactiveGradient}";
 
             groupbar = {
               font_size = 12;
