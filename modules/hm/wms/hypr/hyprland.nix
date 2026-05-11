@@ -41,6 +41,7 @@ let
   signal = "${pkgs.signal-desktop}/bin/signal-desktop";
   brave = "${pkgs.brave}/bin/brave";
   wfRecorderToggle = "wf-recorder-toggle";
+  gatherUrl = "https://app.v2.gather.town/app/grail-41d17977-d077-48a5-835a-7eb7cb97cbff";
 in
 {
   options = {
@@ -369,6 +370,9 @@ in
             "match:title ^(MainPicker)$, float on"
             "match:title ^(Sign in to Security Device)$, float on"
             "match:title ^(app.v2.gather.town is sharing)(.*)$, workspace 10"
+            # Browser routing: regular Brave -> browser special workspace, Gather webapp -> workspace 6
+            "match:class ^(brave-browser)$, workspace special:browser silent"
+            "match:class ^(brave-app\\.v2\\.gather\\.town.*)$, workspace 6 silent"
             "match:title ^()$, match:class ^(dev.zed.Zed)$, float on"
             "match:class (dev.zed.Zed), opacity 0.85"
             "match:class signal, group on"
@@ -409,7 +413,7 @@ in
             "$mainMod, V, exec, ${cliphist} list | ${fuzzel} --dmenu | ${cliphist} decode | ${wl-copy}"
             # Web apps
             "$mainMod SHIFT, A, exec, launch-webapp https://chatgpt.com"
-            "$mainMod SHIFT, G, exec, launch-webapp https://app.v2.gather.town/app/grail-41d17977-d077-48a5-835a-7eb7cb97cbff"
+            "$mainMod SHIFT, G, exec, launch-webapp ${gatherUrl}"
             # Move focus with vim keys
             "$mainMod, h, movefocus, l"
             "$mainMod, l, movefocus, r"

@@ -1,3 +1,6 @@
+let
+  gatherUrl = "https://app.v2.gather.town/app/grail-41d17977-d077-48a5-835a-7eb7cb97cbff";
+in
 {
   programs.waybar.settings.mainBar."hyprland/workspaces".persistent-workspaces = {
     "1" = [ "*" ];
@@ -19,7 +22,7 @@
     "3, monitor:desc:Dell Inc. DELL S3220DGF BG9TF43"
     "4, monitor:desc:Dell Inc. DELL S3220DGF BG9TF43"
     "5, monitor:desc:Dell Inc. DELL S3220DGF BG9TF43"
-    "6, monitor:desc:Dell Inc. DELL U2718Q 4K8X703P0N8L, default:true"
+    "6, monitor:desc:Dell Inc. DELL U2718Q 4K8X703P0N8L, default:true, on-created-empty: launch-webapp ${gatherUrl}"
     "7, monitor:desc:Dell Inc. DELL U2718Q 4K8X703P0N8L"
     "8, monitor:desc:Dell Inc. DELL U2718Q 4K8X703P0N8L"
     "9, monitor:desc:Dell Inc. DELL U2718Q 4K8X703P0N8L"
