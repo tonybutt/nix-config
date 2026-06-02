@@ -136,6 +136,9 @@ in
   config = mkIf cfg.enable {
     wayland.windowManager.hyprland = {
       enable = true;
+      # Keep legacy hyprlang generator (HM default flipped to "lua" in 26.05);
+      # our config uses HM's hyprlang DSL via `settings`/`extraConfig`.
+      configType = "hyprlang";
       package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
       portalPackage =
         inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;

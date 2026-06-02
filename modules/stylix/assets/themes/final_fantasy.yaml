@@ -1,4 +1,5 @@
 scheme: "Final Fantasy Crystal"
+variant: "dark"
 author: "Anthony Butt (derived from FF crystal sprite art)"
 # Dark theme sampled from the FF crystal image.
 # Backgrounds: deep navy void. Accents: ice crystal blues and lavender particles.

@@ -1,4 +1,5 @@
 scheme: "Grail"
+variant: "dark"
 author: "Anthony Butt (from Tiberius Grail Figma)"
 base00: "0D1118" # Radar Blue - primary background
 base01: "151B25" # Dark Navy - secondary background

@@ -8,7 +8,7 @@
 let
   cfg = config.modules.editors;
   inherit (lib) mkIf mkEnableOption;
-  pkgs-color-lsp = import inputs.nixpkgs-color-lsp { inherit (pkgs) system; };
+  pkgs-color-lsp = import inputs.nixpkgs-color-lsp { inherit (pkgs.stdenv.hostPlatform) system; };
 
   # Workaround for Zed's managed Node.js not working on NixOS.
   # Zed downloads a generic Linux node binary that fails due to missing dynamic linker.

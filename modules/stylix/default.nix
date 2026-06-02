@@ -1,6 +1,7 @@
 {
   pkgs,
   config,
+  options,
   lib,
   ...
 }:
@@ -88,6 +89,9 @@ in
       opacity = {
         terminal = 0.65;
       };
+    }
+    // lib.optionalAttrs (options.stylix.targets or { } ? kmscon) {
+      targets.kmscon.enable = false;
     };
   };
 }

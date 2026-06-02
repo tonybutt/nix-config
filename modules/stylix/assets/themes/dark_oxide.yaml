@@ -1,4 +1,5 @@
 scheme: "Dark Oxide"
+variant: "dark"
 author: "Anthony Butt"
 base00: "060F11" # base
 base01: "0E1618" # mantle
