@@ -2,7 +2,7 @@
   description = "My personal flake";
   inputs = {
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
-    nixpkgs.url = "nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-color-lsp.url = "github:tonybutt/nixpkgs/color-lsp-init";
     claude-code.url = "github:sadjow/claude-code-nix";
     home-manager = {
@@ -135,11 +135,11 @@
                 nixos-hardware.nixosModules.dell-precision-3490-intel
                 nixos-hardware.nixosModules.common-gpu-intel
               ];
-              theme = "final-fantasy";
+              theme = "pokemon-starters";
             };
             atlas = {
               hardwareModules = [ nixos-hardware.nixosModules.framework-16-7040-amd ];
-              theme = "final-fantasy";
+              theme = "pokemon-starters";
             };
             mantra = {
               hardwareModules = [
@@ -149,11 +149,11 @@
                 nixos-hardware.nixosModules.common-pc
                 nixos-hardware.nixosModules.common-pc-ssd
               ];
-              theme = "final-fantasy";
+              theme = "pokemon-starters";
             };
             lapnix = {
               hardwareModules = [ nixos-hardware.nixosModules.framework-13-7040-amd ];
-              theme = "final-fantasy";
+              theme = "pokemon-starters";
             };
           };
           mkSystem =
@@ -201,10 +201,10 @@
           themes = import ./themes.nix { inherit pkgs; };
 
           hostDefaults = {
-            tiberius = "final-fantasy";
-            atlas = "ugrain";
-            lapnix = "final-fantasy";
-            mantra = "final-fantasy";
+            tiberius = "pokemon-starters";
+            atlas = "pokemon-starters";
+            lapnix = "pokemon-starters";
+            mantra = "pokemon-starters";
           };
 
           mkHome =

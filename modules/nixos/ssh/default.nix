@@ -22,6 +22,10 @@ in
   config = mkIf cfg.enable {
     services.openssh = {
       enable = true;
+      # Don't globally open port 22 — extraCommands below restricts SSH to the
+      # LAN subnet. openFirewall would accept 22 from anywhere before those
+      # rules run (first-match-wins), defeating the restriction.
+      openFirewall = false;
       # Only serve ed25519 host keys — no RSA, no ECDSA
       hostKeys = [
         {
@@ -81,7 +85,7 @@ in
     };
     networking.firewall.extraCommands = ''
       iptables -A nixos-fw -p tcp --dport 22 -s ${cfg.lanSubnet} -j nixos-fw-accept
-      iptables -A nixos-fw -p tcp --dport 22 -j nixos-fw-drop
+      iptables -A nixos-fw -p tcp --dport 22 -j nixos-fw-refuse
     '';
     # Passwordless sudo for deploy-rs activation
     security.sudo.extraRules = [

@@ -1,4 +1,4 @@
-{ pkgs, config, ... }:
+{ pkgs, ... }:
 {
   imports = [
     ./tools/oath.nix
@@ -22,10 +22,15 @@
     cursor.name = "BreezeX-RosePine-Linux";
     cursor.size = 24;
   };
+  # Stylix sets home.pointerCursor but not its enable flag; home-manager
+  # deprecated relying on that implicit activation. Drop once stylix does
+  # this itself.
+  home.pointerCursor.enable = true;
   modules = {
     ai.claude-cognitive.enable = true;
     ai.team-skills.enable = true;
     ai.superpowers.enable = true;
+    ai.gitnexus.enable = true;
     terminals.ghostty.enable = true;
   };
   home.packages = with pkgs; [
@@ -99,7 +104,7 @@
       gtk-application-prefer-dark-theme = true;
     };
     gtk4 = {
-      theme = config.gtk.theme;
+      # theme is set by Stylix (gtk.gtk4.theme = config.gtk.theme)
       extraConfig = {
         gtk-application-prefer-dark-theme = true;
       };

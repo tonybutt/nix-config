@@ -41,7 +41,7 @@ let
   signal = "${pkgs.signal-desktop}/bin/signal-desktop";
   brave = "${pkgs.brave}/bin/brave";
   wfRecorderToggle = "wf-recorder-toggle";
-  gatherUrl = "https://app.v2.gather.town/app/grail-41d17977-d077-48a5-835a-7eb7cb97cbff";
+  gatherUrl = "https://app.v2.gather.town/app/fbeb7e14-34e5-4f0a-8f37-c2a2095f9260?areaId=3acc511d-c986-424f-b8ae-c3a219987005";
 in
 {
   options = {

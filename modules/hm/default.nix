@@ -19,6 +19,7 @@ in
     ./terminals
     ./ssh
     ./ai
+    ./obsidian.nix
     ../stylix
   ];
   config = {
