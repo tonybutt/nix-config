@@ -1,5 +1,5 @@
 let
-  gatherUrl = "https://app.v2.gather.town/app/fbeb7e14-34e5-4f0a-8f37-c2a2095f9260?areaId=3acc511d-c986-424f-b8ae-c3a219987005";
+  gatherUrl = "https://work.tiberius.com";
 in
 {
   programs.waybar.settings.mainBar."hyprland/workspaces".persistent-workspaces = {
@@ -16,18 +16,33 @@ in
   };
 
   # Desktop workspace assignments
-  wayland.windowManager.hyprland.settings.workspace = [
-    "1, monitor:desc:Dell Inc. DELL S3220DGF BG9TF43, default:true"
-    "2, monitor:desc:Dell Inc. DELL S3220DGF BG9TF43"
-    "3, monitor:desc:Dell Inc. DELL S3220DGF BG9TF43"
-    "4, monitor:desc:Dell Inc. DELL S3220DGF BG9TF43"
-    "5, monitor:desc:Dell Inc. DELL S3220DGF BG9TF43"
-    "6, monitor:desc:Dell Inc. DELL U2718Q 4K8X703P0N8L, default:true, on-created-empty: launch-webapp ${gatherUrl}"
-    "7, monitor:desc:Dell Inc. DELL U2718Q 4K8X703P0N8L"
-    "8, monitor:desc:Dell Inc. DELL U2718Q 4K8X703P0N8L"
-    "9, monitor:desc:Dell Inc. DELL U2718Q 4K8X703P0N8L"
-    "10, monitor:desc:Dell Inc. DELL U2718Q 4K8X703P0N8L"
-  ];
+  wayland.windowManager.hyprland.settings.workspace_rule =
+    let
+      dell32 = "desc:Dell Inc. DELL S3220DGF BG9TF43";
+      dell27 = "desc:Dell Inc. DELL U2718Q 4K8X703P0N8L";
+      onMonitor = monitor: ws: {
+        workspace = toString ws;
+        inherit monitor;
+      };
+    in
+    [
+      (onMonitor dell32 1 // { default = true; })
+      (onMonitor dell32 2)
+      (onMonitor dell32 3)
+      (onMonitor dell32 4)
+      (onMonitor dell32 5)
+      (
+        onMonitor dell27 6
+        // {
+          default = true;
+          on_created_empty = "launch-webapp ${gatherUrl}";
+        }
+      )
+      (onMonitor dell27 7)
+      (onMonitor dell27 8)
+      (onMonitor dell27 9)
+      (onMonitor dell27 10)
+    ];
 
   modules = {
     hyprland.monitors = [

@@ -13,7 +13,8 @@ let
     mkOption
     types
     ;
-  inherit (builtins) map toString;
+  inherit (lib.generators) mkLuaInline;
+  inherit (builtins) map toString toJSON;
 
   # Binary paths
   term = "${pkgs.ghostty}/bin/ghostty";
@@ -40,8 +41,28 @@ let
   slack = "${pkgs.slack}/bin/slack";
   signal = "${pkgs.signal-desktop}/bin/signal-desktop";
   brave = "${pkgs.brave}/bin/brave";
-  wfRecorderToggle = "wf-recorder-toggle";
-  gatherUrl = "https://app.v2.gather.town/app/fbeb7e14-34e5-4f0a-8f37-c2a2095f9260?areaId=3acc511d-c986-424f-b8ae-c3a219987005";
+  gatherUrl = "https://work.tiberius.com";
+
+  mod = cfg.mainMod;
+
+  # hl.bind(combo, dispatcher [, opts]) — dispatcher factories must be raw Lua
+  bind' = combo: dsp: {
+    _args = [
+      combo
+      (mkLuaInline dsp)
+    ];
+  };
+  bindOpts = combo: dsp: opts: {
+    _args = [
+      combo
+      (mkLuaInline dsp)
+      opts
+    ];
+  };
+  execBind = combo: cmd: bind' combo "hl.dsp.exec_cmd(${toJSON cmd})";
+  execBindOpts =
+    combo: cmd: opts:
+    bindOpts combo "hl.dsp.exec_cmd(${toJSON cmd})" opts;
 in
 {
   options = {
@@ -81,13 +102,15 @@ in
                 }
               );
               default = "preferred";
-              example = "highres@highrr";
+              example = "highres";
               description = ''
                 Monitor resolution. Can be:
-                - "highres@highrr" - Highest resolution at highest refresh rate
+                - "highres" - Highest resolution
+                - "highrr" - Highest refresh rate
                 - "preferred" - Use monitor's preferred mode
-                - "auto" - Let Hyprland decide
                 - { width = 1920; height = 1080; refreshRate = 60; } - Explicit resolution
+                Legacy "highres@highrr"/"highres@high" values map to "highres"
+                (Hyprland 0.56 mode strings accept a single preference).
               '';
             };
 
@@ -136,9 +159,9 @@ in
   config = mkIf cfg.enable {
     wayland.windowManager.hyprland = {
       enable = true;
-      # Keep legacy hyprlang generator (HM default flipped to "lua" in 26.05);
-      # our config uses HM's hyprlang DSL via `settings`/`extraConfig`.
-      configType = "hyprlang";
+      # Hyprland 0.56+ resolves only ~/.config/hypr/hyprland.lua; the
+      # hyprlang main config is gone upstream, so generate the Lua DSL.
+      configType = "lua";
       package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
       portalPackage =
         inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
@@ -147,417 +170,784 @@ in
         enable = true;
         variables = [ "--all" ];
       };
-      extraConfig = "debug:disable_logs = false";
       settings =
         let
           inherit (config.lib.stylix) colors;
           isDark = config.modules.themes.polarity == "dark";
           rgb = color: "rgb(${color})";
-          activeGradient = "${rgb colors.base0B} ${rgb colors.base0A} 45deg";
-          inactiveGradient = "${rgb colors.base00}";
+          activeGradient = {
+            colors = [
+              (rgb colors.base0B)
+              (rgb colors.base0A)
+            ];
+            angle = 45;
+          };
+          inactiveGradient = rgb colors.base00;
 
-          # Helper function to build resolution string
-          buildResolution =
+          # Hyprland 0.56 mode strings accept one preference keyword or WxH@r
+          buildMode =
             m:
             if builtins.isAttrs m.resolution then
-              # Structured resolution
               "${toString m.resolution.width}x${toString m.resolution.height}@${toString m.resolution.refreshRate}"
             else if m.width != null && m.height != null then
               # Backwards compatibility
               "${toString m.width}x${toString m.height}@${
                 toString (if m.refreshRate != null then m.refreshRate else 60)
               }"
+            else if lib.hasPrefix "highres" m.resolution then
+              "highres"
             else
-              # String resolution (preferred, auto, highres@highrr, etc.)
               m.resolution;
+
+          mkMonitor =
+            m:
+            {
+              output = m.name;
+            }
+            // (
+              if !m.enabled then
+                { disabled = true; }
+              else
+                {
+                  mode = buildMode m;
+                  position = m.position;
+                  scale = m.scale;
+                }
+                // lib.optionalAttrs m.transform { transform = 1; }
+            );
+
+          # workspace/movetoworkspacesilent binds for 1-10 (key 0 = ws 10)
+          workspaceBinds = lib.concatMap (
+            i:
+            let
+              key = toString (lib.mod i 10);
+            in
+            [
+              (bind' "${mod} + ${key}" "hl.dsp.focus({ workspace = ${toString i} })")
+              (bind' "${mod} + SHIFT + ${key}" "hl.dsp.window.move({ workspace = ${toString i}, follow = false })")
+            ]
+          ) (lib.range 1 10);
         in
         {
-
-          "$mainMod" = cfg.mainMod;
-
-          # Omarchy environment variables
           env = [
             # Cursor size
-            "XCURSOR_SIZE,24"
-            "HYPRCURSOR_SIZE,24"
+            {
+              _args = [
+                "XCURSOR_SIZE"
+                "24"
+              ];
+            }
+            {
+              _args = [
+                "HYPRCURSOR_SIZE"
+                "24"
+              ];
+            }
             # Force all apps to use Wayland
-            "GDK_BACKEND,wayland,x11,*"
-            "QT_QPA_PLATFORM,wayland;xcb"
-            "QT_STYLE_OVERRIDE,kvantum"
-            "SDL_VIDEODRIVER,wayland"
-            "MOZ_ENABLE_WAYLAND,1"
-            "ELECTRON_OZONE_PLATFORM_HINT,wayland"
-            "OZONE_PLATFORM,wayland"
-            "XDG_SESSION_TYPE,wayland"
+            {
+              _args = [
+                "GDK_BACKEND"
+                "wayland,x11,*"
+              ];
+            }
+            {
+              _args = [
+                "QT_QPA_PLATFORM"
+                "wayland;xcb"
+              ];
+            }
+            {
+              _args = [
+                "QT_STYLE_OVERRIDE"
+                "kvantum"
+              ];
+            }
+            {
+              _args = [
+                "SDL_VIDEODRIVER"
+                "wayland"
+              ];
+            }
+            {
+              _args = [
+                "MOZ_ENABLE_WAYLAND"
+                "1"
+              ];
+            }
+            {
+              _args = [
+                "ELECTRON_OZONE_PLATFORM_HINT"
+                "wayland"
+              ];
+            }
+            {
+              _args = [
+                "OZONE_PLATFORM"
+                "wayland"
+              ];
+            }
+            {
+              _args = [
+                "XDG_SESSION_TYPE"
+                "wayland"
+              ];
+            }
             # Screen sharing support
-            "XDG_CURRENT_DESKTOP,Hyprland"
-            "XDG_SESSION_DESKTOP,Hyprland"
+            {
+              _args = [
+                "XDG_CURRENT_DESKTOP"
+                "Hyprland"
+              ];
+            }
+            {
+              _args = [
+                "XDG_SESSION_DESKTOP"
+                "Hyprland"
+              ];
+            }
             # XCompose file
-            "XCOMPOSEFILE,~/.XCompose"
+            {
+              _args = [
+                "XCOMPOSEFILE"
+                "~/.XCompose"
+              ];
+            }
           ];
 
-          xwayland = {
-            force_zero_scaling = false;
-          };
-
-          cursor = {
-            no_hardware_cursors = true;
-            hide_on_key_press = true;
-          };
-
-          ecosystem = {
-            no_update_news = true;
-          };
-
-          # Omarchy input config
-          input = {
-            kb_layout = "us";
-            kb_options = "compose:caps";
-            repeat_rate = 40;
-            repeat_delay = 600;
-            numlock_by_default = true;
-            follow_mouse = 1;
-            sensitivity = 0;
-
-            touchpad = {
-              natural_scroll = false;
-              scroll_factor = 0.4;
-            };
-          };
-
-          monitor =
-            (map (
-              m:
-              "${m.name},${
-                if m.enabled then
-                  if m.transform then
-                    "transform,${toString m.scale}"
-                  else
-                    "${buildResolution m},${m.position},${toString m.scale}"
-                else
-                  "disable"
-              }"
-            ) (cfg.monitors))
-            ++ [
-              ",preferred,auto,1"
-            ];
-
-          # Omarchy look and feel
-          general = {
-            "col.active_border" = lib.mkForce "${activeGradient}";
-            "col.inactive_border" = lib.mkForce "${inactiveGradient}";
-            gaps_in = 2;
-            gaps_out = 4;
-            border_size = 2;
-            resize_on_border = false;
-            allow_tearing = false;
-            layout = "dwindle";
-          };
-
-          decoration = {
-            rounding = 0;
-
-            shadow = {
-              enabled = false;
-              range = 2;
-              render_power = 3;
+          config = {
+            xwayland = {
+              force_zero_scaling = false;
             };
 
-            blur = {
+            cursor = {
+              no_hardware_cursors = true;
+              hide_on_key_press = true;
+            };
+
+            ecosystem = {
+              no_update_news = true;
+            };
+
+            debug = {
+              disable_logs = false;
+            };
+
+            # Omarchy input config
+            input = {
+              kb_layout = "us";
+              kb_options = "compose:caps";
+              repeat_rate = 40;
+              repeat_delay = 600;
+              numlock_by_default = true;
+              follow_mouse = 1;
+              sensitivity = 0;
+
+              touchpad = {
+                natural_scroll = false;
+                scroll_factor = 0.4;
+              };
+            };
+
+            # Omarchy look and feel
+            # String "col.*" keys intentionally mirror stylix's, so mkForce
+            # overrides its target values instead of adding parallel keys
+            general = {
+              "col.active_border" = lib.mkForce activeGradient;
+              "col.inactive_border" = lib.mkForce inactiveGradient;
+              gaps_in = 2;
+              gaps_out = 4;
+              border_size = 2;
+              resize_on_border = false;
+              allow_tearing = false;
+              layout = "dwindle";
+            };
+
+            decoration = {
+              rounding = 6;
+
+              shadow = {
+                enabled = false;
+                range = 2;
+                render_power = 3;
+              };
+
+              blur = {
+                enabled = true;
+                size = 6;
+                passes = 3;
+                special = false;
+                brightness = 0.80;
+                contrast = 0.90;
+                new_optimizations = true;
+                ignore_opacity = true;
+              };
+            };
+
+            animations = {
               enabled = true;
-              size = 6;
-              passes = 3;
-              special = false;
-              brightness = 0.80;
-              contrast = 0.90;
-              new_optimizations = true;
-              ignore_opacity = true;
+            };
+
+            dwindle = {
+              preserve_split = true;
+              force_split = 2; # Always split on the right
+            };
+
+            master = {
+              new_status = "master";
+            };
+
+            group = {
+              "col.border_active" = lib.mkForce activeGradient;
+              "col.border_inactive" = lib.mkForce inactiveGradient;
+              "col.border_locked_active" = lib.mkForce activeGradient;
+              "col.border_locked_inactive" = lib.mkForce inactiveGradient;
+
+              groupbar = {
+                font_size = 12;
+                font_family = "monospace";
+                font_weight_active = "ultraheavy";
+                font_weight_inactive = "normal";
+                indicator_height = 0;
+                indicator_gap = 5;
+                height = 22;
+                gaps_in = 5;
+                gaps_out = 0;
+                text_color = lib.mkForce (rgb (if isDark then colors.base00 else colors.base07));
+                text_color_inactive = lib.mkForce (rgb (if isDark then colors.base04 else colors.base02));
+                "col.active" = lib.mkForce (rgb colors.base0B);
+                "col.inactive" = lib.mkForce (rgb (if isDark then colors.base02 else colors.base05));
+                gradients = true;
+                gradient_rounding = 0;
+                gradient_round_only_edges = false;
+              };
+            };
+
+            misc = {
+              disable_hyprland_logo = true;
+              disable_splash_rendering = true;
+              focus_on_activate = true;
+              anr_missed_pings = 3;
+              on_focus_under_fullscreen = 1;
+              key_press_enables_dpms = true;
+              mouse_move_enables_dpms = true;
             };
           };
+
+          # Omarchy animation curves
+          curve = [
+            {
+              _args = [
+                "easeOutQuint"
+                {
+                  type = "bezier";
+                  points = [
+                    [
+                      0.23
+                      1
+                    ]
+                    [
+                      0.32
+                      1
+                    ]
+                  ];
+                }
+              ];
+            }
+            {
+              _args = [
+                "easeInOutCubic"
+                {
+                  type = "bezier";
+                  points = [
+                    [
+                      0.65
+                      0.05
+                    ]
+                    [
+                      0.36
+                      1
+                    ]
+                  ];
+                }
+              ];
+            }
+            {
+              _args = [
+                "linear"
+                {
+                  type = "bezier";
+                  points = [
+                    [
+                      0
+                      0
+                    ]
+                    [
+                      1
+                      1
+                    ]
+                  ];
+                }
+              ];
+            }
+            {
+              _args = [
+                "almostLinear"
+                {
+                  type = "bezier";
+                  points = [
+                    [
+                      0.5
+                      0.5
+                    ]
+                    [
+                      0.75
+                      1.0
+                    ]
+                  ];
+                }
+              ];
+            }
+            {
+              _args = [
+                "quick"
+                {
+                  type = "bezier";
+                  points = [
+                    [
+                      0.15
+                      0
+                    ]
+                    [
+                      0.1
+                      1
+                    ]
+                  ];
+                }
+              ];
+            }
+          ];
 
           # Omarchy animations
-          animations = {
-            enabled = true;
+          animation = [
+            {
+              leaf = "global";
+              enabled = true;
+              speed = 10;
+              bezier = "default";
+            }
+            {
+              leaf = "border";
+              enabled = true;
+              speed = 5.39;
+              bezier = "easeOutQuint";
+            }
+            {
+              leaf = "windows";
+              enabled = true;
+              speed = 4.79;
+              bezier = "easeOutQuint";
+            }
+            {
+              leaf = "windowsIn";
+              enabled = true;
+              speed = 4.1;
+              bezier = "easeOutQuint";
+              style = "popin 87%";
+            }
+            {
+              leaf = "windowsOut";
+              enabled = true;
+              speed = 1.49;
+              bezier = "linear";
+              style = "popin 87%";
+            }
+            {
+              leaf = "fadeIn";
+              enabled = true;
+              speed = 1.73;
+              bezier = "almostLinear";
+            }
+            {
+              leaf = "fadeOut";
+              enabled = true;
+              speed = 1.46;
+              bezier = "almostLinear";
+            }
+            {
+              leaf = "fade";
+              enabled = true;
+              speed = 3.03;
+              bezier = "quick";
+            }
+            {
+              leaf = "layers";
+              enabled = true;
+              speed = 3.81;
+              bezier = "easeOutQuint";
+            }
+            {
+              leaf = "layersIn";
+              enabled = true;
+              speed = 4;
+              bezier = "easeOutQuint";
+              style = "fade";
+            }
+            {
+              leaf = "layersOut";
+              enabled = true;
+              speed = 1.5;
+              bezier = "linear";
+              style = "fade";
+            }
+            {
+              leaf = "fadeLayersIn";
+              enabled = true;
+              speed = 1.79;
+              bezier = "almostLinear";
+            }
+            {
+              leaf = "fadeLayersOut";
+              enabled = true;
+              speed = 1.39;
+              bezier = "almostLinear";
+            }
+            {
+              leaf = "workspaces";
+              enabled = false;
+            }
+          ];
 
-            bezier = [
-              "easeOutQuint,0.23,1,0.32,1"
-              "easeInOutCubic,0.65,0.05,0.36,1"
-              "linear,0,0,1,1"
-              "almostLinear,0.5,0.5,0.75,1.0"
-              "quick,0.15,0,0.1,1"
-            ];
-
-            animation = [
-              "global, 1, 10, default"
-              "border, 1, 5.39, easeOutQuint"
-              "windows, 1, 4.79, easeOutQuint"
-              "windowsIn, 1, 4.1, easeOutQuint, popin 87%"
-              "windowsOut, 1, 1.49, linear, popin 87%"
-              "fadeIn, 1, 1.73, almostLinear"
-              "fadeOut, 1, 1.46, almostLinear"
-              "fade, 1, 3.03, quick"
-              "layers, 1, 3.81, easeOutQuint"
-              "layersIn, 1, 4, easeOutQuint, fade"
-              "layersOut, 1, 1.5, linear, fade"
-              "fadeLayersIn, 1, 1.79, almostLinear"
-              "fadeLayersOut, 1, 1.39, almostLinear"
-              "workspaces, 0, 0, easeOutQuint"
-            ];
-          };
-
-          dwindle = {
-            preserve_split = true;
-            force_split = 2; # Always split on the right
-          };
-
-          master = {
-            new_status = "master";
-          };
-
-          group = {
-            "col.border_active" = lib.mkForce "${activeGradient}";
-            "col.border_inactive" = lib.mkForce "${inactiveGradient}";
-            "col.border_locked_active" = lib.mkForce "${activeGradient}";
-            "col.border_locked_inactive" = lib.mkForce "${inactiveGradient}";
-
-            groupbar = {
-              font_size = 12;
-              font_family = "monospace";
-              font_weight_active = "ultraheavy";
-              font_weight_inactive = "normal";
-              indicator_height = 0;
-              indicator_gap = 5;
-              height = 22;
-              gaps_in = 5;
-              gaps_out = 0;
-              text_color = lib.mkForce (rgb (if isDark then colors.base00 else colors.base07));
-              text_color_inactive = lib.mkForce (rgb (if isDark then colors.base04 else colors.base02));
-              "col.active" = lib.mkForce (rgb colors.base0B);
-              "col.inactive" = lib.mkForce (rgb (if isDark then colors.base02 else colors.base05));
-              gradients = true;
-              gradient_rounding = 0;
-              gradient_round_only_edges = false;
-            };
-          };
+          monitor = (map mkMonitor cfg.monitors) ++ [
+            {
+              output = "";
+              mode = "preferred";
+              position = "auto";
+              scale = "1";
+            }
+          ];
 
           gesture = [
-            "3, horizontal, workspace"
+            {
+              fingers = 3;
+              direction = "horizontal";
+              action = "workspace";
+            }
           ];
-
-          misc = {
-            disable_hyprland_logo = true;
-            disable_splash_rendering = true;
-            focus_on_activate = true;
-            anr_missed_pings = 3;
-            on_focus_under_fullscreen = 1;
-            key_press_enables_dpms = true;
-            mouse_move_enables_dpms = true;
-          };
 
           # Special workspaces
-          workspace = [
-            "special:monitor, on-created-empty: ${term} -e ${btop}"
+          workspace_rule = [
+            {
+              workspace = "special:monitor";
+              on_created_empty = "${term} -e ${btop}";
+            }
           ];
 
-          # Omarchy window rules + personal rules (Hyprland 0.53+ syntax)
-          windowrule = [
-            "match:title Select what to share, size 250 250, float on, center on"
-            "match:class .*, suppress_event maximize"
-            # Blur only for terminals — disable globally then re-enable for kitty
-            "match:class .*, no_blur on"
-            "match:class (kitty|Alacritty|com.mitchellh.ghostty|dev.zed.Zed), no_blur off"
-            "match:class ^$, match:title ^$, match:xwayland true, match:float true, match:fullscreen false, match:pin false, no_focus on"
-            "match:class (Alacritty|kitty|com.mitchellh.ghostty), scroll_touchpad 1.5"
-            "match:class com.mitchellh.ghostty, scroll_touchpad 0.2"
+          # Omarchy window rules + personal rules; later rules win
+          window_rule = [
+            {
+              match.title = "Select what to share";
+              size = [
+                250
+                250
+              ];
+              float = true;
+              center = true;
+            }
+            {
+              match.class = ".*";
+              suppress_event = "maximize";
+            }
+            # Blur only for terminals — disable globally then re-enable for terminals
+            {
+              match.class = ".*";
+              no_blur = true;
+            }
+            {
+              match.class = "(kitty|Alacritty|com.mitchellh.ghostty|dev.zed.Zed)";
+              no_blur = false;
+            }
+            {
+              match = {
+                class = "^$";
+                title = "^$";
+                xwayland = true;
+                float = true;
+                fullscreen = false;
+                pin = false;
+              };
+              no_focus = true;
+            }
+            {
+              match.class = "(Alacritty|kitty|com.mitchellh.ghostty)";
+              scroll_touchpad = 1.5;
+            }
+            {
+              match.class = "com.mitchellh.ghostty";
+              scroll_touchpad = 0.2;
+            }
             # Personal window rules
-            "match:title ^(MainPicker)$, float on"
-            "match:title ^(Sign in to Security Device)$, float on"
-            "match:title ^(app.v2.gather.town is sharing)(.*)$, workspace 10"
+            {
+              match.title = "^(MainPicker)$";
+              float = true;
+            }
+            {
+              match.title = "^(Sign in to Security Device)$";
+              float = true;
+            }
             # Browser routing: regular Brave -> browser special workspace, Gather webapp -> workspace 6
-            "match:class ^(brave-browser)$, workspace special:browser silent"
-            "match:class ^(brave-app\\.v2\\.gather\\.town.*)$, workspace 6 silent"
-            "match:title ^()$, match:class ^(dev.zed.Zed)$, float on"
-            "match:class (dev.zed.Zed), opacity 0.85"
-            "match:class signal, group on"
-            "match:class Slack, group on"
-            "match:class ^(dropdown)$, float on"
-            "match:class ^(dropdown)$, size 800 400"
-            "match:class ^(dropdown)$, center on"
-            "match:class ^(dropdown)$, animation slide"
-            "match:class ^(ssh-askpass)$, float on, center on, size 400 200"
+            {
+              match.class = "^(brave-browser)$";
+              workspace = "special:browser silent";
+            }
+            {
+              match.class = "^(brave-(work\\.tiberius\\.com|app(\\.v2)?\\.gather\\.town).*)$";
+              workspace = "6 silent";
+            }
+            # Screen-share indicator: must come after the brave class rules — later rules
+            # win, so this keeps the popup out of special:browser/workspace 6
+            {
+              match.title = "^(.+ is sharing (your screen|a window|a tab))(.*)$";
+              workspace = "10 silent";
+            }
+            {
+              match = {
+                title = "^()$";
+                class = "^(dev.zed.Zed)$";
+              };
+              float = true;
+            }
+            {
+              match.class = "(dev.zed.Zed)";
+              opacity = "0.85";
+            }
+            {
+              match.class = "signal";
+              group = "set";
+            }
+            {
+              match.class = "Slack";
+              group = "set";
+            }
+            {
+              match.class = "^(dropdown)$";
+              float = true;
+              size = [
+                800
+                400
+              ];
+              center = true;
+              animation = "slide";
+            }
+            {
+              match.class = "^(ssh-askpass)$";
+              float = true;
+              center = true;
+              size = [
+                400
+                200
+              ];
+            }
             # Steam
-            "match:class ^(steam)$, float on"
-            "match:class ^(steam)$, match:title ^(Steam)$, size 80% 80%"
-            "match:class ^(steam)$, match:title ^(Steam)$, center on"
-            "match:class ^(steam)$, match:title ^(Friends List)$, size 400 600"
-            "match:class ^(steam)$, match:title ^(Steam Settings)$, size 800 600"
+            {
+              match.class = "^(steam)$";
+              float = true;
+            }
+            {
+              # size expressions replace the old "80% 80%" percentage syntax
+              match = {
+                class = "^(steam)$";
+                title = "^(Steam)$";
+              };
+              size = [
+                "monitor_w*0.8"
+                "monitor_h*0.8"
+              ];
+              center = true;
+            }
+            {
+              match = {
+                class = "^(steam)$";
+                title = "^(Friends List)$";
+              };
+              size = [
+                400
+                600
+              ];
+            }
+            {
+              match = {
+                class = "^(steam)$";
+                title = "^(Steam Settings)$";
+              };
+              size = [
+                800
+                600
+              ];
+            }
             # Steam games
-            "match:class ^(steam_app_.*)$, fullscreen on"
-            "match:class ^(steam_app_.*)$, no_blur on"
-            "match:class ^(steam_app_.*)$, immediate on"
+            {
+              match.class = "^(steam_app_.*)$";
+              fullscreen = true;
+              no_blur = true;
+              immediate = true;
+            }
           ];
 
           # Tiling bindings (Omarchy + personal vim keys)
           bind = [
             # Close windows
-            "$mainMod, Q, killactive,"
+            (bind' "${mod} + Q" "hl.dsp.window.close()")
             # Control tiling
-            "$mainMod, S, layoutmsg, togglesplit"
-            "$mainMod, P, pseudo,"
-            "$mainMod, F, togglefloating,"
-            ",F11,fullscreen"
-            "$mainMod CTRL, F, fullscreenstate, 0 2"
-            "$mainMod ALT, F, fullscreen, 1"
+            (bind' "${mod} + S" ''hl.dsp.layout("togglesplit")'')
+            (bind' "${mod} + P" "hl.dsp.window.pseudo()")
+            (bind' "${mod} + F" "hl.dsp.window.float()")
+            (bind' "F11" "hl.dsp.window.fullscreen()")
+            (bind' "${mod} + CTRL + F" "hl.dsp.window.fullscreen_state({ internal = 0, client = 2 })")
+            (bind' "${mod} + ALT + F" ''hl.dsp.window.fullscreen({ mode = "maximized" })'')
             # Applications
-            "$mainMod, Return, exec, ${term}"
-            "$mainMod, E, exec, ${thunar}"
-            "$mainMod, SPACE, exec, ${fuzzel}"
-            "$mainMod, Y, exec, oath 22293570 19125157"
-            "$mainMod, V, exec, ${cliphist} list | ${fuzzel} --dmenu | ${cliphist} decode | ${wl-copy}"
+            (execBind "${mod} + Return" term)
+            (execBind "${mod} + E" thunar)
+            (execBind "${mod} + SPACE" fuzzel)
+            (execBind "${mod} + Y" "oath 22293570 19125157")
+            (execBind "${mod} + V" "${cliphist} list | ${fuzzel} --dmenu | ${cliphist} decode | ${wl-copy}")
             # Web apps
-            "$mainMod SHIFT, A, exec, launch-webapp https://chatgpt.com"
-            "$mainMod SHIFT, G, exec, launch-webapp ${gatherUrl}"
+            (execBind "${mod} + SHIFT + A" "launch-webapp https://chatgpt.com")
+            (execBind "${mod} + SHIFT + G" "launch-webapp ${gatherUrl}")
             # Move focus with vim keys
-            "$mainMod, h, movefocus, l"
-            "$mainMod, l, movefocus, r"
-            "$mainMod, k, movefocus, u"
-            "$mainMod, j, movefocus, d"
+            (bind' "${mod} + h" ''hl.dsp.focus({ direction = "left" })'')
+            (bind' "${mod} + l" ''hl.dsp.focus({ direction = "right" })'')
+            (bind' "${mod} + k" ''hl.dsp.focus({ direction = "up" })'')
+            (bind' "${mod} + j" ''hl.dsp.focus({ direction = "down" })'')
             # Move focus with arrow keys
-            "$mainMod, LEFT, movefocus, l"
-            "$mainMod, RIGHT, movefocus, r"
-            "$mainMod, UP, movefocus, u"
-            "$mainMod, DOWN, movefocus, d"
-            # Move/swap windows with vim keys
-            "$mainMod SHIFT, h, movewindoworgroup, l"
-            "$mainMod SHIFT, l, movewindoworgroup, r"
-            "$mainMod SHIFT, k, movewindoworgroup, u"
-            "$mainMod SHIFT, j, movewindoworgroup, d"
+            (bind' "${mod} + LEFT" ''hl.dsp.focus({ direction = "left" })'')
+            (bind' "${mod} + RIGHT" ''hl.dsp.focus({ direction = "right" })'')
+            (bind' "${mod} + UP" ''hl.dsp.focus({ direction = "up" })'')
+            (bind' "${mod} + DOWN" ''hl.dsp.focus({ direction = "down" })'')
+            # Move/swap windows with vim keys (group-aware = movewindoworgroup)
+            (bind' "${mod} + SHIFT + h" ''hl.dsp.window.move({ direction = "left", group_aware = true })'')
+            (bind' "${mod} + SHIFT + l" ''hl.dsp.window.move({ direction = "right", group_aware = true })'')
+            (bind' "${mod} + SHIFT + k" ''hl.dsp.window.move({ direction = "up", group_aware = true })'')
+            (bind' "${mod} + SHIFT + j" ''hl.dsp.window.move({ direction = "down", group_aware = true })'')
             # Resize with vim keys
-            "$mainMod CTRL, h, resizeactive, -60 0"
-            "$mainMod CTRL, l, resizeactive, 60 0"
-            "$mainMod CTRL, k, resizeactive, 0 -60"
-            "$mainMod CTRL, j, resizeactive, 0 60"
-            # Switch workspaces with numbers
-            "$mainMod, 1, workspace, 1"
-            "$mainMod, 2, workspace, 2"
-            "$mainMod, 3, workspace, 3"
-            "$mainMod, 4, workspace, 4"
-            "$mainMod, 5, workspace, 5"
-            "$mainMod, 6, workspace, 6"
-            "$mainMod, 7, workspace, 7"
-            "$mainMod, 8, workspace, 8"
-            "$mainMod, 9, workspace, 9"
-            "$mainMod, 0, workspace, 10"
-            # Move window silently to workspace
-            "$mainMod SHIFT, 1, movetoworkspacesilent, 1"
-            "$mainMod SHIFT, 2, movetoworkspacesilent, 2"
-            "$mainMod SHIFT, 3, movetoworkspacesilent, 3"
-            "$mainMod SHIFT, 4, movetoworkspacesilent, 4"
-            "$mainMod SHIFT, 5, movetoworkspacesilent, 5"
-            "$mainMod SHIFT, 6, movetoworkspacesilent, 6"
-            "$mainMod SHIFT, 7, movetoworkspacesilent, 7"
-            "$mainMod SHIFT, 8, movetoworkspacesilent, 8"
-            "$mainMod SHIFT, 9, movetoworkspacesilent, 9"
-            "$mainMod SHIFT, 0, movetoworkspacesilent, 10"
+            (bind' "${mod} + CTRL + h" "hl.dsp.window.resize({ x = -60, y = 0, relative = true })")
+            (bind' "${mod} + CTRL + l" "hl.dsp.window.resize({ x = 60, y = 0, relative = true })")
+            (bind' "${mod} + CTRL + k" "hl.dsp.window.resize({ x = 0, y = -60, relative = true })")
+            (bind' "${mod} + CTRL + j" "hl.dsp.window.resize({ x = 0, y = 60, relative = true })")
             # Special workspaces
-            "$mainMod, B, togglespecialworkspace, browser"
-            "$mainMod, Z, togglespecialworkspace, spotify"
-            "$mainMod, C, togglespecialworkspace, chat"
-            "$mainMod, M, togglespecialworkspace, monitor"
-            "$mainMod, O, togglespecialworkspace, obs"
+            (bind' "${mod} + B" ''hl.dsp.workspace.toggle_special("browser")'')
+            (bind' "${mod} + Z" ''hl.dsp.workspace.toggle_special("spotify")'')
+            (bind' "${mod} + C" ''hl.dsp.workspace.toggle_special("chat")'')
+            (bind' "${mod} + M" ''hl.dsp.workspace.toggle_special("monitor")'')
+            (bind' "${mod} + O" ''hl.dsp.workspace.toggle_special("obs")'')
             # TAB between workspaces
-            "$mainMod, TAB, workspace, previous"
-            "$mainMod SHIFT, TAB, workspace, e-1"
-            "$mainMod CTRL, TAB, workspace, e+1"
+            (bind' "${mod} + TAB" ''hl.dsp.focus({ workspace = "previous" })'')
+            (bind' "${mod} + SHIFT + TAB" ''hl.dsp.focus({ workspace = "e-1" })'')
+            (bind' "${mod} + CTRL + TAB" ''hl.dsp.focus({ workspace = "e+1" })'')
             # Move workspaces to other monitors
-            "$mainMod SHIFT ALT, LEFT, movecurrentworkspacetomonitor, l"
-            "$mainMod SHIFT ALT, RIGHT, movecurrentworkspacetomonitor, r"
+            (bind' "${mod} + SHIFT + ALT + LEFT" ''hl.dsp.workspace.move({ monitor = "l" })'')
+            (bind' "${mod} + SHIFT + ALT + RIGHT" ''hl.dsp.workspace.move({ monitor = "r" })'')
             # Swap windows with arrows
-            "$mainMod SHIFT, LEFT, swapwindow, l"
-            "$mainMod SHIFT, RIGHT, swapwindow, r"
-            "$mainMod SHIFT, UP, swapwindow, u"
-            "$mainMod SHIFT, DOWN, swapwindow, d"
+            (bind' "${mod} + SHIFT + LEFT" ''hl.dsp.window.swap({ direction = "left" })'')
+            (bind' "${mod} + SHIFT + RIGHT" ''hl.dsp.window.swap({ direction = "right" })'')
+            (bind' "${mod} + SHIFT + UP" ''hl.dsp.window.swap({ direction = "up" })'')
+            (bind' "${mod} + SHIFT + DOWN" ''hl.dsp.window.swap({ direction = "down" })'')
             # Resize active window
-            "$mainMod, minus, resizeactive, -100 0"
-            "$mainMod, equal, resizeactive, 100 0"
-            "$mainMod SHIFT, minus, resizeactive, 0 -100"
-            "$mainMod SHIFT, equal, resizeactive, 0 100"
+            (bind' "${mod} + minus" "hl.dsp.window.resize({ x = -100, y = 0, relative = true })")
+            (bind' "${mod} + equal" "hl.dsp.window.resize({ x = 100, y = 0, relative = true })")
+            (bind' "${mod} + SHIFT + minus" "hl.dsp.window.resize({ x = 0, y = -100, relative = true })")
+            (bind' "${mod} + SHIFT + equal" "hl.dsp.window.resize({ x = 0, y = 100, relative = true })")
             # Scroll workspaces
-            "$mainMod, mouse_down, workspace, e+1"
-            "$mainMod, mouse_up, workspace, e-1"
+            (bind' "${mod} + mouse_down" ''hl.dsp.focus({ workspace = "e+1" })'')
+            (bind' "${mod} + mouse_up" ''hl.dsp.focus({ workspace = "e-1" })'')
             # Groups
-            "ALT CTRL SHIFT, L, exec, loginctl lock-session && ${hyprlock}"
-            "$mainMod, G, togglegroup"
-            "$mainMod ALT, G, moveoutofgroup"
-            "$mainMod ALT, J, changegroupactive, f"
-            "$mainMod ALT, K, changegroupactive, b"
-            "$mainMod ALT, LEFT, moveintogroup, l"
-            "$mainMod ALT, RIGHT, moveintogroup, r"
-            "$mainMod ALT, UP, moveintogroup, u"
-            "$mainMod ALT, DOWN, moveintogroup, d"
-            "$mainMod ALT, TAB, changegroupactive, f"
-            "$mainMod ALT SHIFT, TAB, changegroupactive, b"
-            "$mainMod CTRL, LEFT, changegroupactive, b"
-            "$mainMod CTRL, RIGHT, changegroupactive, f"
-            "$mainMod ALT, mouse_down, changegroupactive, f"
-            "$mainMod ALT, mouse_up, changegroupactive, b"
+            (execBind "ALT + CTRL + SHIFT + L" "loginctl lock-session && ${hyprlock}")
+            (bind' "${mod} + G" "hl.dsp.group.toggle()")
+            (bind' "${mod} + ALT + G" "hl.dsp.window.move({ out_of_group = true })")
+            (bind' "${mod} + ALT + J" "hl.dsp.group.next()")
+            (bind' "${mod} + ALT + K" "hl.dsp.group.prev()")
+            (bind' "${mod} + ALT + LEFT" ''hl.dsp.window.move({ into_group = "left" })'')
+            (bind' "${mod} + ALT + RIGHT" ''hl.dsp.window.move({ into_group = "right" })'')
+            (bind' "${mod} + ALT + UP" ''hl.dsp.window.move({ into_group = "up" })'')
+            (bind' "${mod} + ALT + DOWN" ''hl.dsp.window.move({ into_group = "down" })'')
+            (bind' "${mod} + ALT + TAB" "hl.dsp.group.next()")
+            (bind' "${mod} + ALT + SHIFT + TAB" "hl.dsp.group.prev()")
+            (bind' "${mod} + CTRL + LEFT" "hl.dsp.group.prev()")
+            (bind' "${mod} + CTRL + RIGHT" "hl.dsp.group.next()")
+            (bind' "${mod} + ALT + mouse_down" "hl.dsp.group.next()")
+            (bind' "${mod} + ALT + mouse_up" "hl.dsp.group.prev()")
             # Group window by number
-            "$mainMod ALT, 1, changegroupactive, 1"
-            "$mainMod ALT, 2, changegroupactive, 2"
-            "$mainMod ALT, 3, changegroupactive, 3"
-            "$mainMod ALT, 4, changegroupactive, 4"
-            "$mainMod ALT, 5, changegroupactive, 5"
+            (bind' "${mod} + ALT + 1" "hl.dsp.group.active({ index = 1 })")
+            (bind' "${mod} + ALT + 2" "hl.dsp.group.active({ index = 2 })")
+            (bind' "${mod} + ALT + 3" "hl.dsp.group.active({ index = 3 })")
+            (bind' "${mod} + ALT + 4" "hl.dsp.group.active({ index = 4 })")
+            (bind' "${mod} + ALT + 5" "hl.dsp.group.active({ index = 5 })")
             # Keyboard backlight
-            "$mainMod, F3, exec, ${brightnessctl} -d *::kbd_backlight set +33%"
-            "$mainMod, F2, exec, ${brightnessctl} -d *::kbd_backlight set 33%-"
+            (execBind "${mod} + F3" "${brightnessctl} -d *::kbd_backlight set +33%")
+            (execBind "${mod} + F2" "${brightnessctl} -d *::kbd_backlight set 33%-")
             # Screenshot
-            '', Print, exec, ${grim} -g "$(${slurp})" - | ${swappy} -f -''
-            # Screen recording
-            "$mainMod, R, exec, ${wfRecorderToggle}"
-          ];
+            (execBind "Print" ''${grim} -g "$(${slurp})" - | ${swappy} -f -'')
 
-          # ALT+TAB cycling
-          bindr = [
-            "ALT, TAB, cyclenext"
-            "ALT SHIFT, TAB, cyclenext, prev"
-            "ALT, TAB, bringactivetotop"
-            "ALT SHIFT, TAB, bringactivetotop"
-          ];
+            # ALT+TAB cycling (release binds, formerly bindr)
+            (bindOpts "ALT + TAB" "hl.dsp.window.cycle_next()" { release = true; })
+            (bindOpts "ALT + SHIFT + TAB" "hl.dsp.window.cycle_next({ next = false })" { release = true; })
+            (bindOpts "ALT + TAB" "hl.dsp.window.bring_to_top()" { release = true; })
+            (bindOpts "ALT + SHIFT + TAB" "hl.dsp.window.bring_to_top()" { release = true; })
 
-          # Media keys (repeat on hold)
-          bindel = [
-            ", XF86AudioRaiseVolume, exec, ${wpctl} set-volume @DEFAULT_AUDIO_SINK@ 5%+"
-            ", XF86AudioLowerVolume, exec, ${wpctl} set-volume @DEFAULT_AUDIO_SINK@ 5%-"
-            ", XF86AudioMute, exec, ${wpctl} set-mute @DEFAULT_AUDIO_SINK@ toggle"
-            ", XF86AudioMicMute, exec, ${wpctl} set-mute @DEFAULT_AUDIO_SOURCE@ toggle"
-            ", XF86MonBrightnessUp, exec, ${brightnessctl} set 5%+"
-            ", XF86MonBrightnessDown, exec, ${brightnessctl} set 5%-"
-          ];
+            # Media keys (repeat on hold + locked, formerly bindel)
+            (execBindOpts "XF86AudioRaiseVolume" "${wpctl} set-volume @DEFAULT_AUDIO_SINK@ 5%+" {
+              repeating = true;
+              locked = true;
+            })
+            (execBindOpts "XF86AudioLowerVolume" "${wpctl} set-volume @DEFAULT_AUDIO_SINK@ 5%-" {
+              repeating = true;
+              locked = true;
+            })
+            (execBindOpts "XF86AudioMute" "${wpctl} set-mute @DEFAULT_AUDIO_SINK@ toggle" {
+              repeating = true;
+              locked = true;
+            })
+            (execBindOpts "XF86AudioMicMute" "${wpctl} set-mute @DEFAULT_AUDIO_SOURCE@ toggle" {
+              repeating = true;
+              locked = true;
+            })
+            (execBindOpts "XF86MonBrightnessUp" "${brightnessctl} set 5%+" {
+              repeating = true;
+              locked = true;
+            })
+            (execBindOpts "XF86MonBrightnessDown" "${brightnessctl} set 5%-" {
+              repeating = true;
+              locked = true;
+            })
 
-          # Media playback (locked)
-          bindl = [
-            ", XF86AudioNext, exec, ${playerctl} next"
-            ", XF86AudioPause, exec, ${playerctl} play-pause"
-            ", XF86AudioPlay, exec, ${playerctl} play-pause"
-            ", XF86AudioPrev, exec, ${playerctl} previous"
-          ];
+            # Media playback (locked, formerly bindl)
+            (execBindOpts "XF86AudioNext" "${playerctl} next" { locked = true; })
+            (execBindOpts "XF86AudioPause" "${playerctl} play-pause" { locked = true; })
+            (execBindOpts "XF86AudioPlay" "${playerctl} play-pause" { locked = true; })
+            (execBindOpts "XF86AudioPrev" "${playerctl} previous" { locked = true; })
 
-          # Mouse bindings
-          bindm = [
-            "$mainMod, mouse:272, movewindow"
-            "$mainMod, mouse:273, resizewindow"
-          ];
+            # Mouse bindings (formerly bindm)
+            (bindOpts "${mod} + mouse:272" "hl.dsp.window.drag()" { mouse = true; })
+            (bindOpts "${mod} + mouse:273" "hl.dsp.window.resize()" { mouse = true; })
+          ]
+          ++ workspaceBinds;
 
-          exec-once = [
-            "hyprpaper"
-            "systemctl --user import-environment PATH && systemctl --user restart xdg-desktop-portal.service"
-            "${pkgs.networkmanagerapplet}/bin/nm-applet --indicator"
-            "[workspace special:spotify silent] ${spotify}"
-            "[workspace special:obs silent] ${obs} --startvirtualcam"
-            "[workspace special:chat silent] ${slack}"
-            "[workspace special:chat silent] ${signal}"
-            "[workspace special:browser silent] ${brave}"
-          ];
+          # Autostart (formerly exec-once)
+          on = {
+            _args = [
+              "hyprland.start"
+              (mkLuaInline ''
+                function()
+                  hl.exec_cmd("hyprpaper")
+                  hl.exec_cmd("systemctl --user import-environment PATH && systemctl --user restart xdg-desktop-portal.service")
+                  hl.exec_cmd("${pkgs.networkmanagerapplet}/bin/nm-applet --indicator")
+                  hl.exec_cmd("${spotify}", { workspace = "special:spotify silent" })
+                  hl.exec_cmd("${obs} --startvirtualcam", { workspace = "special:obs silent" })
+                  hl.exec_cmd("${slack}", { workspace = "special:chat silent" })
+                  hl.exec_cmd("${signal}", { workspace = "special:chat silent" })
+                  hl.exec_cmd("${brave}", { workspace = "special:browser silent" })
+                end'')
+            ];
+          };
         };
     };
   };

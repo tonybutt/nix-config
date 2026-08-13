@@ -12,18 +12,25 @@
     "10" = [ "HDMI-A-1" ];
   };
 
-  wayland.windowManager.hyprland.settings.workspace = [
-    "1, monitor:DP-1, default:true"
-    "2, monitor:DP-1"
-    "3, monitor:DP-1"
-    "4, monitor:DP-1"
-    "5, monitor:DP-1"
-    "6, monitor:HDMI-A-1, default:true"
-    "7, monitor:HDMI-A-1"
-    "8, monitor:HDMI-A-1"
-    "9, monitor:HDMI-A-1"
-    "10, monitor:HDMI-A-1"
-  ];
+  wayland.windowManager.hyprland.settings.workspace_rule =
+    let
+      onMonitor = monitor: ws: {
+        workspace = toString ws;
+        inherit monitor;
+      };
+    in
+    [
+      (onMonitor "DP-1" 1 // { default = true; })
+      (onMonitor "DP-1" 2)
+      (onMonitor "DP-1" 3)
+      (onMonitor "DP-1" 4)
+      (onMonitor "DP-1" 5)
+      (onMonitor "HDMI-A-1" 6 // { default = true; })
+      (onMonitor "HDMI-A-1" 7)
+      (onMonitor "HDMI-A-1" 8)
+      (onMonitor "HDMI-A-1" 9)
+      (onMonitor "HDMI-A-1" 10)
+    ];
 
   modules = {
     hyprland.monitors = [
