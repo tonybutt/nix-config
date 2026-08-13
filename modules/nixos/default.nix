@@ -171,6 +171,16 @@ in
       HibernateOnACPower = "no";
     };
 
+    # Restarting the audio stack mid-session races WirePlumber's device probe:
+    # cards re-register under a ".2"-suffixed name and get parked on the "Off"
+    # profile, killing microphones until reboot. Let pipewire updates land on
+    # the next boot instead of restarting during a switch.
+    systemd.user.services = {
+      pipewire.restartIfChanged = false;
+      pipewire-pulse.restartIfChanged = false;
+      wireplumber.restartIfChanged = false;
+    };
+
     services = {
       upower.enable = true;
       devmon.enable = true;
