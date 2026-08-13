@@ -20,6 +20,7 @@ in
     ./ssh
     ./ai
     ./obsidian.nix
+    ./slack-gov.nix
     ../stylix
   ];
   config = {
