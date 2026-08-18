@@ -86,6 +86,29 @@ let
     })
   ];
 
+  projectsPlugins = [
+    (mkObsidianPlugin {
+      pname = "dataview";
+      version = "0.5.70";
+      repo = "blacksmithgu/obsidian-dataview";
+      hashes = {
+        "main.js" = "sha256-a7HPcBCvrYMOc1dfyg4r+9MnnFYuPZ0k8tL0UWHrfQA=";
+        "manifest.json" = "sha256-kjXbRxEtqBuFWRx57LmuJXTl5yIHBW6XZHL5BhYoYYU=";
+        "styles.css" = "sha256-MwbdkDLgD5ibpyM6N/0lW8TT9DQM7mYXYulS8/aqHek=";
+      };
+    })
+    (mkObsidianPlugin {
+      pname = "tasks";
+      version = "8.3.0";
+      repo = "obsidian-tasks-group/obsidian-tasks";
+      hashes = {
+        "main.js" = "sha256-FwrAr0FggS/mxUErlhsiIql8VCOtl4pTgQnG0zIfD1I=";
+        "manifest.json" = "sha256-y0LVY7vNX+VRABesA11wEwX8YGjK/YU4JX5UehZ/ljc=";
+        "styles.css" = "sha256-2thMf5im6Q2Aruu1xlvnSb4xLwOEK1Ho9qAx6yLsnOI=";
+      };
+    })
+  ];
+
   # Scaffolds a new story in the writing vault from a title and optional
   # premise. Never overwrites: refuses if the story folder exists and only
   # seeds vault-level Templater templates that are missing.
@@ -167,6 +190,25 @@ in
           # Install is declarative; per-plugin settings stay writable in-app
           # (no `settings`, so each plugin owns its own data.json).
           communityPlugins = plugins;
+        };
+      };
+      vaults.projects = {
+        target = "workspace/github.com/tonybutt/projects";
+        settings = {
+          appearance = {
+            theme = "obsidian";
+            interfaceFontFamily = config.stylix.fonts.sansSerif.name;
+            textFontFamily = config.stylix.fonts.sansSerif.name;
+            monospaceFontFamily = config.stylix.fonts.monospace.name;
+            baseFontSize = 16;
+          };
+          cssSnippets = [
+            {
+              name = "stylix";
+              text = stylixCss;
+            }
+          ];
+          communityPlugins = projectsPlugins;
         };
       };
     };
