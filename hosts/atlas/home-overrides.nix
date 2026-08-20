@@ -46,12 +46,12 @@ in
 
   modules = {
     hyprland.monitors = [
-      # Desktop mode - external monitors enabled, laptop display off
+      # Laptop display enabled for travel; set enabled = false to turn it
+      # off when docked. External monitor rules are inert while unplugged.
       {
         name = "eDP-2";
         resolution = "highres@highrr";
         scale = "1.25";
-        enabled = false;
       }
       {
         name = "desc:Dell Inc. DELL S3220DGF BG9TF43";
@@ -62,24 +62,6 @@ in
         position = "auto-right";
         resolution = "highres@high";
       }
-
-      # Travel mode - laptop display only (uncomment and comment above when traveling)
-      # {
-      #   name = "eDP-2";
-      #   resolution = "highres@highrr";
-      #   scale = "1.25";
-      # }
-      # {
-      #   name = "desc:Dell Inc. DELL S3220DGF BG9TF43";
-      #   position = "0x0";
-      #   enabled = false;
-      # }
-      # {
-      #   name = "desc:Dell Inc. DELL U2718Q 4K8X703P0N8L";
-      #   position = "auto-right";
-      #   resolution = "highres@high";
-      #   enabled = false;
-      # }
     ];
   };
 }
