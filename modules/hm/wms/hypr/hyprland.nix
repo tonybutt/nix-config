@@ -354,8 +354,8 @@ in
             general = {
               "col.active_border" = lib.mkForce activeGradient;
               "col.inactive_border" = lib.mkForce inactiveGradient;
-              gaps_in = 2;
-              gaps_out = 4;
+              gaps_in = 3;
+              gaps_out = 6;
               border_size = 2;
               resize_on_border = false;
               allow_tearing = false;
