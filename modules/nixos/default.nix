@@ -212,6 +212,16 @@ in
       pcscd.enable = true;
       gnome.gnome-keyring.enable = true;
 
+      # Tailscale client pointed at the company Headscale server; operator
+      # lets trayscale/CLI control the daemon without sudo. Authenticate
+      # once per host with `ts-login` (zsh alias). extraUpFlags also apply
+      # automatically if authKeyFile is ever set for preauth-key joins.
+      tailscale = {
+        enable = true;
+        extraSetFlags = [ "--operator=${user.username}" ];
+        extraUpFlags = [ "--login-server=https://headscale.tiberius.com" ];
+      };
+
       logind.settings.Login = {
         HandlePowerKey = "suspend-then-hibernate";
         HandlePowerKeyLongPress = "poweroff";

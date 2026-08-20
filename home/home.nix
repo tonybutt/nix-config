@@ -50,6 +50,7 @@
     yubioath-flutter
     signal-desktop
     ssm-session-manager-plugin
+    trayscale
     pcsc-tools
     (pkgs.writeShellScriptBin "setup-browser-CAC" ''
       NSSDB="''${HOME}/.pki/nssdb"

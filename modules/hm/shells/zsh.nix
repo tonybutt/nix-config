@@ -162,6 +162,7 @@ in
           upd = "nh home switch ${flakeDir} --update";
           zed = "zeditor";
           gct = "git commit";
+          ts-login = "sudo tailscale up --login-server=https://headscale.tiberius.com --operator=$USER";
         }
         // lib.optionalAttrs (config.modules.themes.fastfetchLogoType == "pokeget") {
           fastfetch = "pokeget random --hide-name | ${pkgs.fastfetch}/bin/fastfetch --logo-type file-raw --logo -";
