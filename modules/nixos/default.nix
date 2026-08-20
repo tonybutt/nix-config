@@ -19,6 +19,7 @@ in
     ./laptop.nix
     ./ssh
     ./sops
+    ./endpoint-verification
   ];
   options = {
     modules.enable = mkEnableOption "Enable NixOS modules" // {
@@ -165,6 +166,12 @@ in
     };
 
     powerManagement.enable = true;
+
+    # Google Endpoint Verification reads the device serial as the logged-in
+    # user; default is 0400 root:root. Grant wheel read instead of sudo/cat.
+    systemd.tmpfiles.rules = [
+      "z /sys/class/dmi/id/product_serial 0440 root wheel -"
+    ];
 
     systemd.sleep.settings.Sleep = {
       HibernateDelaySec = "1h";

@@ -88,6 +88,7 @@
         { id = "pkehgijcmpdhfbdbbnkijodmdjhbjlgp"; } # privacy badger
         { id = "damfoaielhjgnodobkkikiaiikkklejb"; } # Gather Meetings
         { id = "iaalpfgpbocpdfblpnhhgllgbdbchmia"; } # Asciidoctor.js Live Preview
+        { id = "callobklhcbilhphinckomhgkigmfocg"; } # Endpoint Verification (Google Workspace)
       ];
     };
     zsh.sessionVariables = {
@@ -95,6 +96,20 @@
       EDITOR = "vim";
     };
   };
+  # Lets the Endpoint Verification extension query device attributes (serial,
+  # disk encryption) via the native helper provided by modules/nixos/endpoint-
+  # verification; /opt path is a tmpfiles symlink into the nix store.
+  xdg.configFile."BraveSoftware/Brave-Browser/NativeMessagingHosts/com.google.endpoint_verification.api_helper.json".text =
+    builtins.toJSON {
+      name = "com.google.endpoint_verification.api_helper";
+      description = "Google Endpoint Verification API Helper";
+      path = "/opt/google/endpoint-verification/bin/apihelper";
+      type = "stdio";
+      allowed_origins = [
+        "chrome-extension://callobklhcbilhphinckomhgkigmfocg/"
+      ];
+    };
+
   gtk = {
     iconTheme = {
       package = pkgs.colloid-icon-theme;
