@@ -96,12 +96,20 @@ in
             command = "/nix/store/*/activate-rs";
             options = [ "NOPASSWD" ];
           }
+          # sudo matches commands against their canonical (symlink-resolved)
+          # path, and its glob does not cross '/' — so patterns must name the
+          # store path with the /bin/ level explicit
           {
-            command = "/nix/store/*/switch-to-configuration";
+            command = "/nix/store/*/bin/switch-to-configuration";
             options = [ "NOPASSWD" ];
           }
           {
-            command = "/run/current-system/sw/bin/nix-env";
+            command = "/nix/store/*/bin/nix-env";
+            options = [ "NOPASSWD" ];
+          }
+          # deploy-rs confirms a deploy by removing its canary file as root
+          {
+            command = "/nix/store/*/bin/rm /tmp/deploy-rs-canary-*";
             options = [ "NOPASSWD" ];
           }
         ];
