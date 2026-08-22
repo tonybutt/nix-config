@@ -15,6 +15,9 @@
   boot.resumeDevice = "/dev/mapper/crypted";
   boot.kernelParams = [ "resume_offset=533760" ];
 
+  # Build aarch64 closures (Raspberry Pi kiosk image) via QEMU emulation
+  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+
   modules = {
     hostName = "atlas";
     grub = false;

@@ -2,6 +2,7 @@
   description = "My personal flake";
   inputs = {
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    nixos-raspberrypi.url = "github:nvmd/nixos-raspberrypi/main";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-color-lsp.url = "github:tonybutt/nixpkgs/color-lsp-init";
     claude-code.url = "github:sadjow/claude-code-nix";
@@ -40,11 +41,13 @@
       "https://hyprland.cachix.org"
       "https://claude-code.cachix.org"
       "https://deploy-rs.cachix.org"
+      "https://nixos-raspberrypi.cachix.org"
     ];
     extra-trusted-public-keys = [
       "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
       "claude-code.cachix.org-1:YeXf2aNu7UTX8Vwrze0za1WEDS+4DuI2kVeWEE4fsRk="
       "deploy-rs.cachix.org-1:xfNobmiwF/vzvK1gpfediPwpdIP0rpDV2rYqx40zdSI="
+      "nixos-raspberrypi.cachix.org-1:4iMO9LXa8BqhU+Rpg6LQKiGa2lsNh/j2oiYLNOQ5sPI="
     ];
   };
 
@@ -106,7 +109,11 @@
         claude-cognitive = import ./modules/hm/ai/claude-cognitive.nix;
       };
       formatter.${system} = treefmtEval.config.build.wrapper;
-      packages.${system}.opnsense-config = opnsenseConfig;
+      packages.${system} = {
+        opnsense-config = opnsenseConfig;
+        # Alias so `nix build .#kiosk-sd` works (built as aarch64 via binfmt)
+        kiosk-sd = self.nixosConfigurations.kiosk.config.system.build.sdImage;
+      };
       checks.${system} = {
         pre-commit-check = pkgs.callPackage ./pre-commit.nix {
           inherit pre-commit-hooks treefmtEval;
@@ -194,6 +201,22 @@
             modules = [
               { nixpkgs.hostPlatform = system; }
               ./hosts/iso/configuration.nix
+            ];
+          };
+          # Raspberry Pi 5 kiosk (aarch64, special case — no themes/disko)
+          kiosk = inputs.nixos-raspberrypi.lib.nixosSystem {
+            specialArgs = inputs // {
+              inherit user inputs;
+            };
+            modules = [
+              {
+                imports = with inputs.nixos-raspberrypi.nixosModules; [
+                  raspberry-pi-5.base
+                  raspberry-pi-5.display-vc4
+                  sd-image
+                ];
+              }
+              ./hosts/kiosk/configuration.nix
             ];
           };
         };
@@ -284,6 +307,14 @@
             user = "root";
             sshUser = user.username;
             path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.lapnix;
+          };
+        };
+        kiosk = {
+          hostname = "kiosk.local";
+          profiles.system = {
+            user = "root";
+            sshUser = user.username;
+            path = deploy-rs.lib.aarch64-linux.activate.nixos self.nixosConfigurations.kiosk;
           };
         };
       };
