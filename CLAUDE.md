@@ -2,7 +2,7 @@
 
 # GitNexus — Code Intelligence
 
-This project is indexed by GitNexus as **nix-config** (244 symbols, 232 relationships, 0 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+This project is indexed by GitNexus as **nix-config** (253 symbols, 241 relationships, 0 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
 
 > Index stale? Run `gitnexus analyze` from the project root — the binary is Nix-installed via home-manager (`modules/hm/ai/gitnexus`, on PATH at `~/.nix-profile/bin/gitnexus`). Do not use `npx`/`pnpm dlx`/`node .gitnexus/run.cjs`.
 
