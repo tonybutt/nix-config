@@ -26,6 +26,9 @@
     pkgs.material-icons
   ];
 
+  # Build aarch64 closures (Raspberry Pi kiosk image) via QEMU emulation
+  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+
   # Always on-the-go — no clamshell use, so always suspend on lid close
   services.logind.settings.Login = {
     HandleLidSwitchDocked = lib.mkForce "suspend-then-hibernate";
