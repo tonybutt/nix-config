@@ -46,6 +46,10 @@ in
   # dropping it also removes the zfs tools from the closure
   boot.supportedFilesystems.zfs = lib.mkForce false;
 
+  # Generation-aware bootloader (rollbacks). The sd-image module used to set
+  # this; without it the default regresses to single-generation "kernelboot"
+  boot.loader.raspberry-pi.bootloader = "kernel";
+
   modules.ssh.enable = true;
 
   # modules/nixos/users sets zsh as default shell; kiosk skips the full
@@ -81,6 +85,8 @@ in
   # graceful shutdown: kill it outright, which counts as a clean stop.
   systemd.services."cage-tty1".serviceConfig = {
     KillSignal = "SIGKILL";
+    # systemd counts a SIGKILL death as failure unless declared expected
+    SuccessExitStatus = "SIGKILL";
     TimeoutStopSec = 10;
   };
 
@@ -99,6 +105,8 @@ in
     vim
     git
     htop
+    # EEPROM inspection/config for the NVMe boot-order step
+    raspberrypi-eeprom
   ];
 
   system.stateVersion = "26.05";

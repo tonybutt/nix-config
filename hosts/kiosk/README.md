@@ -50,13 +50,27 @@ sha256sum pieeprom.upd | cut -c1-64 > /run/media/$USER/FIRMWARE/pieeprom.sig
 Success: `recovery.bin` renames itself to `RECOVERY.000`. Delete the leftover
 `pieeprom.*` files and boot normally.
 
-## Phase 2 — move to NVMe (planned)
+## NVMe (done — this is how the host runs now)
 
-1. Confirm the SSD enumerates from the running SD system (`lsblk`); if not,
-   add `PCIE_PROBE=1` to the EEPROM config.
-2. Add a disko NVMe layout (see nixos-raspberrypi-demo `disko-nvme-*.nix`) and
-   swap the `sd-image` module out of the flake entry.
-3. Provision with `nixos-anywhere --flake .#kiosk root@kiosk.local`
-   (deploy-rs only updates existing systems; it can't partition disks).
-4. `rpi-eeprom-config --edit` → `BOOT_ORDER=0xf416` (NVMe → SD → USB), then
-   pull the SD card and keep it as a rescue boot.
+The system lives on the M.2 HAT SSD (`hosts/kiosk/disks.nix`: 2G vfat
+FIRMWARE + ext4 root, disko). The May-2026 EEPROM's default
+`BOOT_ORDER=0xf461` already falls back to NVMe, so no EEPROM changes were
+needed: an inserted SD card always wins the boot order, which makes the old
+sd-image card a permanent rescue stick — keep it.
+
+Notes from the install (2026-08-23), should it ever be redone:
+
+- `nixos-anywhere --flake .#kiosk --phases disko,install root@kiosk.local`
+  from a builder with aarch64 binfmt; no kexec needed since the NVMe isn't
+  the boot disk when installing from the running SD system.
+- Temporary root SSH is required (nixos-anywhere needs real root; the sudo
+  whitelist is deliberately narrow). Revert it afterwards.
+- Root's shell must be bash during the install: nixos-anywhere sends an
+  unquoted `local?root=/mnt` store URI through the remote shell and zsh
+  aborts on the unmatched glob. Watch out for a cached ssh ControlMaster
+  keeping the old shell alive after `usermod`.
+- Dropping the `sd-image` module silently reverts
+  `boot.loader.raspberry-pi.bootloader` from "kernel" to legacy
+  "kernelboot"; it is now pinned explicitly in `configuration.nix`.
+- The fresh install generates new SSH host keys: expect a known_hosts
+  mismatch on first connect.

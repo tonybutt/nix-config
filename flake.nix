@@ -213,9 +213,10 @@
                 imports = with inputs.nixos-raspberrypi.nixosModules; [
                   raspberry-pi-5.base
                   raspberry-pi-5.display-vc4
-                  sd-image
                 ];
               }
+              disko.nixosModules.disko
+              ./hosts/kiosk/disks.nix
               ./hosts/kiosk/configuration.nix
             ];
           };
