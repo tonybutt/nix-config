@@ -52,6 +52,7 @@ in
         name = "eDP-2";
         resolution = "highres@highrr";
         scale = "1.25";
+        enabled = false;
       }
       {
         name = "desc:Dell Inc. DELL S3220DGF BG9TF43";
