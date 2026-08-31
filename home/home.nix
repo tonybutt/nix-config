@@ -75,7 +75,43 @@
   ];
 
   programs = {
-    obs-studio.enable = true;
+    obs-studio = {
+      enable = true;
+      # OBS should render on whichever GPU the compositor owns, not on the
+      # session-wide offload target. Its frames arrive in host memory from the
+      # capture device and have to be read back to host memory again for the
+      # v4l2 virtual camera, so a discrete GPU pays a PCIe crossing at both ends
+      # and the readback stalls the pipeline; the integrated GPU maps the same
+      # DDR5 the frames already live in. Measured on atlas over the virtual-cam
+      # path (1080p -> 720p NV12, upload + scale + readback), the 780M beats the
+      # RX 7700S by ~5% -- and both clear 500fps against a 30fps requirement, so
+      # the dGPU's shader throughput buys nothing here while keeping the card
+      # awake for ~21W.
+      #
+      # Clearing the variables rather than naming a device keeps this correct on
+      # every host: Mesa's EGL/Wayland fallback is the compositor's own device,
+      # and on single-GPU machines there is nothing to clear.
+      # Wrapped by symlink rather than overrideAttrs so the cached obs-studio
+      # build is reused instead of recompiled. wrapOBS reads name, meta and
+      # passthru off whatever it is handed, so carry those across.
+      package = pkgs.symlinkJoin {
+        name = "obs-studio-compositor-gpu";
+        paths = [ pkgs.obs-studio ];
+        nativeBuildInputs = [ pkgs.makeWrapper ];
+        inherit (pkgs.obs-studio) meta;
+        passthru = pkgs.obs-studio.passthru or { };
+        postBuild = ''
+          wrapProgram $out/bin/obs \
+            --unset DRI_PRIME \
+            --unset MESA_VK_DEVICE_SELECT
+
+          grep -q 'unset DRI_PRIME' $out/bin/obs || {
+            echo "obs render-device unset did not reach the wrapper" >&2
+            exit 1
+          }
+        '';
+      };
+    };
     kitty.settings = {
       scrollback_lines = 100000;
       copy_on_select = "clipboard";
