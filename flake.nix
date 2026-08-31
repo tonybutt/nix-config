@@ -77,6 +77,7 @@
           nur.overlays.default
           claude-code.overlays.default
           (import ./overlays/brave-endpoint-verification.nix)
+          (import ./overlays/brave-render-node.nix)
         ];
       };
       user = {

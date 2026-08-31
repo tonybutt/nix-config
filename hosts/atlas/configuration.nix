@@ -1,5 +1,6 @@
 {
   pkgs,
+  lib,
   ...
 }:
 {
@@ -52,6 +53,30 @@
   };
 
   hardware.graphics.enable32Bit = true;
+
+  # The Navi 33 in the expansion bay has no connected display outputs — every
+  # connector belongs to the Phoenix1 iGPU — so it is a pure offload device.
+  # Default all GL and Vulkan clients to it, which hands the APU's shared power
+  # budget and DDR5 bandwidth back to the CPU cores for compiles. Hyprland
+  # itself is unaffected and keeps rendering on the iGPU that owns the displays.
+  #
+  # Both variables are required: DRI_PRIME only steers GL/EGL, Vulkan ignores it.
+  # Addressed by PCI path and vendor:device rather than DRI_PRIME=1, since the
+  # positional index is not stable across boots.
+  environment.sessionVariables = {
+    DRI_PRIME = "pci-0000_03_00_0";
+    MESA_VK_DEVICE_SELECT = "1002:7480";
+  };
+
+  # Merges with the on-the-go specialisation defined in modules/nixos/laptop.nix
+  # rather than replacing it. On battery the dGPU is not worth its idle draw, so
+  # hand rendering back to the iGPU.
+  specialisation.on-the-go.configuration = {
+    environment.sessionVariables = {
+      DRI_PRIME = lib.mkForce "pci-0000_c5_00_0";
+      MESA_VK_DEVICE_SELECT = lib.mkForce "1002:15bf";
+    };
+  };
 
   services.fwupd.enable = true;
 
