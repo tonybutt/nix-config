@@ -211,6 +211,25 @@ in
           communityPlugins = projectsPlugins;
         };
       };
+      vaults.work = {
+        target = "workspace/work";
+        settings = {
+          appearance = {
+            theme = "obsidian";
+            interfaceFontFamily = config.stylix.fonts.sansSerif.name;
+            textFontFamily = config.stylix.fonts.sansSerif.name;
+            monospaceFontFamily = config.stylix.fonts.monospace.name;
+            baseFontSize = 16;
+          };
+          cssSnippets = [
+            {
+              name = "stylix";
+              text = stylixCss;
+            }
+          ];
+          communityPlugins = projectsPlugins;
+        };
+      };
     };
   };
 }

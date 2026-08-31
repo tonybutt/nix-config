@@ -41,6 +41,19 @@ let
   slack = "${pkgs.slack}/bin/slack";
   signal = "${pkgs.signal-desktop}/bin/signal-desktop";
   brave = "${pkgs.brave}/bin/brave";
+  # Obsidian is single-instance: a second invocation hands its URI to the
+  # already-running process over the Electron singleton socket. Fired before
+  # that socket exists the two race into separate instances, so open the work
+  # vault, wait for the socket to appear, then ask for the personal one.
+  obsidian = pkgs.writeShellScript "obsidian-vaults" ''
+    obsidian=${pkgs.obsidian}/bin/obsidian
+    "$obsidian" "obsidian://open?vault=work" &
+    for _ in $(seq 1 60); do
+      [ -e "$HOME/.config/obsidian/SingletonSocket" ] && break
+      sleep 0.5
+    done
+    exec "$obsidian" "obsidian://open?vault=projects"
+  '';
   gatherUrl = "https://work.tiberius.com";
 
   mod = cfg.mainMod;
@@ -709,6 +722,12 @@ in
               match.title = "^(.+ is sharing (your screen|a window|a tab))(.*)$";
               workspace = "10 silent";
             }
+            # Obsidian reports class md.Obsidian, not obsidian — both vault
+            # windows land on the notes scratchpad.
+            {
+              match.class = "^(md\\.Obsidian)$";
+              workspace = "special:notes silent";
+            }
             {
               match = {
                 title = "^()$";
@@ -839,6 +858,7 @@ in
             (bind' "${mod} + C" ''hl.dsp.workspace.toggle_special("chat")'')
             (bind' "${mod} + M" ''hl.dsp.workspace.toggle_special("monitor")'')
             (bind' "${mod} + O" ''hl.dsp.workspace.toggle_special("obs")'')
+            (bind' "${mod} + N" ''hl.dsp.workspace.toggle_special("notes")'')
             # TAB between workspaces
             (bind' "${mod} + TAB" ''hl.dsp.focus({ workspace = "previous" })'')
             (bind' "${mod} + SHIFT + TAB" ''hl.dsp.focus({ workspace = "e-1" })'')
@@ -946,6 +966,7 @@ in
                   hl.exec_cmd("${slack}", { workspace = "special:chat silent" })
                   hl.exec_cmd("${signal}", { workspace = "special:chat silent" })
                   hl.exec_cmd("${brave}", { workspace = "special:browser silent" })
+                  hl.exec_cmd("${obsidian}", { workspace = "special:notes silent" })
                 end'')
             ];
           };

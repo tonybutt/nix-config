@@ -162,6 +162,7 @@ in
           upd = "nh home switch ${flakeDir} --update";
           zed = "zeditor";
           gct = "git commit";
+          wk = "PJ_VAULT=$HOME/workspace/work pj";
           ts-login = "sudo tailscale up --login-server=https://headscale.tiberius.com --operator=$USER";
         }
         // lib.optionalAttrs (config.modules.themes.fastfetchLogoType == "pokeget") {
