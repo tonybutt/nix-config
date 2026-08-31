@@ -52,6 +52,9 @@ in
         awscli2
         kind
         fluxcd
+        # Carries gke-gcloud-auth-plugin, which kubectl execs for any GKE
+        # context; plain google-cloud-sdk omits it and auth fails.
+        (google-cloud-sdk.withExtraComponents [ google-cloud-sdk.components.gke-gcloud-auth-plugin ])
         kubectl
         kubelogin-oidc
         kubernetes-helm
