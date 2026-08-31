@@ -740,14 +740,6 @@ in
               opacity = "0.85";
             }
             {
-              match.class = "signal";
-              group = "set";
-            }
-            {
-              match.class = "Slack";
-              group = "set";
-            }
-            {
               match.class = "^(dropdown)$";
               float = true;
               size = [
