@@ -212,12 +212,15 @@ in
             format-critical = "{icon} {temperatureF}°F";
             format = "{icon}";
             format-alt = "{icon} {temperatureF}°F";
-            format-icons = [
-              ""
-              ""
-              ""
-              ""
-              ""
+            # Font Awesome thermometer ramp, empty -> full. Spelled as \u
+            # escapes (Nix has none; JSON does) so the codepoints are explicit
+            # instead of invisible PUA glyphs that an editor can drop.
+            format-icons = map (cp: builtins.fromJSON ''"\u${cp}"'') [
+              "f2cb"
+              "f2ca"
+              "f2c9"
+              "f2c8"
+              "f2c7"
             ];
           };
 
