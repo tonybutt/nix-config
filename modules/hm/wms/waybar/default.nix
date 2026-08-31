@@ -206,16 +206,18 @@ in
           };
 
           temperature = {
+            # critical-threshold is always compared in Celsius, whatever the
+            # format displays.
             critical-threshold = 80;
-            format-critical = "{icon} {temperatureC}°C";
+            format-critical = "{icon} {temperatureF}°F";
             format = "{icon}";
-            format-alt = "{icon} {temperatureC}°C";
+            format-alt = "{icon} {temperatureF}°F";
             format-icons = [
-              "󰔏"
-              "󰔏"
-              "󰔐"
-              "󰔑"
-              "󰔒"
+              ""
+              ""
+              ""
+              ""
+              ""
             ];
           };
 
