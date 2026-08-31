@@ -29,6 +29,12 @@ let
   wpctl = "${pkgs.wireplumber}/bin/wpctl";
   playerctl = "${pkgs.playerctl}/bin/playerctl";
   btop = "${pkgs.btop}/bin/btop";
+  # Monitor scratchpad: btop for the system plus amdgpu_top for per-GPU
+  # detail — mainly to watch the Navi 33 while the session offloads to it.
+  monitors = pkgs.writeShellScript "monitor-scratchpad" ''
+    ${term} -e ${btop} &
+    exec ${term} -e ${pkgs.amdgpu_top}/bin/amdgpu_top
+  '';
   hyprlock = "${pkgs.hyprlock}/bin/hyprlock";
   spotify = "${pkgs.spotify}/bin/spotify";
   # clear stale sentinel files before launching obs to suppress the
@@ -651,7 +657,7 @@ in
           workspace_rule = [
             {
               workspace = "special:monitor";
-              on_created_empty = "${term} -e ${btop}";
+              on_created_empty = "${monitors}";
             }
           ];
 
