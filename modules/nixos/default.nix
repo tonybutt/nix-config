@@ -11,6 +11,7 @@ let
 in
 {
   imports = [
+    ./browser.nix
     ./packages.nix
     ./wms
     ./peripherals
