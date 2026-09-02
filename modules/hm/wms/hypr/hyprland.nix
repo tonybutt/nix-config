@@ -728,6 +728,17 @@ in
               match.title = "^(.+ is sharing (your screen|a window|a tab))(.*)$";
               workspace = "10 silent";
             }
+            # Bitwarden extension popups (nngc... is Bitwarden's extension id);
+            # loose match catches any popup window the extension opens, any profile
+            {
+              match.class = ".*nngceckbapebfimnlniiiahkandclblb.*";
+              float = true;
+              center = true;
+              size = [
+                500
+                "monitor_h*0.6"
+              ];
+            }
             # Obsidian reports class md.Obsidian, not obsidian — both vault
             # windows land on the notes scratchpad.
             {
