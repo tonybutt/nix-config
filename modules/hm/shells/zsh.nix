@@ -161,6 +161,9 @@ in
           rbh = "nh home switch ${flakeDir}";
           upd = "nh home switch ${flakeDir} --update";
           zed = "zeditor";
+          # exec (not source) so the shell re-evaluates cleanly: no duplicated
+          # PATH entries, no p10k instant-prompt complaints
+          reload = "exec zsh";
           gct = "git commit";
           wk = "PJ_VAULT=$HOME/workspace/work pj";
           ts-login = "sudo tailscale up --login-server=https://headscale.tiberius.com --operator=$USER";
