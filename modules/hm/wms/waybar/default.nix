@@ -59,6 +59,68 @@ let
     TOOLTIP="''${TOOLTIP}\n  ''${RUNNING}/''${TOTAL} running"
     echo "{\"text\": \"''${TUNNEL}''${LABEL}: ''${ICON}\", \"tooltip\": \"''${TOOLTIP}\", \"class\": \"''${CLASS}\"}"
   '';
+
+  kindStatus = pkgs.writeShellScript "kind-status" ''
+    if ! ${pkgs.docker}/bin/docker info >/dev/null 2>&1; then
+      echo '{"text": "󱃾", "tooltip": "docker not running", "class": "offline"}'
+      exit 0
+    fi
+
+    CLUSTERS=$(${pkgs.kind}/bin/kind get clusters 2>/dev/null)
+    if [ -z "''${CLUSTERS}" ]; then
+      echo '{"text": "󱃾", "tooltip": "no kind clusters", "class": "offline"}'
+      exit 0
+    fi
+
+    # A cluster can exist with its node containers stopped — only clusters
+    # with running containers count as up.
+    UP_CLUSTERS=$(${pkgs.docker}/bin/docker ps --filter label=io.x-k8s.kind.cluster \
+      --format '{{.Label "io.x-k8s.kind.cluster"}}' 2>/dev/null | sort -u)
+
+    TOTAL=0
+    UP=0
+    TOOLTIP="kind clusters:"
+    while IFS= read -r cluster; do
+      TOTAL=$((TOTAL + 1))
+      if echo "''${UP_CLUSTERS}" | grep -qx "''${cluster}"; then
+        UP=$((UP + 1))
+        TOOLTIP="''${TOOLTIP}\n  ✓ ''${cluster} (running)"
+      else
+        TOOLTIP="''${TOOLTIP}\n  ✗ ''${cluster} (stopped)"
+      fi
+    done <<< "''${CLUSTERS}"
+
+    if [ "''${UP}" -gt 0 ]; then
+      CLASS="online"
+    else
+      CLASS="offline"
+    fi
+    TOOLTIP="''${TOOLTIP}\n  ''${UP}/''${TOTAL} running"
+    echo "{\"text\": \"󱃾\", \"tooltip\": \"''${TOOLTIP}\", \"class\": \"''${CLASS}\"}"
+  '';
+
+  dockerStatus = pkgs.writeShellScript "docker-status" ''
+    if ! ${pkgs.docker}/bin/docker info >/dev/null 2>&1; then
+      echo '{"text": "󰡨", "tooltip": "docker not running", "class": "offline"}'
+      exit 0
+    fi
+
+    RUNNING=$(${pkgs.docker}/bin/docker ps --format '{{.Names}} ({{.Image}})' 2>/dev/null)
+    if [ -z "''${RUNNING}" ]; then
+      echo '{"text": "󰡨", "tooltip": "no containers running", "class": "offline"}'
+      exit 0
+    fi
+
+    COUNT=0
+    TOOLTIP="containers:"
+    while IFS= read -r container; do
+      COUNT=$((COUNT + 1))
+      TOOLTIP="''${TOOLTIP}\n  ✓ ''${container}"
+    done <<< "''${RUNNING}"
+
+    TOOLTIP="''${TOOLTIP}\n  ''${COUNT} running"
+    echo "{\"text\": \"󰡨\", \"tooltip\": \"''${TOOLTIP}\", \"class\": \"online\"}"
+  '';
 in
 {
   options = {
@@ -92,6 +154,8 @@ in
           modules-right = [
             "custom/lethality"
             "custom/agility"
+            "custom/kind"
+            "custom/docker"
             "group/tray-expander"
             "custom/lock"
             "network"
@@ -169,6 +233,18 @@ in
             exec = "${pcStatus} LETH 8080 backend,frontend,postgres,openfga,rustfs,zitadel,zitadel-login,zitadel-db,golang-ai";
             return-type = "json";
             interval = 5;
+          };
+
+          "custom/kind" = {
+            exec = "${kindStatus}";
+            return-type = "json";
+            interval = 10;
+          };
+
+          "custom/docker" = {
+            exec = "${dockerStatus}";
+            return-type = "json";
+            interval = 10;
           };
 
           "group/tray-expander" = {

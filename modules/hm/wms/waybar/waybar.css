@@ -204,6 +204,22 @@ tooltip label {
   color: @base04;
 }
 
+#custom-kind,
+#custom-docker {
+  margin: 0 4px;
+  font-size: 20px;
+}
+
+#custom-kind.online,
+#custom-docker.online {
+  color: @base0D;
+}
+
+#custom-kind.offline,
+#custom-docker.offline {
+  color: @base04;
+}
+
 .hidden {
   opacity: 0;
 }
