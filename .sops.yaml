@@ -5,7 +5,7 @@ keys:
   - &mantra age1fkqne0n5ksw3v2yhlc995s09rt5gyzt8eta6xfrwg95yx8mqmsvs096aa8
 creation_rules:
   - path_regex: secrets/secrets\.yaml$
-    encrypted_regex: ^github-runner-token$
+    encrypted_regex: ^(github-runner-token|notifier-slack-token)$
     key_groups:
       - age:
           - *atlas

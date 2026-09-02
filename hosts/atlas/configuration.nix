@@ -23,6 +23,7 @@
     hostName = "atlas";
     grub = false;
     laptop = true;
+    sops.enable = true;
     ssh.enable = true;
     peripherals = {
       enable = true;
@@ -53,6 +54,8 @@
   };
 
   hardware.graphics.enable32Bit = true;
+
+  sops.secrets.notifier-slack-token.owner = "anthony";
 
   # The Navi 33 in the expansion bay has no connected display outputs — every
   # connector belongs to the Phoenix1 iGPU — so it is a pure offload device.
