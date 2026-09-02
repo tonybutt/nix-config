@@ -124,8 +124,10 @@
         { id = "nngceckbapebfimnlniiiahkandclblb"; } # bitwarden
         { id = "pkehgijcmpdhfbdbbnkijodmdjhbjlgp"; } # privacy badger
         { id = "damfoaielhjgnodobkkikiaiikkklejb"; } # Gather Meetings
+        { id = "nmgegmkaijcgdgkfjhlbbaoabldoaehj"; } # Gather 1.0 Meetings (Classic)
         { id = "iaalpfgpbocpdfblpnhhgllgbdbchmia"; } # Asciidoctor.js Live Preview
         { id = "callobklhcbilhphinckomhgkigmfocg"; } # Endpoint Verification (Google Workspace)
+        { id = "jlmpjdjjbgclbocgajdjefcidcncaied"; } # daily.dev
       ];
     };
     zsh.sessionVariables = {
