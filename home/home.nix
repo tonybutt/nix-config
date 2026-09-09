@@ -41,6 +41,7 @@
     gimp3
     unzip
     claude-code
+    codex
     sox
     pavucontrol
     cloudflared

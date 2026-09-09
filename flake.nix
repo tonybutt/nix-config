@@ -6,6 +6,10 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-color-lsp.url = "github:tonybutt/nixpkgs/color-lsp-init";
     claude-code.url = "github:sadjow/claude-code-nix";
+    codex-cli = {
+      url = "github:sadjow/codex-cli-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -40,12 +44,14 @@
     extra-substituters = [
       "https://hyprland.cachix.org"
       "https://claude-code.cachix.org"
+      "https://codex-cli.cachix.org"
       "https://deploy-rs.cachix.org"
       "https://nixos-raspberrypi.cachix.org"
     ];
     extra-trusted-public-keys = [
       "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
       "claude-code.cachix.org-1:YeXf2aNu7UTX8Vwrze0za1WEDS+4DuI2kVeWEE4fsRk="
+      "codex-cli.cachix.org-1:1Br3H1hHoRYG22n//cGKJOk3cQXgYobUel6O8DgSing="
       "deploy-rs.cachix.org-1:xfNobmiwF/vzvK1gpfediPwpdIP0rpDV2rYqx40zdSI="
       "nixos-raspberrypi.cachix.org-1:4iMO9LXa8BqhU+Rpg6LQKiGa2lsNh/j2oiYLNOQ5sPI="
     ];
@@ -66,6 +72,7 @@
       treefmt-nix,
       pre-commit-hooks,
       claude-code,
+      codex-cli,
       ...
     }@inputs:
     let
@@ -76,6 +83,7 @@
         overlays = [
           nur.overlays.default
           claude-code.overlays.default
+          codex-cli.overlays.default
           (import ./overlays/brave-endpoint-verification.nix)
           (import ./overlays/brave-render-node.nix)
         ];
