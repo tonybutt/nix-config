@@ -33,7 +33,10 @@
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    deploy-rs.url = "github:serokell/deploy-rs";
+    deploy-rs = {
+      url = "github:serokell/deploy-rs";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     team-claude-skills.url = "git+ssh://git@github.com/tiberius-grail/team-claude-skills";
     superpowers = {
       url = "github:obra/superpowers";
@@ -45,14 +48,12 @@
       "https://hyprland.cachix.org"
       "https://claude-code.cachix.org"
       "https://codex-cli.cachix.org"
-      "https://deploy-rs.cachix.org"
       "https://nixos-raspberrypi.cachix.org"
     ];
     extra-trusted-public-keys = [
       "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
       "claude-code.cachix.org-1:YeXf2aNu7UTX8Vwrze0za1WEDS+4DuI2kVeWEE4fsRk="
       "codex-cli.cachix.org-1:1Br3H1hHoRYG22n//cGKJOk3cQXgYobUel6O8DgSing="
-      "deploy-rs.cachix.org-1:xfNobmiwF/vzvK1gpfediPwpdIP0rpDV2rYqx40zdSI="
       "nixos-raspberrypi.cachix.org-1:4iMO9LXa8BqhU+Rpg6LQKiGa2lsNh/j2oiYLNOQ5sPI="
     ];
   };
@@ -103,6 +104,13 @@
         };
       };
       treefmtEval = treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
+      deployPkgs = nixpkgs.lib.genAttrs [ "x86_64-linux" "aarch64-linux" ] (
+        deploySystem:
+        import nixpkgs {
+          system = deploySystem;
+          overlays = [ (import ./overlays/deploy-rs-from-nixpkgs.nix { inherit deploy-rs; }) ];
+        }
+      );
       opnsenseConfig = import ./hosts/protectli {
         inherit pkgs;
         sshKeys = [
@@ -128,13 +136,13 @@
           inherit pre-commit-hooks treefmtEval;
         };
       }
-      // (deploy-rs.lib.${system}.deployChecks self.deploy);
+      // (deployPkgs.${system}.deploy-rs.lib.deployChecks self.deploy);
       devShells.${system}.default = pkgs.mkShell {
         inherit (self.checks.${system}.pre-commit-check) shellHook;
         packages = [
           (self.checks.${system}.pre-commit-check.enabledPackages)
           treefmtEval.config.build.wrapper
-          deploy-rs.packages.${system}.default
+          deployPkgs.${system}.deploy-rs.deploy-rs
           pkgs.sops
         ];
         env = {
@@ -300,7 +308,7 @@
           profiles.system = {
             user = "root";
             sshUser = user.username;
-            path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.mantra;
+            path = deployPkgs.x86_64-linux.deploy-rs.lib.activate.nixos self.nixosConfigurations.mantra;
           };
         };
         atlas = {
@@ -308,7 +316,7 @@
           profiles.system = {
             user = "root";
             sshUser = user.username;
-            path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.atlas;
+            path = deployPkgs.x86_64-linux.deploy-rs.lib.activate.nixos self.nixosConfigurations.atlas;
           };
         };
         lapnix = {
@@ -316,7 +324,7 @@
           profiles.system = {
             user = "root";
             sshUser = user.username;
-            path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.lapnix;
+            path = deployPkgs.x86_64-linux.deploy-rs.lib.activate.nixos self.nixosConfigurations.lapnix;
           };
         };
         kiosk = {
@@ -324,7 +332,7 @@
           profiles.system = {
             user = "root";
             sshUser = user.username;
-            path = deploy-rs.lib.aarch64-linux.activate.nixos self.nixosConfigurations.kiosk;
+            path = deployPkgs.aarch64-linux.deploy-rs.lib.activate.nixos self.nixosConfigurations.kiosk;
           };
         };
       };
