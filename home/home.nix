@@ -50,6 +50,8 @@
     libnotify
     yubioath-flutter
     signal-desktop
+    firefox
+    google-chrome
     ssm-session-manager-plugin
     trayscale
     pcsc-tools
@@ -129,6 +131,7 @@
         { id = "iaalpfgpbocpdfblpnhhgllgbdbchmia"; } # Asciidoctor.js Live Preview
         { id = "callobklhcbilhphinckomhgkigmfocg"; } # Endpoint Verification (Google Workspace)
         { id = "jlmpjdjjbgclbocgajdjefcidcncaied"; } # daily.dev
+        { id = "idefohglmnkliiadgfofeokcpjobdeik"; } # Ramp for Chrome
       ];
     };
     zsh.sessionVariables = {
