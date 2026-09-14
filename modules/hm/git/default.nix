@@ -17,7 +17,10 @@ in
     };
   };
   config = mkIf cfg.enable {
-    home.packages = [ pkgs.tea ];
+    home.packages = [
+      pkgs.tea
+      pkgs.gh
+    ];
     programs.git = {
       package = pkgs.gitFull;
       enable = true;
