@@ -2,17 +2,9 @@ let
   gatherUrl = "https://work.tiberius.com";
 in
 {
+  # Values are output names; an empty list means all outputs. [ "*" ] matches nothing.
   programs.waybar.settings.mainBar."hyprland/workspaces".persistent-workspaces = {
-    "1" = [ "*" ];
-    "2" = [ "*" ];
-    "3" = [ "*" ];
-    "4" = [ "*" ];
-    "5" = [ "*" ];
-    "6" = [ "*" ];
-    "7" = [ "*" ];
-    "8" = [ "*" ];
-    "9" = [ "*" ];
-    "10" = [ "*" ];
+    "1" = [ ];
   };
 
   # Desktop workspace assignments
