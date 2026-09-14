@@ -42,6 +42,11 @@
       url = "github:obra/superpowers";
       flake = false;
     };
+    # Stopgap for Alexays/Waybar#5316 — see overlays/waybar-hyprland-ipc.nix
+    waybar-src = {
+      url = "github:tonybutt/Waybar/hyprland-addressable-workspaces";
+      flake = false;
+    };
   };
   nixConfig = {
     extra-substituters = [
@@ -74,6 +79,7 @@
       pre-commit-hooks,
       claude-code,
       codex-cli,
+      waybar-src,
       ...
     }@inputs:
     let
@@ -87,6 +93,7 @@
           codex-cli.overlays.default
           (import ./overlays/brave-endpoint-verification.nix)
           (import ./overlays/brave-render-node.nix)
+          (import ./overlays/waybar-hyprland-ipc.nix { inherit waybar-src; })
         ];
       };
       user = {

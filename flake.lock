@@ -1114,7 +1114,8 @@
         "stylix": "stylix",
         "superpowers": "superpowers",
         "team-claude-skills": "team-claude-skills",
-        "treefmt-nix": "treefmt-nix_2"
+        "treefmt-nix": "treefmt-nix_2",
+        "waybar-src": "waybar-src"
       }
     },
     "sops-nix": {
@@ -1397,6 +1398,23 @@
       "original": {
         "owner": "numtide",
         "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "waybar-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1789395231,
+        "narHash": "sha256-ZY+lyt2WY2aZ7dmOBCyJGfuJfqMNMkgjMUrrb50h0yc=",
+        "owner": "tonybutt",
+        "repo": "Waybar",
+        "rev": "54abdc16eb28057cbfa169c7c72b41443800647b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "tonybutt",
+        "ref": "hyprland-addressable-workspaces",
+        "repo": "Waybar",
         "type": "github"
       }
     },
