@@ -22,9 +22,19 @@ in
     {
       users.users.${user.username}.extraGroups = mkAfter [ "docker" ];
 
+      environment.systemPackages = with pkgs; [
+        skopeo
+      ];
+
       virtualisation = {
         docker.enable = true;
         containers.enable = true;
+
+        podman = {
+          enable = true;
+          dockerSocket.enable = false;
+          defaultNetwork.settings.dns_enabled = true;
+        };
       };
     }
 
