@@ -91,6 +91,7 @@
           nur.overlays.default
           claude-code.overlays.default
           codex-cli.overlays.default
+          (import ./overlays/brave-no-hw-encode.nix)
           (import ./overlays/brave-endpoint-verification.nix)
           (import ./overlays/brave-render-node.nix)
           (import ./overlays/waybar-hyprland-ipc.nix { inherit waybar-src; })
@@ -146,8 +147,7 @@
       // (deployPkgs.${system}.deploy-rs.lib.deployChecks self.deploy);
       devShells.${system}.default = pkgs.mkShell {
         inherit (self.checks.${system}.pre-commit-check) shellHook;
-        packages = [
-          (self.checks.${system}.pre-commit-check.enabledPackages)
+        packages = self.checks.${system}.pre-commit-check.enabledPackages ++ [
           treefmtEval.config.build.wrapper
           deployPkgs.${system}.deploy-rs.deploy-rs
           pkgs.sops
@@ -225,6 +225,13 @@
             modules = [
               { nixpkgs.hostPlatform = system; }
               ./hosts/iso/configuration.nix
+            ];
+          };
+          rescue = nixpkgs.lib.nixosSystem {
+            inherit pkgs;
+            modules = [
+              { nixpkgs.hostPlatform = system; }
+              ./hosts/rescue/configuration.nix
             ];
           };
           # Raspberry Pi 5 kiosk (aarch64, special case — no themes/disko)

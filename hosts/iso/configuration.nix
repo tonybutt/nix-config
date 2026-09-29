@@ -1,4 +1,5 @@
 {
+  lib,
   pkgs,
   modulesPath,
   system,
@@ -6,6 +7,7 @@
   ...
 }:
 let
+  inherit (lib) mkForce;
   hostname = builtins.getEnv "HOSTNAME";
   drive =
     let
@@ -40,7 +42,7 @@ in
     };
   };
   image = {
-    fileName = "nixinstaller.iso";
+    baseName = mkForce "nixinstaller";
   };
   isoImage = {
     contents = [
