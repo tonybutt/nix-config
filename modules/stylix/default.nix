@@ -57,6 +57,9 @@ in
   config = mkIf cfg.enable {
     stylix = {
       targets.gnome.enable = false;
+      # Launcher is fuzzel; the rofi target sets the renamed programs.rofi.font
+      # even with rofi disabled.
+      targets.rofi.enable = false;
       enable = true;
       fonts =
         let

@@ -1404,11 +1404,11 @@
     "waybar-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1789750187,
-        "narHash": "sha256-24zl1AUL+K4o6UK0TC20PlfJhcFxClOx4TdmaJLegw0=",
+        "lastModified": 1790183724,
+        "narHash": "sha256-84eczmSNetDDr5IoWK5zB+Vs2Ze4Rq9Y7LIqj7b6/UU=",
         "owner": "tonybutt",
         "repo": "Waybar",
-        "rev": "919939aa435d1442d423e180fb3bd452802befa4",
+        "rev": "a0b6a1a0db608bd3abac34c8d6e0fd4f1574d618",
         "type": "github"
       },
       "original": {
