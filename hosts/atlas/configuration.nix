@@ -1,4 +1,5 @@
 {
+  config,
   pkgs,
   lib,
   ...
@@ -55,7 +56,15 @@
 
   hardware.graphics.enable32Bit = true;
 
-  sops.secrets.notifier-slack-token.owner = "anthony";
+  sops = {
+    secrets = {
+      forgejo-squire-read-token = { };
+      notifier-slack-token.owner = "anthony";
+    };
+
+    templates."nix-daemon-private-modules.env".content =
+      "GRAIL_FORGEJO_TOKEN=${config.sops.placeholder.forgejo-squire-read-token}";
+  };
 
   # The Navi 33 in the expansion bay has no connected display outputs — every
   # connector belongs to the Phoenix1 iGPU — so it is a pure offload device.
@@ -80,7 +89,8 @@
       MESA_VK_DEVICE_SELECT = lib.mkForce "1002:15bf";
     };
   };
-
+  systemd.services.nix-daemon.serviceConfig.EnvironmentFile =
+    config.sops.templates."nix-daemon-private-modules.env".path;
   services.fwupd.enable = true;
 
   hardware.keyboard.zsa.enable = true;

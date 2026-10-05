@@ -18,9 +18,15 @@ in
   };
   config = mkIf cfg.enable {
     home.packages = [
-      pkgs.tea
+      pkgs.forgejo-cli
       pkgs.gh
     ];
+    # fj only offers browser login for hosts it has an OAuth client ID for.
+    # Forgejo auto-registers a public "tea" app (oauth2.DEFAULT_APPLICATIONS)
+    # whose loopback redirect accepts fj's http://127.0.0.1:26218/.
+    xdg.configFile."forgejo-cli/client_ids".text = ''
+      code.grail.tiberius.com d57cb8c4-630c-4168-8324-ec79935e18d4
+    '';
     programs.git = {
       package = pkgs.gitFull;
       enable = true;
