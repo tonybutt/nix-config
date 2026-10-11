@@ -79,6 +79,15 @@ in
     user = "kiosk";
     program = "${pkgs.chromium}/bin/chromium --kiosk --ozone-platform=wayland ${kioskUrl}";
   };
+  # The cage module leaves its session alone on switch (restartIfChanged =
+  # false), so a changed cage-tty1 is stopped and never started again; the
+  # kiosk session holds nothing worth preserving, so restart it instead
+  systemd.services."cage-tty1".restartIfChanged = lib.mkForce true;
+  # cage owns tty1 and Conflicts= its getty; a switch that pulls the getty
+  # in (it happened on a networking.hosts change) silently stops the kiosk
+  systemd.services."getty@tty1".enable = false;
+  systemd.services."autovt@tty1".enable = false;
+
   # Chromium under cage ignores SIGTERM, so a graceful stop always ends in
   # systemd's fallback SIGKILL — which marks the unit failed and makes
   # deploy-rs roll back every switch. A kiosk session has no state worth a
