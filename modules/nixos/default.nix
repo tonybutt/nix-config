@@ -60,16 +60,19 @@ in
           "https://hyprland.cachix.org"
           "https://claude-code.cachix.org"
           "https://codex-cli.cachix.org"
+          "https://nixos-raspberrypi.cachix.org"
         ];
         trusted-substituters = [
           "https://hyprland.cachix.org"
           "https://claude-code.cachix.org"
           "https://codex-cli.cachix.org"
+          "https://nixos-raspberrypi.cachix.org"
         ];
         trusted-public-keys = [
           "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
           "claude-code.cachix.org-1:YeXf2aNu7UTX8Vwrze0za1WEDS+4DuI2kVeWEE4fsRk="
           "codex-cli.cachix.org-1:1Br3H1hHoRYG22n//cGKJOk3cQXgYobUel6O8DgSing="
+          "nixos-raspberrypi.cachix.org-1:4iMO9LXa8BqhU+Rpg6LQKiGa2lsNh/j2oiYLNOQ5sPI="
         ];
       };
     };
