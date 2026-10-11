@@ -87,6 +87,10 @@ in
   boot.loader.raspberry-pi.bootloader = "kernel";
 
   modules.ssh.enable = true;
+  # The task repo's `nix run .#kiosk-dev` hands the kiosk the developer's
+  # local API with `ssh -R`; "remote" allows only that direction, and with
+  # GatewayPorts off the port binds to the Pi's loopback alone
+  services.openssh.settings.AllowTcpForwarding = lib.mkForce "remote";
 
   # modules/nixos/users sets zsh as default shell; kiosk skips the full
   # modules/nixos set that normally enables it
