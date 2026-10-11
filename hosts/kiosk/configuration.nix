@@ -107,6 +107,25 @@ in
   # dconf service; desktops get this from the full module set
   programs.dconf.enable = true;
 
+  # The deploy user has no password, so give it just enough to bounce the
+  # kiosk session; same canonical-store-path matching as modules/nixos/ssh
+  security.sudo.extraRules = [
+    {
+      users = [ user.username ];
+      commands =
+        map
+          (verb: {
+            command = "/nix/store/*/bin/systemctl ${verb} cage-tty1.service";
+            options = [ "NOPASSWD" ];
+          })
+          [
+            "start"
+            "stop"
+            "restart"
+          ];
+    }
+  ];
+
   # Unprivileged session user for cage; not the SSH/deploy user
   users.users.kiosk = {
     isNormalUser = true;
