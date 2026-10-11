@@ -6,8 +6,40 @@
   ...
 }:
 let
-  # What the kiosk displays — change and `deploy .#kiosk` to update
-  kioskUrl = "https://time.is";
+  # The Guild Hall kiosk binary is not part of this closure: the task repo
+  # deploys it as its own deploy-rs profile (`nix run .#deploy-kiosk` there),
+  # so app releases never need a nix-config change. Deploy that profile
+  # before this host, or cage has nothing to run and the switch rolls back.
+  # kioskProgram = "/nix/var/nix/profiles/guild-hall-kiosk/bin/kiosk";
+  apiBaseUrl = "https://${apiHost}";
+  # LAN-only: public DNS for *.abutt.dev points at the Cloudflare tunnel,
+  # which does not route this host; the gems gateway VIP serves it on :443
+  apiHost = "task.abutt.dev";
+  gemsGatewayIp = "192.168.86.10";
+
+  # Dev mode: cage runs whatever the task repo's `nix run .#kiosk-dev` last
+  # published to kioskDevDir and relaunches it on every publish, so the
+  # deploy user can iterate on the kiosk user's screen without sudo
+  kioskDevDir = "/srv/guild-hall-dev";
+  kioskDevSupervisor = pkgs.writeShellApplication {
+    name = "guild-hall-kiosk-dev-supervisor";
+    runtimeInputs = [ pkgs.inotify-tools ];
+    text = ''
+      dev_dir=${kioskDevDir}
+      while true; do
+        pid=""
+        if [ -x "$dev_dir/run" ]; then
+          "$dev_dir/run" &
+          pid=$!
+        fi
+        inotifywait -qq -e moved_to -e close_write --include '/run$' "$dev_dir"
+        if [ -n "$pid" ]; then
+          kill "$pid" 2>/dev/null || true
+          wait "$pid" || true
+        fi
+      done
+    '';
+  };
 in
 {
   imports = [
@@ -81,8 +113,28 @@ in
   services.cage = {
     enable = true;
     user = "kiosk";
-    program = "${pkgs.chromium}/bin/chromium --kiosk --ozone-platform=wayland ${kioskUrl}";
+    # Dev mode. Switch to kioskProgram only once `nix run .#deploy-kiosk`
+    # has created the profile: a cage with nothing to run fails, and a failed
+    # cage makes deploy-rs roll the whole switch back
+    program = lib.getExe kioskDevSupervisor;
+    # program = kioskProgram;
   };
+
+  # Read by the kiosk at startup; per-device values live here, the app's
+  # defaults live in the task repo (desktop/kiosk.example.toml)
+  environment.etc."guild-hall/kiosk.toml".text = ''
+    api_base_url = "${apiBaseUrl}"
+  '';
+  networking.hosts.${gemsGatewayIp} = [ apiHost ];
+
+  # Pairing writes the device token to /var/lib/guild-hall-kiosk (the kiosk
+  # prefers it over its working directory whenever it exists); kioskDevDir is
+  # written by the deploy user and read by the kiosk user
+  systemd.tmpfiles.rules = [
+    "d /var/lib/guild-hall-kiosk 0700 kiosk kiosk -"
+    "d ${kioskDevDir} 2750 ${user.username} kiosk -"
+  ];
+
   # The cage module leaves its session alone on switch (restartIfChanged =
   # false), so a changed cage-tty1 is stopped and never started again; the
   # kiosk session holds nothing worth preserving, so restart it instead

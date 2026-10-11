@@ -1,6 +1,6 @@
 # kiosk — Raspberry Pi 5 kiosk
 
-Raspberry Pi 5 (M.2 HAT) running a fullscreen chromium kiosk under
+Raspberry Pi 5 (M.2 HAT) running the Guild Hall Slint kiosk fullscreen under
 [cage](https://github.com/cage-kiosk/cage). Built with
 [nvmd/nixos-raspberrypi](https://github.com/nvmd/nixos-raspberrypi) rather than
 nixos-hardware: it boots the kernel directly via the Pi firmware (no U-Boot),
@@ -11,8 +11,34 @@ Unlike the other hosts this is a special case in `flake.nix` — aarch64, no
 Stylix/themes/disko, not part of `mkSystem`. It imports only
 `modules/nixos/ssh` and `modules/nixos/users`.
 
-The displayed URL is the `kioskUrl` binding at the top of
-`configuration.nix`.
+## Two profiles, two repos
+
+This repo owns the OS: cage, the `kiosk` user, `/etc/guild-hall/kiosk.toml`
+(the `apiBaseUrl` binding at the top of `configuration.nix`) and the state
+directory `/var/lib/guild-hall-kiosk`. The kiosk binary is a separate
+deploy-rs profile, `/nix/var/nix/profiles/guild-hall-kiosk`, shipped from the
+task repo:
+
+```sh
+# in the task repo
+nix run .#deploy-kiosk
+```
+
+That builds the aarch64 package, switches the profile and restarts
+`cage-tty1`; if cage is not active five seconds later the profile rolls back.
+
+Right now cage runs the **dev supervisor** instead: it launches whatever
+the task repo's `nix run .#kiosk-dev` last published to
+`/srv/guild-hall-dev/run` (deploy user writes, `kiosk` group reads) and
+relaunches it on every publish, so iterating needs no sudo. Switch
+`services.cage.program` to `kioskProgram` once `nix run .#deploy-kiosk` has
+created the profile. The kiosk talks to the gems API at `apiBaseUrl`
+(`task.abutt.dev`, pinned in `/etc/hosts` to the LAN gateway, never the
+tunnel).
+
+On a fresh install deploy the kiosk profile **before** `deploy .#kiosk`: until
+the profile exists cage has nothing to run, the unit fails, and deploy-rs
+rolls the system switch back.
 
 ## Build & flash the SD image
 
