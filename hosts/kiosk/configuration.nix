@@ -46,6 +46,10 @@ in
   # dropping it also removes the zfs tools from the closure
   boot.supportedFilesystems.zfs = lib.mkForce false;
 
+  # 8G and no swap thrashes the page cache under on-device Rust builds
+  # (kiosk-dev); compressed in-RAM swap gives idle pages somewhere to go
+  zramSwap.enable = true;
+
   # Generation-aware bootloader (rollbacks). The sd-image module used to set
   # this; without it the default regresses to single-generation "kernelboot"
   boot.loader.raspberry-pi.bootloader = "kernel";
