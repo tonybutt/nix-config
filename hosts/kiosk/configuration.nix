@@ -74,6 +74,10 @@ in
 
   networking.hostName = "kiosk";
 
+  # The kiosk skips modules/nixos, which normally sets this; without it the
+  # Pi runs on UTC and the calendar and clock render in the wrong zone
+  time.timeZone = "America/New_York";
+
   # The sd-image base profile enables ZFS support; this host has no ZFS and
   # dropping it also removes the zfs tools from the closure
   boot.supportedFilesystems.zfs = lib.mkForce false;
