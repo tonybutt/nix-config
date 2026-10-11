@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   user,
   ...
 }:
@@ -20,6 +21,10 @@ in
     };
   };
   config = mkIf cfg.enable {
+    # Sessions arrive from Ghostty with TERM=xterm-ghostty; hosts without
+    # ghostty installed (the kiosk) otherwise reject the terminal type
+    environment.systemPackages = [ pkgs.ghostty.terminfo ];
+
     services.openssh = {
       enable = true;
       # Don't globally open port 22 — extraCommands below restricts SSH to the
