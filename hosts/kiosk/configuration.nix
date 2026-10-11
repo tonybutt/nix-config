@@ -132,6 +132,9 @@ in
   # defaults live in the task repo (desktop/kiosk.example.toml)
   environment.etc."guild-hall/kiosk.toml".text = ''
     api_base_url = "${apiBaseUrl}"
+    # The touchscreen also registers as a mouse; without this cage draws a
+    # cursor on the panel
+    hide_cursor = true
   '';
   networking.hosts.${gemsGatewayIp} = [ apiHost ];
 
