@@ -21,4 +21,12 @@
       ];
     }
   ];
+
+  # A second uBlock Origin (Brave's re-hosted MV2 build) was installed by hand
+  # beside the declared one in home/home.nix. Both injected the same YouTube
+  # scriptlets, so videos stalled until a hard refresh. Blocklisting removes
+  # it from the profile and keeps it from coming back.
+  programs.chromium.extraOpts.ExtensionInstallBlocklist = [
+    "jcokkipkhhgiakinbnnplhkdbjbgcgpe"
+  ];
 }
