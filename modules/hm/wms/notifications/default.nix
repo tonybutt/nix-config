@@ -35,7 +35,7 @@ in
 
     systemd.user.services.mako-screenshare-watch = {
       Unit = {
-        Description = "Suppress messaging notifications while screensharing";
+        Description = "Suppress notifications while screensharing";
         After = [ "graphical-session.target" ];
         PartOf = [ "graphical-session.target" ];
       };
@@ -58,14 +58,16 @@ in
       width = 450;
       height = 300;
 
-      # Messaging apps show full content normally, but are suppressed
-      # entirely while the screenshare mode is active (queued, not lost:
-      # makoctl restore). Mode is driven by mako-screenshare-watch.
-      "mode=screenshare app-name=Signal" = {
+      # Everything is suppressed while the screenshare mode is active
+      # (queued, not lost: makoctl restore). Mode is driven by
+      # mako-screenshare-watch. Sections render in attr-name order and the
+      # last match wins, so the YubiKey exemption must sort after the
+      # blanket rule — a touch prompt hidden mid-share stalls a git sign.
+      "mode=screenshare" = {
         invisible = 1;
       };
-      "mode=screenshare app-name=Slack" = {
-        invisible = 1;
+      "mode=screenshare app-name=yubikey-touch-detector" = {
+        invisible = 0;
       };
       "app-name=yubikey-touch-detector" = {
         "icon-path" = "${config.home.homeDirectory}/.nix-profile/share/icons/hicolor";
