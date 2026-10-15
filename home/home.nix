@@ -29,6 +29,7 @@
     ai.claude-cognitive.enable = true;
     ai.team-skills.enable = true;
     ai.superpowers.enable = true;
+    ai.mattpocock-skills.enable = true;
     ai.gitnexus.enable = true;
     slack-gov.enable = true;
     terminals.ghostty.enable = true;

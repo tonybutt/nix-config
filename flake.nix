@@ -42,6 +42,10 @@
       url = "github:obra/superpowers";
       flake = false;
     };
+    mattpocock-skills = {
+      url = "github:mattpocock/skills";
+      flake = false;
+    };
     # Stopgap for Alexays/Waybar#5316 — see overlays/waybar-hyprland-ipc.nix
     waybar-src = {
       url = "github:tonybutt/Waybar/hyprland-addressable-workspaces";
