@@ -120,7 +120,7 @@
       enable = true;
       package = pkgs.brave;
       extensions = [
-        { id = "cjpalhdlnbpafiamejdnhcphjbkeiagm"; } # ublock origin
+        { id = "jcokkipkhhgiakinbnnplhkdbjbgcgpe"; } # ublock origin (Brave-hosted MV2 build)
         { id = "nngceckbapebfimnlniiiahkandclblb"; } # bitwarden
         { id = "pkehgijcmpdhfbdbbnkijodmdjhbjlgp"; } # privacy badger
         { id = "damfoaielhjgnodobkkikiaiikkklejb"; } # Gather Meetings
