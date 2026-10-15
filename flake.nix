@@ -106,7 +106,10 @@
         fullName = "Anthony Butt";
         work = {
           email = "abutt@tiberius.com";
-          signingKey = "~/.ssh/id_ed25519_sk.pub";
+          # Not id_ed25519_sk: it is a no-touch-required sk key, and Forgejo's
+          # Go verifier rejects sk signatures lacking the user-presence flag,
+          # so its commits never show as verified.
+          signingKey = "~/.ssh/id_ed25519.pub";
           githubOrg = "tiberius-grail";
         };
         personal = {
