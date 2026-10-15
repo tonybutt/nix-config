@@ -56,6 +56,10 @@
 
   hardware.graphics.enable32Bit = true;
 
+  # LAN-only: public DNS for *.abutt.dev points at the Cloudflare tunnel,
+  # which does not route this host; the gems gateway VIP serves it on :443
+  networking.hosts."192.168.86.10" = [ "task.abutt.dev" ];
+
   sops = {
     secrets = {
       forgejo-squire-read-token = { };
