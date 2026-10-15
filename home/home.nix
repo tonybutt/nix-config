@@ -36,10 +36,8 @@
   };
   home.packages = with pkgs; [
     nixpkgs-review
-    mpv
     imv
     pokeget-rs
-    gimp3
     unzip
     claude-code
     codex
@@ -51,8 +49,6 @@
     libnotify
     yubioath-flutter
     signal-desktop
-    firefox
-    google-chrome
     ssm-session-manager-plugin
     trayscale
     pcsc-tools
