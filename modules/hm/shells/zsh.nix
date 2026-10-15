@@ -151,6 +151,7 @@ in
       syntaxHighlighting.enable = true;
       history = {
         append = true;
+        extended = true;
       };
       shellAliases =
         let
