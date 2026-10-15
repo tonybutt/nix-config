@@ -1,4 +1,22 @@
-{ ... }:
+{ lib, ... }:
+let
+  # The only extensions Brave may run. Anything else, whether installed from
+  # the Web Store, Brave's MV2 settings page, or an old profile, is removed.
+  # Brave's own component extensions (PDF viewer, Web Store) are unaffected.
+  extensions = {
+    # Brave's re-hosted MV2 build. The Web Store copy
+    # (cjpalhdlnbpafiamejdnhcphjbkeiagm) no longer receives updates.
+    jcokkipkhhgiakinbnnplhkdbjbgcgpe = "uBlock Origin";
+    nngceckbapebfimnlniiiahkandclblb = "Bitwarden";
+    pkehgijcmpdhfbdbbnkijodmdjhbjlgp = "Privacy Badger";
+    damfoaielhjgnodobkkikiaiikkklejb = "Gather Meetings";
+    nmgegmkaijcgdgkfjhlbbaoabldoaehj = "Gather 1.0 Meetings (Classic)";
+    iaalpfgpbocpdfblpnhhgllgbdbchmia = "Asciidoctor.js Live Preview";
+    callobklhcbilhphinckomhgkigmfocg = "Endpoint Verification (Google Workspace)";
+    jlmpjdjjbgclbocgajdjefcidcncaied = "daily.dev";
+    idefohglmnkliiadgfofeokcpjobdeik = "Ramp for Chrome";
+  };
+in
 {
   # Declarative Brave/Chromium bookmarks via the ManagedBookmarks enterprise
   # policy. programs.chromium is already enabled (Stylix theming) and writes
@@ -22,12 +40,14 @@
     }
   ];
 
-  # The Chrome Web Store no longer ships MV2 updates, so its uBlock Origin is
-  # frozen; home/home.nix declares Brave's re-hosted build instead. Running
-  # both injected the same YouTube scriptlets twice and videos stalled until a
-  # hard refresh. Blocklisting the store copy removes it from the profile and
-  # keeps it from coming back.
-  programs.chromium.extraOpts.ExtensionInstallBlocklist = [
-    "cjpalhdlnbpafiamejdnhcphjbkeiagm"
-  ];
+  # Block everything, then force-install the declared set. Before this, a
+  # second uBlock Origin installed from Brave's settings ran beside the
+  # declared one and stalled YouTube until a hard refresh.
+  programs.chromium.extraOpts.ExtensionSettings = {
+    "*".installation_mode = "blocked";
+  }
+  // lib.mapAttrs (_: _: {
+    installation_mode = "force_installed";
+    update_url = "https://clients2.google.com/service/update2/crx";
+  }) extensions;
 }

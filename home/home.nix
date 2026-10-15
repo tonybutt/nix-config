@@ -119,17 +119,7 @@
     brave = {
       enable = true;
       package = pkgs.brave;
-      extensions = [
-        { id = "jcokkipkhhgiakinbnnplhkdbjbgcgpe"; } # ublock origin (Brave-hosted MV2 build)
-        { id = "nngceckbapebfimnlniiiahkandclblb"; } # bitwarden
-        { id = "pkehgijcmpdhfbdbbnkijodmdjhbjlgp"; } # privacy badger
-        { id = "damfoaielhjgnodobkkikiaiikkklejb"; } # Gather Meetings
-        { id = "nmgegmkaijcgdgkfjhlbbaoabldoaehj"; } # Gather 1.0 Meetings (Classic)
-        { id = "iaalpfgpbocpdfblpnhhgllgbdbchmia"; } # Asciidoctor.js Live Preview
-        { id = "callobklhcbilhphinckomhgkigmfocg"; } # Endpoint Verification (Google Workspace)
-        { id = "jlmpjdjjbgclbocgajdjefcidcncaied"; } # daily.dev
-        { id = "idefohglmnkliiadgfofeokcpjobdeik"; } # Ramp for Chrome
-      ];
+      # Extensions are enforced by policy in modules/nixos/browser.nix.
     };
     zsh.sessionVariables = {
       BROWSER = "brave";
