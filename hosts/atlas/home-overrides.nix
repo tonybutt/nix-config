@@ -49,6 +49,7 @@ in
       {
         name = "desc:Dell Inc. DELL S3220DGF BG9TF43";
         position = "0x0";
+        resolution = "highres@highrr";
       }
       {
         name = "desc:Dell Inc. DELL U2718Q 4K8X703P0N8L";
