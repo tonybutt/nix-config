@@ -26,7 +26,6 @@
   # this itself.
   home.pointerCursor.enable = true;
   modules = {
-    ai.claude-cognitive.enable = true;
     ai.team-skills.enable = true;
     ai.superpowers.enable = true;
     ai.mattpocock-skills.enable = true;

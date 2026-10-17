@@ -137,9 +137,6 @@
       };
     in
     {
-      homeModules = {
-        claude-cognitive = import ./modules/hm/ai/claude-cognitive.nix;
-      };
       formatter.${system} = treefmtEval.config.build.wrapper;
       packages.${system} = {
         opnsense-config = opnsenseConfig;
