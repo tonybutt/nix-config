@@ -12,116 +12,203 @@ let
   # Map ANSI 256-color codes in p10k.zsh to Stylix base16 hex colors.
   # Two replacement types: FOREGROUND=NN → ='#RRGGBB' and inline %NNF → %F{#RRGGBB}.
   # Values are single-quoted to prevent zsh EXTENDED_GLOB expansion of '#'.
-  p10kConfig =
-    builtins.replaceStrings
-      [
-        # Inline %NF codes (longer numbers first to avoid partial matches)
-        "%244F"
-        "%196F"
-        "%178F"
-        "%215F"
-        "%76F"
-        "%70F"
-        "%39F"
-        # FOREGROUND= assignments (descending to avoid partial matches)
-        "=244"
-        "=220"
-        "=215"
-        "=208"
-        "=196"
-        "=180"
-        "=178"
-        "=172"
-        "=168"
-        "=166"
-        "=161"
-        "=160"
-        "=135"
-        "=134"
-        "=130"
-        "=129"
-        "=125"
-        "=117"
-        "=110"
-        "=103"
-        "=101"
-        "=99"
-        "=96"
-        "=94"
-        "=81"
-        "=76"
-        "=74"
-        "=72"
-        "=70"
-        "=68"
-        "=67"
-        "=66"
-        "=39"
-        "=38"
-        "=37"
-        "=35"
-        "=34"
-        "=33"
-        "=32"
-        "=31"
-      ]
-      [
-        # Inline → %F{#RRGGBB}
-        "%F{#${colors.base03}}"
-        "%F{#${colors.base08}}"
-        "%F{#${colors.base0A}}"
-        "%F{#${colors.base09}}"
-        "%F{#${colors.base0B}}"
-        "%F{#${colors.base0B}}"
-        "%F{#${colors.base0C}}"
-        # FOREGROUND → ='#RRGGBB'
-        #       244=chrome  220=yellow  215=orange  208=orange  196=red     180=orange  178=yellow  172=orange
-        "='#${colors.base03}'"
-        "='#${colors.base0A}'"
-        "='#${colors.base09}'"
-        "='#${colors.base09}'"
-        "='#${colors.base08}'"
-        "='#${colors.base09}'"
-        "='#${colors.base0A}'"
-        "='#${colors.base09}'"
-        #       168=red     166=orange  161=red     160=red     135=purple  134=purple  130=orange  129=purple
-        "='#${colors.base08}'"
-        "='#${colors.base09}'"
-        "='#${colors.base08}'"
-        "='#${colors.base08}'"
-        "='#${colors.base0E}'"
-        "='#${colors.base0E}'"
-        "='#${colors.base09}'"
-        "='#${colors.base0E}'"
-        #       125=red     117=cyan    110=cyan    103=muted   101=muted   99=purple   96=purple   94=muted
-        "='#${colors.base08}'"
-        "='#${colors.base0C}'"
-        "='#${colors.base0C}'"
-        "='#${colors.base04}'"
-        "='#${colors.base04}'"
-        "='#${colors.base0E}'"
-        "='#${colors.base0E}'"
-        "='#${colors.base04}'"
-        #       81=cyan     76=green    74=blue     72=cyan     70=green    68=blue     67=muted    66=muted
-        "='#${colors.base0C}'"
-        "='#${colors.base0B}'"
-        "='#${colors.base0D}'"
-        "='#${colors.base0C}'"
-        "='#${colors.base0B}'"
-        "='#${colors.base0D}'"
-        "='#${colors.base04}'"
-        "='#${colors.base04}'"
-        #       39=blue     38=cyan     37=cyan     35=cyan     34=cyan     33=blue     32=blue     31=blue
-        "='#${colors.base0D}'"
-        "='#${colors.base0C}'"
-        "='#${colors.base0C}'"
-        "='#${colors.base0C}'"
-        "='#${colors.base0C}'"
-        "='#${colors.base0D}'"
-        "='#${colors.base0D}'"
-        "='#${colors.base0D}'"
-      ]
-      (builtins.readFile ./p10k.zsh);
+  p10kReplacements = [
+    # Inline %NF codes (longer numbers first to avoid partial matches)
+    {
+      from = "%244F";
+      to = "%F{#${colors.base03}}";
+    }
+    {
+      from = "%196F";
+      to = "%F{#${colors.base08}}";
+    }
+    {
+      from = "%178F";
+      to = "%F{#${colors.base0A}}";
+    }
+    {
+      from = "%215F";
+      to = "%F{#${colors.base09}}";
+    }
+    {
+      from = "%76F";
+      to = "%F{#${colors.base0B}}";
+    }
+    {
+      from = "%70F";
+      to = "%F{#${colors.base0B}}";
+    }
+    {
+      from = "%39F";
+      to = "%F{#${colors.base0C}}";
+    }
+
+    # FOREGROUND= assignments (descending to avoid partial matches)
+    {
+      from = "=244";
+      to = "='#${colors.base03}'";
+    }
+    {
+      from = "=220";
+      to = "='#${colors.base0A}'";
+    }
+    {
+      from = "=215";
+      to = "='#${colors.base09}'";
+    }
+    {
+      from = "=208";
+      to = "='#${colors.base09}'";
+    }
+    {
+      from = "=196";
+      to = "='#${colors.base08}'";
+    }
+    {
+      from = "=180";
+      to = "='#${colors.base09}'";
+    }
+    {
+      from = "=178";
+      to = "='#${colors.base0A}'";
+    }
+    {
+      from = "=172";
+      to = "='#${colors.base09}'";
+    }
+    {
+      from = "=168";
+      to = "='#${colors.base08}'";
+    }
+    {
+      from = "=166";
+      to = "='#${colors.base09}'";
+    }
+    {
+      from = "=161";
+      to = "='#${colors.base08}'";
+    }
+    {
+      from = "=160";
+      to = "='#${colors.base08}'";
+    }
+    {
+      from = "=135";
+      to = "='#${colors.base0E}'";
+    }
+    {
+      from = "=134";
+      to = "='#${colors.base0E}'";
+    }
+    {
+      from = "=130";
+      to = "='#${colors.base09}'";
+    }
+    {
+      from = "=129";
+      to = "='#${colors.base0E}'";
+    }
+    {
+      from = "=125";
+      to = "='#${colors.base08}'";
+    }
+    {
+      from = "=117";
+      to = "='#${colors.base0C}'";
+    }
+    {
+      from = "=110";
+      to = "='#${colors.base0C}'";
+    }
+    {
+      from = "=103";
+      to = "='#${colors.base04}'";
+    }
+    {
+      from = "=101";
+      to = "='#${colors.base04}'";
+    }
+    {
+      from = "=99";
+      to = "='#${colors.base0E}'";
+    }
+    {
+      from = "=96";
+      to = "='#${colors.base0E}'";
+    }
+    {
+      from = "=94";
+      to = "='#${colors.base04}'";
+    }
+    {
+      from = "=81";
+      to = "='#${colors.base0C}'";
+    }
+    {
+      from = "=76";
+      to = "='#${colors.base0B}'";
+    }
+    {
+      from = "=74";
+      to = "='#${colors.base0D}'";
+    }
+    {
+      from = "=72";
+      to = "='#${colors.base0C}'";
+    }
+    {
+      from = "=70";
+      to = "='#${colors.base0B}'";
+    }
+    {
+      from = "=68";
+      to = "='#${colors.base0D}'";
+    }
+    {
+      from = "=67";
+      to = "='#${colors.base04}'";
+    }
+    {
+      from = "=66";
+      to = "='#${colors.base04}'";
+    }
+    {
+      from = "=39";
+      to = "='#${colors.base0D}'";
+    }
+    {
+      from = "=38";
+      to = "='#${colors.base0C}'";
+    }
+    {
+      from = "=37";
+      to = "='#${colors.base0C}'";
+    }
+    {
+      from = "=35";
+      to = "='#${colors.base0C}'";
+    }
+    {
+      from = "=34";
+      to = "='#${colors.base0C}'";
+    }
+    {
+      from = "=33";
+      to = "='#${colors.base0D}'";
+    }
+    {
+      from = "=32";
+      to = "='#${colors.base0D}'";
+    }
+    {
+      from = "=31";
+      to = "='#${colors.base0D}'";
+    }
+  ];
+
+  p10kConfig = builtins.replaceStrings (map (r: r.from) p10kReplacements) (map (
+    r: r.to
+  ) p10kReplacements) (builtins.readFile ./p10k.zsh);
 in
 {
   options = {
