@@ -91,17 +91,22 @@ in
         };
         mantra = {
           HostName = "mantra.lan";
-          User = "anthony";
+          User = config.home.username;
           IdentityFile = [ "~/.ssh/id_ed25519_sk" ];
         };
         lapnix = {
           HostName = "lapnix.lan";
-          User = "anthony";
+          User = config.home.username;
           IdentityFile = [ "~/.ssh/id_ed25519_sk" ];
         };
         atlas = {
           HostName = "atlas.lan";
-          User = "anthony";
+          User = config.home.username;
+          IdentityFile = [ "~/.ssh/id_ed25519_sk" ];
+        };
+        tiberius = {
+          HostName = "tiberius.lan";
+          User = config.home.username;
           IdentityFile = [ "~/.ssh/id_ed25519_sk" ];
         };
       };

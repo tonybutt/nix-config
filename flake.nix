@@ -107,6 +107,10 @@
           signingKey = "~/.ssh/id_ed25519_personal.pub";
           githubUsername = "tonybutt";
         };
+        sshKeys = [
+          "no-touch-required sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIO9ZH1VvOc2+1tAkzQzNwhyT+LT6wCBmt9gP2yeH8g+oAAAABHNzaDo= abutt@tiberius.com"
+          "no-touch-required sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIKoZU8AWvPjbgJfQXA3Kl6Ep9PzO6tGdN3GP4BRcTitOAAAABHNzaDo= anthony@abutt.io"
+        ];
       };
       treefmtEval = treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
       deployPkgs = nixpkgs.lib.genAttrs [ "x86_64-linux" "aarch64-linux" ] (
@@ -118,10 +122,7 @@
       );
       opnsenseConfig = import ./hosts/protectli {
         inherit pkgs;
-        sshKeys = [
-          "no-touch-required sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIO9ZH1VvOc2+1tAkzQzNwhyT+LT6wCBmt9gP2yeH8g+oAAAABHNzaDo= abutt@tiberius.com"
-          "no-touch-required sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIKoZU8AWvPjbgJfQXA3Kl6Ep9PzO6tGdN3GP4BRcTitOAAAABHNzaDo= anthony@abutt.io"
-        ];
+        inherit (user) sshKeys;
         apiKey = "CHANGEME_GENERATE_API_KEY";
         apiSecretHash = "CHANGEME_GENERATE_API_SECRET";
       };
