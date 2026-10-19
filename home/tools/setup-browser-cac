@@ -1,0 +1,5 @@
+NSSDB="${HOME}/.pki/nssdb"
+mkdir -p "$NSSDB"
+
+modutil -force -dbdir "sql:$NSSDB" -add yubi-smartcard \
+  -libfile "$OPENSC_PKCS11"

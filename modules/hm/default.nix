@@ -1,5 +1,4 @@
 {
-  pkgs,
   lib,
   config,
   user,
@@ -47,39 +46,6 @@ in
     home = {
       username = user.username;
       homeDirectory = "/home/${user.username}";
-      packages = with pkgs; [
-        # DevOpts
-        awscli2
-        kind
-        fluxcd
-        # Carries gke-gcloud-auth-plugin, which kubectl execs for any GKE
-        # context; plain google-cloud-sdk omits it and auth fails.
-        (google-cloud-sdk.withExtraComponents [ google-cloud-sdk.components.gke-gcloud-auth-plugin ])
-        kubectl
-        kubelogin-oidc
-        kubernetes-helm
-        kustomize
-        istioctl
-        cilium-cli
-        vim
-
-        # Shell Utils
-        tree
-        jq
-        yubikey-manager
-
-        # Clipboard
-        grim
-        slurp
-        swappy
-        wl-clipboard-rs
-
-        # Dev Tools
-        hyprpicker
-
-        # Chat
-        slack
-      ];
       file."Wallpapers" = {
         recursive = true;
         source = ../stylix/assets/walls;

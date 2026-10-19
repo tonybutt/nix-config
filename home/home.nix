@@ -1,5 +1,4 @@
 {
-  lib,
   pkgs,
   inputs,
   ...
@@ -9,8 +8,11 @@ let
 in
 {
   imports = [
-    ./tools/oath.nix
+    ./tools/launch-webapp.nix
     ./tools/mp4-to-gif.nix
+    ./tools/oath.nix
+    ./tools/setup-browser-cac.nix
+    ./tools/system-menu.nix
     ./tools/theme-switch.nix
     ../modules/hm
   ];
@@ -60,26 +62,38 @@ in
     ssm-session-manager-plugin
     trayscale
     pcsc-tools
-    (pkgs.writeShellScriptBin "setup-browser-CAC" ''
-      NSSDB="''${HOME}/.pki/nssdb"
-      mkdir -p ''${NSSDB}
 
-      ${lib.getExe' pkgs.nssTools "modutil"} -force -dbdir sql:$NSSDB -add yubi-smartcard \
-        -libfile ${pkgs.opensc}/lib/opensc-pkcs11.so
-    '')
-    (pkgs.writeShellScriptBin "launch-webapp" ''
-      exec ${lib.getExe pkgs.brave} --app="$1" "''${@:2}"
-    '')
-    (pkgs.writeShellScriptBin "system-menu" ''
-      choice=$(printf "󰌾  Lock\n󰤄  Sleep\n  Reboot\n󰐥  Shutdown\n󰗽  Logout" | ${lib.getExe pkgs.fuzzel} --dmenu -p "System: ")
-      case "$choice" in
-        *Lock*) loginctl lock-session ;;
-        *Sleep*) systemctl suspend-then-hibernate ;;
-        *Reboot*) systemctl reboot ;;
-        *Shutdown*) systemctl poweroff ;;
-        *Logout*) hyprctl dispatch exit ;;
-      esac
-    '')
+    # DevOpts
+    awscli2
+    kind
+    fluxcd
+    # Carries gke-gcloud-auth-plugin, which kubectl execs for any GKE
+    # context; plain google-cloud-sdk omits it and auth fails.
+    (google-cloud-sdk.withExtraComponents [ google-cloud-sdk.components.gke-gcloud-auth-plugin ])
+    kubectl
+    kubelogin-oidc
+    kubernetes-helm
+    kustomize
+    istioctl
+    cilium-cli
+    vim
+
+    # Shell Utils
+    tree
+    jq
+    yubikey-manager
+
+    # Clipboard
+    grim
+    slurp
+    swappy
+    wl-clipboard-rs
+
+    # Dev Tools
+    hyprpicker
+
+    # Chat
+    slack
   ];
 
   programs = {
