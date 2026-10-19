@@ -4,8 +4,8 @@
   lib,
   ...
 }:
-with lib;
 let
+  inherit (lib) mkEnableOption mkIf;
   cfg = config.modules.hyprland.waybar;
   inherit (config.lib.stylix) colors;
 

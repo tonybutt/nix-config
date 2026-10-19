@@ -5,8 +5,8 @@
   inputs,
   ...
 }:
-with lib;
 let
+  inherit (lib) mkEnableOption mkIf;
   cfg = config.modules.hyprland;
   tuigreet = "${pkgs.tuigreet}/bin/tuigreet";
   session = "start-hyprland";

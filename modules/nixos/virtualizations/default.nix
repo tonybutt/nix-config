@@ -5,8 +5,13 @@
   user,
   ...
 }:
-with lib;
 let
+  inherit (lib)
+    mkAfter
+    mkEnableOption
+    mkIf
+    mkMerge
+    ;
   cfg = config.modules.virtualization;
 in
 {

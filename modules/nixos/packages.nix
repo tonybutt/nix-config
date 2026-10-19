@@ -4,8 +4,8 @@
   lib,
   ...
 }:
-with lib;
 let
+  inherit (lib) mkOption;
   cfg = config.modules;
 in
 {
