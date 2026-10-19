@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 let
   themes = import ../../themes.nix { inherit pkgs; };
   themeList = builtins.concatStringsSep " " (builtins.attrNames themes);
@@ -18,7 +18,7 @@ let
   # Generate a .desktop file for each theme
   themeDesktopEntries = builtins.mapAttrs (name: _: {
     name = "Theme: ${name}";
-    exec = "${theme-switch}/bin/theme-switch ${name}";
+    exec = "${lib.getExe theme-switch} ${name}";
     icon = "${pkgs.colloid-icon-theme}/share/icons/Colloid/apps/scalable/preferences-desktop-color.svg";
     comment = "Switch to the ${name} theme";
     categories = [ "Settings" ];

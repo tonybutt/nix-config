@@ -257,7 +257,7 @@ in
           ts-login = "sudo tailscale up --login-server=https://headscale.tiberius.com --operator=$USER";
         }
         // lib.optionalAttrs (config.modules.themes.fastfetchLogoType == "pokeget") {
-          fastfetch = "pokeget random --hide-name | ${pkgs.fastfetch}/bin/fastfetch --logo-type file-raw --logo -";
+          fastfetch = "pokeget random --hide-name | ${lib.getExe pkgs.fastfetch} --logo-type file-raw --logo -";
         };
       historySubstringSearch.enable = true;
       oh-my-zsh = {

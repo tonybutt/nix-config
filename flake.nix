@@ -289,7 +289,7 @@
             };
 
           # Generate all host x theme combinations
-          allConfigs = builtins.foldl' (acc: { name, value }: acc // { ${name} = value; }) { } (
+          allConfigs = nixpkgs.lib.listToAttrs (
             builtins.concatLists (
               nixpkgs.lib.mapAttrsToList (
                 hostname: defaultTheme:

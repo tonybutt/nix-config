@@ -81,7 +81,7 @@ in
           claude-acp = {
             type = "registry";
             env = {
-              CLAUDE_CODE_EXECUTABLE = "${agentPackages.claude-code}/bin/claude";
+              CLAUDE_CODE_EXECUTABLE = lib.getExe agentPackages.claude-code;
             };
           };
         };

@@ -1,4 +1,5 @@
 {
+  lib,
   pkgs,
   inputs,
   ...
@@ -63,14 +64,14 @@ in
       NSSDB="''${HOME}/.pki/nssdb"
       mkdir -p ''${NSSDB}
 
-      ${pkgs.nssTools}/bin/modutil -force -dbdir sql:$NSSDB -add yubi-smartcard \
+      ${lib.getExe' pkgs.nssTools "modutil"} -force -dbdir sql:$NSSDB -add yubi-smartcard \
         -libfile ${pkgs.opensc}/lib/opensc-pkcs11.so
     '')
     (pkgs.writeShellScriptBin "launch-webapp" ''
-      exec ${pkgs.brave}/bin/brave --app="$1" "''${@:2}"
+      exec ${lib.getExe pkgs.brave} --app="$1" "''${@:2}"
     '')
     (pkgs.writeShellScriptBin "system-menu" ''
-      choice=$(printf "󰌾  Lock\n󰤄  Sleep\n  Reboot\n󰐥  Shutdown\n󰗽  Logout" | ${pkgs.fuzzel}/bin/fuzzel --dmenu -p "System: ")
+      choice=$(printf "󰌾  Lock\n󰤄  Sleep\n  Reboot\n󰐥  Shutdown\n󰗽  Logout" | ${lib.getExe pkgs.fuzzel} --dmenu -p "System: ")
       case "$choice" in
         *Lock*) loginctl lock-session ;;
         *Sleep*) systemctl suspend-then-hibernate ;;

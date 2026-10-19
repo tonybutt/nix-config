@@ -10,12 +10,12 @@ let
   # Toggle mako's "screenshare" mode from Hyprland's screencast IPC
   # events (emitted when any screencopy/portal share starts or stops)
   makoScreenshareWatch = pkgs.writeShellScript "mako-screenshare-watch" ''
-    sig="''${HYPRLAND_INSTANCE_SIGNATURE:-$(${pkgs.coreutils}/bin/ls -t "$XDG_RUNTIME_DIR/hypr" | ${pkgs.coreutils}/bin/head -n1)}"
-    ${pkgs.socat}/bin/socat -U - UNIX-CONNECT:"$XDG_RUNTIME_DIR/hypr/$sig/.socket2.sock" \
+    sig="''${HYPRLAND_INSTANCE_SIGNATURE:-$(${lib.getExe' pkgs.coreutils "ls"} -t "$XDG_RUNTIME_DIR/hypr" | ${lib.getExe' pkgs.coreutils "head"} -n1)}"
+    ${lib.getExe pkgs.socat} -U - UNIX-CONNECT:"$XDG_RUNTIME_DIR/hypr/$sig/.socket2.sock" \
       | while IFS= read -r line; do
           case "$line" in
-            "screencast>>1"*) ${config.services.mako.package}/bin/makoctl mode -a screenshare > /dev/null ;;
-            "screencast>>0"*) ${config.services.mako.package}/bin/makoctl mode -r screenshare > /dev/null ;;
+            "screencast>>1"*) ${lib.getExe' config.services.mako.package "makoctl"} mode -a screenshare > /dev/null ;;
+            "screencast>>0"*) ${lib.getExe' config.services.mako.package "makoctl"} mode -r screenshare > /dev/null ;;
           esac
         done
   '';
@@ -27,7 +27,7 @@ in
     systemd.user.services.yubikey-touch-detector = {
       Unit.Description = "YubiKey touch detector";
       Service = {
-        ExecStart = "${pkgs.yubikey-touch-detector}/bin/yubikey-touch-detector --libnotify";
+        ExecStart = "${lib.getExe pkgs.yubikey-touch-detector} --libnotify";
         Restart = "on-failure";
       };
       Install.WantedBy = [ "default.target" ];

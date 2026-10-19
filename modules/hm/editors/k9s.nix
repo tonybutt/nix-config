@@ -1,4 +1,9 @@
-{ pkgs, user, ... }:
+{
+  lib,
+  pkgs,
+  user,
+  ...
+}:
 {
   programs.k9s = {
     enable = true;
@@ -7,7 +12,7 @@
         debug-command = pkgs.writeShellApplication {
           name = "debug";
           text = ''
-            ${pkgs.kubectl}/bin/kubectl debug -it -n="$NAMESPACE" "$POD" --target="$NAME" --image=nicolaka/netshoot:v0.11 --share-processes -- bash
+            ${lib.getExe pkgs.kubectl} debug -it -n="$NAMESPACE" "$POD" --target="$NAME" --image=nicolaka/netshoot:v0.11 --share-processes -- bash
           '';
         };
         toggle = pkgs.writeShellApplication {
@@ -17,14 +22,14 @@
             NAMESPACE=$2
             NAME=$3
             RESOURCE=$4
-            suspended=$(${pkgs.kubectl}/bin/kubectl --context "$CONTEXT" get helmreleases -n "$NAMESPACE" "$NAME" -o=custom-columns=TYPE:.spec.suspend | tail -1)
+            suspended=$(${lib.getExe pkgs.kubectl} --context "$CONTEXT" get helmreleases -n "$NAMESPACE" "$NAME" -o=custom-columns=TYPE:.spec.suspend | tail -1)
             toggle=""
             if [ "$suspended" = "true" ]; then
               toggle="resume"
             else
               toggle="suspend"
             fi
-            ${pkgs.fluxcd}/bin/flux "$toggle" --context "$CONTEXT" "$RESOURCE" -n "$NAMESPACE" "$NAME"
+            ${lib.getExe pkgs.fluxcd} "$toggle" --context "$CONTEXT" "$RESOURCE" -n "$NAMESPACE" "$NAME"
           '';
         };
         ssm = pkgs.writeShellApplication {
@@ -33,7 +38,7 @@
           text = ''
             NAME=$1
             CONTEXT=$2
-            provider_id=$(${pkgs.kubectl}/bin/kubectl --context "$CONTEXT" get node "$NAME" -o jsonpath='{.spec.providerID}')
+            provider_id=$(${lib.getExe pkgs.kubectl} --context "$CONTEXT" get node "$NAME" -o jsonpath='{.spec.providerID}')
             instance_id="''${provider_id##*/}"
             az="''${provider_id%/*}"
             az="''${az##*/}"
@@ -44,14 +49,14 @@
             fi
             # shellcheck disable=SC1091
             source /home/${user.username}/config/2fctl/credentials.sh
-            ${pkgs.awscli2}/bin/aws ssm start-session --target "$instance_id"
+            ${lib.getExe pkgs.awscli2} ssm start-session --target "$instance_id"
           '';
         };
         mkToggle = scope: resource: {
           shortCut = "Shift-T";
           description = "Suspend/Resume ${scope}";
           scopes = [ scope ];
-          command = "${toggle}/bin/flux-toggle";
+          command = lib.getExe toggle;
           background = true;
           args = [
             "$CONTEXT"
@@ -65,11 +70,11 @@
           confirm = false;
           description = "Flux reconcile";
           scopes = [ "${resource}" ];
-          command = "${pkgs.bash}/bin/bash";
+          command = lib.getExe pkgs.bash;
           background = true;
           args = [
             "-c"
-            "${pkgs.fluxcd}/bin/flux --context $CONTEXT reconcile ${command} -n $NAMESPACE $NAME ${force} |& less"
+            "${lib.getExe pkgs.fluxcd} --context $CONTEXT reconcile ${command} -n $NAMESPACE $NAME ${force} |& less"
           ];
         };
       in
@@ -78,7 +83,7 @@
           shortCut = "Shift-D";
           description = "Add debug container";
           scopes = [ "containers" ];
-          command = "${debug-command}/bin/debug";
+          command = lib.getExe debug-command;
           background = false;
           confirm = true;
         };
@@ -87,7 +92,7 @@
           confirm = false;
           description = "Dive Image";
           scopes = [ "containers" ];
-          command = "${pkgs.dive}/bin/dive";
+          command = lib.getExe pkgs.dive;
           background = false;
           args = [ "$COL-IMAGE" ];
         };
@@ -97,7 +102,7 @@
           description = "Start SSM to EC2";
           scopes = [ "nodes" ];
           background = false;
-          command = "${ssm}/bin/ssm";
+          command = lib.getExe ssm;
           args = [
             "$NAME"
             "$CONTEXT"

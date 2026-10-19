@@ -21,7 +21,7 @@ let
       mkdir -p "$data_dir"
       echo '{"clientEnvironment":"1001"}' > "$data_dir/local-settings.json"
     fi
-    exec ${pkgs.slack}/bin/slack --user-data-dir="$data_dir" "$@"
+    exec ${lib.getExe pkgs.slack} --user-data-dir="$data_dir" "$@"
   '';
 in
 {

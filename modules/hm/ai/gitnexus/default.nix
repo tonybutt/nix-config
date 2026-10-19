@@ -45,9 +45,9 @@ in
         paths = [
           (pkgs.writeShellScriptBin "gitnexus" ''
             if [ "''${1:-}" = "analyze" ]; then
-              exec ${cfg.package}/bin/gitnexus "$@" ${lib.escapeShellArgs cfg.analyzeExtraFlags}
+              exec ${lib.getExe cfg.package} "$@" ${lib.escapeShellArgs cfg.analyzeExtraFlags}
             fi
-            exec ${cfg.package}/bin/gitnexus "$@"
+            exec ${lib.getExe cfg.package} "$@"
           '')
           cfg.package
         ];

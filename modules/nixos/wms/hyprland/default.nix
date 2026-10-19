@@ -8,7 +8,7 @@
 let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.modules.hyprland;
-  tuigreet = "${pkgs.tuigreet}/bin/tuigreet";
+  tuigreet = lib.getExe pkgs.tuigreet;
   session = "start-hyprland";
 in
 {

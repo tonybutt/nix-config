@@ -15,7 +15,7 @@ let
     PROCS="$3"
     TUNNEL_PROC="$4"
 
-    RAW=$(${pkgs.process-compose}/bin/process-compose process list -o json -p "''${PORT}" 2>/dev/null)
+    RAW=$(${lib.getExe pkgs.process-compose} process list -o json -p "''${PORT}" 2>/dev/null)
     if [ $? -ne 0 ] || [ -z "$RAW" ]; then
       echo "{\"text\": \"''${LABEL}: 󱎘\", \"tooltip\": \"''${LABEL}: not reachable\", \"class\": \"offline\"}"
       exit 0
@@ -26,7 +26,7 @@ let
     RUNNING=0
     TOOLTIP="''${LABEL}:"
     for proc in "''${PROC_ARR[@]}"; do
-      STATUS=$(echo "$RAW" | ${pkgs.jq}/bin/jq -r --arg name "$proc" '.[] | select(.name == $name) | .status')
+      STATUS=$(echo "$RAW" | ${lib.getExe pkgs.jq} -r --arg name "$proc" '.[] | select(.name == $name) | .status')
       TOTAL=$((TOTAL + 1))
       if [ "$STATUS" = "Running" ]; then
         RUNNING=$((RUNNING + 1))
@@ -49,7 +49,7 @@ let
 
     TUNNEL=""
     if [ -n "''${TUNNEL_PROC}" ]; then
-      TSTATUS=$(echo "$RAW" | ${pkgs.jq}/bin/jq -r --arg name "''${TUNNEL_PROC}" '.[] | select(.name == $name) | .status')
+      TSTATUS=$(echo "$RAW" | ${lib.getExe pkgs.jq} -r --arg name "''${TUNNEL_PROC}" '.[] | select(.name == $name) | .status')
       if [ "$TSTATUS" = "Running" ]; then
         TUNNEL="<span color='#${colors.base09}'>󰅟</span> "
         TOOLTIP="''${TOOLTIP}\n  󰅟 tunnel active"
@@ -61,12 +61,12 @@ let
   '';
 
   kindStatus = pkgs.writeShellScript "kind-status" ''
-    if ! ${pkgs.docker}/bin/docker info >/dev/null 2>&1; then
+    if ! ${lib.getExe pkgs.docker} info >/dev/null 2>&1; then
       echo '{"text": "󱃾", "tooltip": "docker not running", "class": "offline"}'
       exit 0
     fi
 
-    CLUSTERS=$(${pkgs.kind}/bin/kind get clusters 2>/dev/null)
+    CLUSTERS=$(${lib.getExe pkgs.kind} get clusters 2>/dev/null)
     if [ -z "''${CLUSTERS}" ]; then
       echo '{"text": "󱃾", "tooltip": "no kind clusters", "class": "offline"}'
       exit 0
@@ -74,7 +74,7 @@ let
 
     # A cluster can exist with its node containers stopped — only clusters
     # with running containers count as up.
-    UP_CLUSTERS=$(${pkgs.docker}/bin/docker ps --filter label=io.x-k8s.kind.cluster \
+    UP_CLUSTERS=$(${lib.getExe pkgs.docker} ps --filter label=io.x-k8s.kind.cluster \
       --format '{{.Label "io.x-k8s.kind.cluster"}}' 2>/dev/null | sort -u)
 
     TOTAL=0
@@ -100,12 +100,12 @@ let
   '';
 
   dockerStatus = pkgs.writeShellScript "docker-status" ''
-    if ! ${pkgs.docker}/bin/docker info >/dev/null 2>&1; then
+    if ! ${lib.getExe pkgs.docker} info >/dev/null 2>&1; then
       echo '{"text": "󰡨", "tooltip": "docker not running", "class": "offline"}'
       exit 0
     fi
 
-    RUNNING=$(${pkgs.docker}/bin/docker ps --format '{{.Names}} ({{.Image}})' 2>/dev/null)
+    RUNNING=$(${lib.getExe pkgs.docker} ps --format '{{.Names}} ({{.Image}})' 2>/dev/null)
     if [ -z "''${RUNNING}" ]; then
       echo '{"text": "󰡨", "tooltip": "no containers running", "class": "offline"}'
       exit 0
@@ -217,7 +217,7 @@ in
 
           "custom/lock" = {
             format = "";
-            on-click = "loginctl lock-session && ${pkgs.hyprlock}/bin/hyprlock";
+            on-click = "loginctl lock-session && ${lib.getExe pkgs.hyprlock}";
             tooltip-format = "Lock Screen";
           };
 
@@ -271,7 +271,7 @@ in
             interval = 5;
             format = "󰍛";
             format-alt = "󰍛 {usage}%";
-            on-click-right = "${pkgs.kitty}/bin/kitty --class btop -e ${pkgs.btop}/bin/btop";
+            on-click-right = "${lib.getExe pkgs.kitty} --class btop -e ${lib.getExe pkgs.btop}";
           };
 
           memory = {
@@ -349,7 +349,7 @@ in
             tooltip-format-disconnected = "Disconnected";
             interval = 3;
             spacing = 1;
-            on-click = "${pkgs.networkmanagerapplet}/bin/nm-connection-editor";
+            on-click = lib.getExe' pkgs.networkmanagerapplet "nm-connection-editor";
           };
 
           battery = {
@@ -384,14 +384,14 @@ in
             format-connected = "󰂱";
             format-no-controller = "󰂲";
             tooltip-format = "Devices connected: {num_connections}";
-            on-click = "${pkgs.blueman}/bin/blueman-manager";
+            on-click = lib.getExe pkgs.blueman;
           };
 
           pulseaudio = {
             format = "{icon}";
             format-alt = "{icon}  {volume}% {format_source}";
-            on-click-middle = "${pkgs.pamixer}/bin/pamixer -t";
-            on-click-right = "${pkgs.pavucontrol}/bin/pavucontrol";
+            on-click-middle = "${lib.getExe pkgs.pamixer} -t";
+            on-click-right = lib.getExe pkgs.pavucontrol;
             tooltip-format = "Playing at {volume}%";
             scroll-step = 5;
             format-muted = "󰝟";

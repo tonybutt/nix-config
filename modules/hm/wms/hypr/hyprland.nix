@@ -17,42 +17,42 @@ let
   inherit (builtins) map toString toJSON;
 
   # Binary paths
-  term = "${pkgs.ghostty}/bin/ghostty";
-  thunar = "${pkgs.thunar}/bin/thunar";
-  fuzzel = "${pkgs.fuzzel}/bin/fuzzel";
-  cliphist = "${pkgs.cliphist}/bin/cliphist";
-  wl-copy = "${pkgs.wl-clipboard}/bin/wl-copy";
-  brightnessctl = "${pkgs.brightnessctl}/bin/brightnessctl";
-  grim = "${pkgs.grim}/bin/grim";
-  slurp = "${pkgs.slurp}/bin/slurp";
-  swappy = "${pkgs.swappy}/bin/swappy";
-  wpctl = "${pkgs.wireplumber}/bin/wpctl";
-  playerctl = "${pkgs.playerctl}/bin/playerctl";
-  btop = "${pkgs.btop}/bin/btop";
+  term = lib.getExe pkgs.ghostty;
+  thunar = lib.getExe pkgs.thunar;
+  fuzzel = lib.getExe pkgs.fuzzel;
+  cliphist = lib.getExe pkgs.cliphist;
+  wl-copy = lib.getExe' pkgs.wl-clipboard "wl-copy";
+  brightnessctl = lib.getExe pkgs.brightnessctl;
+  grim = lib.getExe pkgs.grim;
+  slurp = lib.getExe pkgs.slurp;
+  swappy = lib.getExe pkgs.swappy;
+  wpctl = lib.getExe' pkgs.wireplumber "wpctl";
+  playerctl = lib.getExe pkgs.playerctl;
+  btop = lib.getExe pkgs.btop;
   # Monitor scratchpad: btop for the system plus amdgpu_top for per-GPU
   # detail — mainly to watch the Navi 33 while the session offloads to it.
   monitors = pkgs.writeShellScript "monitor-scratchpad" ''
     ${term} -e ${btop} &
-    exec ${term} -e ${pkgs.amdgpu_top}/bin/amdgpu_top
+    exec ${term} -e ${lib.getExe pkgs.amdgpu_top}
   '';
-  hyprlock = "${pkgs.hyprlock}/bin/hyprlock";
-  spotify = "${pkgs.spotify}/bin/spotify";
+  hyprlock = lib.getExe pkgs.hyprlock;
+  spotify = lib.getExe pkgs.spotify;
   # clear stale sentinel files before launching obs to suppress the
   # "OBS didn't shut down properly" dialog caused by fast shutdown
   # ref: https://obsproject.com/forum/threads/190590/
   obs = pkgs.writeShellScript "obs-clean-start" ''
     rm -rf ~/.config/obs-studio/.sentinel
-    exec ${pkgs.obs-studio}/bin/obs "$@"
+    exec ${lib.getExe pkgs.obs-studio} "$@"
   '';
-  slack = "${pkgs.slack}/bin/slack";
-  signal = "${pkgs.signal-desktop}/bin/signal-desktop";
-  brave = "${pkgs.brave}/bin/brave";
+  slack = lib.getExe pkgs.slack;
+  signal = lib.getExe pkgs.signal-desktop;
+  brave = lib.getExe pkgs.brave;
   # Obsidian is single-instance: a second invocation hands its URI to the
   # already-running process over the Electron singleton socket. Fired before
   # that socket exists the two race into separate instances, so open the work
   # vault, wait for the socket to appear, then ask for the personal one.
   obsidian = pkgs.writeShellScript "obsidian-vaults" ''
-    obsidian=${pkgs.obsidian}/bin/obsidian
+    obsidian=${lib.getExe pkgs.obsidian}
     "$obsidian" "obsidian://open?vault=work" &
     for _ in $(seq 1 60); do
       [ -e "$HOME/.config/obsidian/SingletonSocket" ] && break
@@ -968,8 +968,8 @@ in
                 function()
                   hl.exec_cmd("hyprpaper")
                   hl.exec_cmd("systemctl --user import-environment PATH && systemctl --user restart xdg-desktop-portal.service")
-                  hl.exec_cmd("${pkgs.networkmanagerapplet}/bin/nm-applet --indicator")
-                  hl.exec_cmd("${pkgs.trayscale}/bin/trayscale --hide-window")
+                  hl.exec_cmd("${lib.getExe pkgs.networkmanagerapplet} --indicator")
+                  hl.exec_cmd("${lib.getExe pkgs.trayscale} --hide-window")
                   hl.exec_cmd("${spotify}", { workspace = "special:spotify silent" })
                   hl.exec_cmd("${obs} --startvirtualcam", { workspace = "special:obs silent" })
                   hl.exec_cmd("${slack}", { workspace = "special:chat silent" })

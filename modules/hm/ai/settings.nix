@@ -23,11 +23,11 @@ in
       SETTINGS="$HOME/.claude/settings.json"
       NIX_SETTINGS='${builtins.toJSON cfg}'
       if [ -f "$SETTINGS" ]; then
-        ${pkgs.jq}/bin/jq -s '.[0] * .[1]' "$SETTINGS" <(echo "$NIX_SETTINGS") > "$SETTINGS.tmp"
+        ${lib.getExe pkgs.jq} -s '.[0] * .[1]' "$SETTINGS" <(echo "$NIX_SETTINGS") > "$SETTINGS.tmp"
         mv "$SETTINGS.tmp" "$SETTINGS"
       else
         mkdir -p "$(dirname "$SETTINGS")"
-        echo "$NIX_SETTINGS" | ${pkgs.jq}/bin/jq '.' > "$SETTINGS"
+        echo "$NIX_SETTINGS" | ${lib.getExe pkgs.jq} '.' > "$SETTINGS"
       fi
     '';
   };

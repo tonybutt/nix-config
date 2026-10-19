@@ -71,7 +71,7 @@ in
         rerere.enabled = true;
         help.autocorrect = 10;
         diff.histogram = "histogram";
-        core.pager = "${pkgs.delta}/bin/delta";
+        core.pager = lib.getExe pkgs.delta;
         gpg.ssh.allowedSignersFile = "~/.ssh/allowed_signers";
       };
     };
