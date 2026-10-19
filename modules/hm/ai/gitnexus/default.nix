@@ -1,5 +1,6 @@
 {
   pkgs,
+  inputs,
   config,
   lib,
   ...
@@ -19,7 +20,7 @@ in
 
     package = mkOption {
       type = types.package;
-      default = pkgs.callPackage ./package.nix { };
+      default = inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.gitnexus;
       description = "The gitnexus package to install";
     };
 

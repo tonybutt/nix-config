@@ -1,4 +1,11 @@
-{ pkgs, ... }:
+{
+  pkgs,
+  inputs,
+  ...
+}:
+let
+  agentPackages = inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system};
+in
 {
   imports = [
     ./tools/oath.nix
@@ -38,8 +45,9 @@
     imv
     pokeget-rs
     unzip
-    claude-code
-    codex
+    agentPackages.claude-code
+    agentPackages.codex
+    agentPackages.antigravity-cli
     sox
     pavucontrol
     cloudflared
