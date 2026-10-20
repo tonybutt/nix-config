@@ -1112,11 +1112,11 @@
         "rev": "5322c581409f436415318c5ba565a6dabe11598a",
         "revCount": 66,
         "type": "git",
-        "url": "ssh://git@github.com/tiberius-grail/team-claude-skills"
+        "url": "ssh://git@code.grail.tiberius.com/grail/team-claude-skills"
       },
       "original": {
         "type": "git",
-        "url": "ssh://git@github.com/tiberius-grail/team-claude-skills"
+        "url": "ssh://git@code.grail.tiberius.com/grail/team-claude-skills"
       }
     },
     "tinted-kitty": {
