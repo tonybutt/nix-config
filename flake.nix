@@ -1,11 +1,20 @@
 {
   description = "My personal flake";
   inputs = {
-    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    nixos-hardware = {
+      url = "github:NixOS/nixos-hardware/master";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    # No nixpkgs follows: tracks its own pin for the cached vendor kernel
     nixos-raspberrypi.url = "github:nvmd/nixos-raspberrypi/main";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-color-lsp.url = "github:tonybutt/nixpkgs/color-lsp-init";
-    llm-agents.url = "github:numtide/llm-agents.nix";
+    # No nixpkgs follows: cache.numtide.com only holds builds against the
+    # flake's own pin, so following ours turns every agent into a source build
+    llm-agents = {
+      url = "github:numtide/llm-agents.nix";
+      inputs.treefmt-nix.follows = "treefmt-nix";
+    };
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -14,13 +23,17 @@
       url = "github:danth/stylix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # No nixpkgs follows: hyprland.cachix.org only holds builds against
+    # Hyprland's own pin, so following ours compiles Hyprland locally
     hyprland.url = "github:hyprwm/Hyprland";
     disko = {
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nur.url = "github:nix-community/NUR";
-    treefmt-nix.url = "github:numtide/treefmt-nix";
+    treefmt-nix = {
+      url = "github:numtide/treefmt-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     pre-commit-hooks = {
       url = "github:cachix/pre-commit-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -33,7 +46,14 @@
       url = "github:serokell/deploy-rs";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    team-claude-skills.url = "git+ssh://git@github.com/tiberius-grail/team-claude-skills";
+    team-claude-skills = {
+      url = "git+ssh://git@github.com/tiberius-grail/team-claude-skills";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        treefmt-nix.follows = "treefmt-nix";
+        git-hooks.follows = "pre-commit-hooks";
+      };
+    };
     superpowers = {
       url = "github:obra/superpowers";
       flake = false;
@@ -72,7 +92,6 @@
       sops-nix,
       deploy-rs,
       nixos-hardware,
-      nur,
       treefmt-nix,
       pre-commit-hooks,
       waybar-src,
@@ -84,7 +103,6 @@
         inherit system;
         config.allowUnfree = true;
         overlays = [
-          nur.overlays.default
           (import ./overlays/brave-no-hw-encode.nix)
           (import ./overlays/brave-endpoint-verification.nix)
           (import ./overlays/brave-render-node.nix)
