@@ -184,26 +184,6 @@ tooltip label {
   }
 }
 
-#custom-agility,
-#custom-lethality {
-  margin: 0 4px;
-}
-
-#custom-agility.online,
-#custom-lethality.online {
-  color: @base0B;
-}
-
-#custom-agility.degraded,
-#custom-lethality.degraded {
-  color: @base0A;
-}
-
-#custom-agility.offline,
-#custom-lethality.offline {
-  color: @base04;
-}
-
 #custom-kind,
 #custom-docker {
   margin: 0 4px;

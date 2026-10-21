@@ -9,57 +9,6 @@ let
   cfg = config.modules.hyprland.waybar;
   inherit (config.lib.stylix) colors;
 
-  pcStatus = pkgs.writeShellScript "pc-status" ''
-    LABEL="$1"
-    PORT="$2"
-    PROCS="$3"
-    TUNNEL_PROC="$4"
-
-    RAW=$(${lib.getExe pkgs.process-compose} process list -o json -p "''${PORT}" 2>/dev/null)
-    if [ $? -ne 0 ] || [ -z "$RAW" ]; then
-      echo "{\"text\": \"''${LABEL}: 󱎘\", \"tooltip\": \"''${LABEL}: not reachable\", \"class\": \"offline\"}"
-      exit 0
-    fi
-
-    IFS=',' read -ra PROC_ARR <<< "''${PROCS}"
-    TOTAL=0
-    RUNNING=0
-    TOOLTIP="''${LABEL}:"
-    for proc in "''${PROC_ARR[@]}"; do
-      STATUS=$(echo "$RAW" | ${lib.getExe pkgs.jq} -r --arg name "$proc" '.[] | select(.name == $name) | .status')
-      TOTAL=$((TOTAL + 1))
-      if [ "$STATUS" = "Running" ]; then
-        RUNNING=$((RUNNING + 1))
-        TOOLTIP="''${TOOLTIP}\n  ✓ ''${proc}"
-      else
-        TOOLTIP="''${TOOLTIP}\n  ✗ ''${proc} (''${STATUS:-unknown})"
-      fi
-    done
-
-    if [ "$RUNNING" -eq "$TOTAL" ]; then
-      ICON="󰐾"
-      CLASS="online"
-    elif [ "$RUNNING" -gt 0 ]; then
-      ICON="󰍷"
-      CLASS="degraded"
-    else
-      ICON="󱎘"
-      CLASS="offline"
-    fi
-
-    TUNNEL=""
-    if [ -n "''${TUNNEL_PROC}" ]; then
-      TSTATUS=$(echo "$RAW" | ${lib.getExe pkgs.jq} -r --arg name "''${TUNNEL_PROC}" '.[] | select(.name == $name) | .status')
-      if [ "$TSTATUS" = "Running" ]; then
-        TUNNEL="<span color='#${colors.base09}'>󰅟</span> "
-        TOOLTIP="''${TOOLTIP}\n  󰅟 tunnel active"
-      fi
-    fi
-
-    TOOLTIP="''${TOOLTIP}\n  ''${RUNNING}/''${TOTAL} running"
-    echo "{\"text\": \"''${TUNNEL}''${LABEL}: ''${ICON}\", \"tooltip\": \"''${TOOLTIP}\", \"class\": \"''${CLASS}\"}"
-  '';
-
   kindStatus = pkgs.writeShellScript "kind-status" ''
     if ! ${lib.getExe pkgs.docker} info >/dev/null 2>&1; then
       echo '{"text": "󱃾", "tooltip": "docker not running", "class": "offline"}'
@@ -152,8 +101,6 @@ in
             "clock"
           ];
           modules-right = [
-            "custom/lethality"
-            "custom/agility"
             "custom/kind"
             "custom/docker"
             "group/tray-expander"
@@ -219,18 +166,6 @@ in
             format = "";
             on-click = "loginctl lock-session && ${lib.getExe pkgs.hyprlock}";
             tooltip-format = "Lock Screen";
-          };
-
-          "custom/agility" = {
-            exec = "${pcStatus} AGI 8088 backend,frontend,postgres,zitadel,openfga,rustfs,mailpit cloudflared";
-            return-type = "json";
-            interval = 5;
-          };
-
-          "custom/lethality" = {
-            exec = "${pcStatus} LETH 8080 backend,frontend,postgres,openfga,rustfs,zitadel,zitadel-login,zitadel-db,golang-ai";
-            return-type = "json";
-            interval = 5;
           };
 
           "custom/kind" = {
