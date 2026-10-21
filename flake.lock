@@ -1128,15 +1128,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1777475190,
-        "narHash": "sha256-mxK1U/br6eurAeXz+Cnz9WrJRjvdhU1v6YI8ViSAKNM=",
-        "ref": "refs/heads/main",
-        "rev": "5322c581409f436415318c5ba565a6dabe11598a",
-        "revCount": 66,
+        "lastModified": 1792603793,
+        "narHash": "sha256-VYBFb9RBWuJg+TLf3iFzr5U7qqg/P06z+NA0C/oYwN8=",
+        "ref": "feat/rfd-aligned-review-skills",
+        "rev": "8d444572b1698241131c62f37348a06c81152299",
+        "revCount": 70,
         "type": "git",
         "url": "ssh://git@code.grail.tiberius.com/grail/team-claude-skills"
       },
       "original": {
+        "ref": "feat/rfd-aligned-review-skills",
         "type": "git",
         "url": "ssh://git@code.grail.tiberius.com/grail/team-claude-skills"
       }
