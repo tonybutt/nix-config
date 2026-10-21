@@ -1,5 +1,58 @@
 {
   "nodes": {
+    "agenix": {
+      "inputs": {
+        "nixpkgs": [
+          "watchman",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1792507013,
+        "narHash": "sha256-8tKjSQajD3mUND1GaAuaWTcuyUpgcGsh5V+l4ibzC7U=",
+        "owner": "ryantm",
+        "repo": "agenix",
+        "rev": "5e5b88a0c8e56f291a108c2fe9934054d9745b2e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ryantm",
+        "repo": "agenix",
+        "type": "github"
+      }
+    },
+    "agenix-shell": {
+      "inputs": {
+        "flake-parts": "flake-parts_3",
+        "flake-root": "flake-root",
+        "git-hooks-nix": [
+          "watchman",
+          "git-hooks"
+        ],
+        "nix-github-actions": "nix-github-actions",
+        "nixpkgs": [
+          "watchman",
+          "nixpkgs"
+        ],
+        "treefmt-nix": [
+          "watchman",
+          "treefmt-nix"
+        ]
+      },
+      "locked": {
+        "lastModified": 1757452022,
+        "narHash": "sha256-sroxc6suWIzNDB/wkKRjJCAg+YpF3zNz33EyMATF2ks=",
+        "owner": "aciceri",
+        "repo": "agenix-shell",
+        "rev": "3342bc91c76fead722b3b9d9d0193aceae8f00fd",
+        "type": "github"
+      },
+      "original": {
+        "owner": "aciceri",
+        "repo": "agenix-shell",
+        "type": "github"
+      }
+    },
     "aquamarine": {
       "inputs": {
         "hyprutils": [
@@ -311,6 +364,39 @@
       "original": {
         "owner": "hercules-ci",
         "repo": "flake-parts",
+        "type": "github"
+      }
+    },
+    "flake-parts_3": {
+      "inputs": {
+        "nixpkgs-lib": "nixpkgs-lib"
+      },
+      "locked": {
+        "lastModified": 1743550720,
+        "narHash": "sha256-hIshGgKZCgWh6AYJpJmRgFdR3WUbkY04o82X05xqQiY=",
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "rev": "c621e8422220273271f52058f618c94e405bb0f5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "type": "github"
+      }
+    },
+    "flake-root": {
+      "locked": {
+        "lastModified": 1723604017,
+        "narHash": "sha256-rBtQ8gg+Dn4Sx/s+pvjdq3CB2wQNzx9XGFq/JVGCB6k=",
+        "owner": "srid",
+        "repo": "flake-root",
+        "rev": "b759a56851e10cb13f6b8e5698af7b59c44be26e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "srid",
+        "repo": "flake-root",
         "type": "github"
       }
     },
@@ -725,6 +811,28 @@
         "type": "github"
       }
     },
+    "nix-github-actions": {
+      "inputs": {
+        "nixpkgs": [
+          "watchman",
+          "agenix-shell",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1737420293,
+        "narHash": "sha256-F1G5ifvqTpJq7fdkT34e/Jy9VCyzd5XfJ9TO8fHhJWE=",
+        "owner": "nix-community",
+        "repo": "nix-github-actions",
+        "rev": "f4158fa080ef4503c8f4c820967d946c2af31ec9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "nix-github-actions",
+        "type": "github"
+      }
+    },
     "nixos-hardware": {
       "inputs": {
         "nixpkgs": [
@@ -823,6 +931,21 @@
         "owner": "tonybutt",
         "ref": "color-lsp-init",
         "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs-lib": {
+      "locked": {
+        "lastModified": 1743296961,
+        "narHash": "sha256-b1EdN3cULCqtorQ4QeWgLMrd5ZGOjLSLemfa00heasc=",
+        "owner": "nix-community",
+        "repo": "nixpkgs.lib",
+        "rev": "e4822aea2a6d1cdd36653c134cacfd64c97ff4fa",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "nixpkgs.lib",
         "type": "github"
       }
     },
@@ -1246,6 +1369,8 @@
     },
     "watchman": {
       "inputs": {
+        "agenix": "agenix",
+        "agenix-shell": "agenix-shell",
         "git-hooks": [
           "pre-commit-hooks"
         ],
@@ -1261,11 +1386,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1792523089,
-        "narHash": "sha256-WRUQnJcLpFdGA0P1VIj/+ysRayKKSc6/xDJXIe4Mu84=",
+        "lastModified": 1792615140,
+        "narHash": "sha256-np9qnAfblqk1Ij1OiFaPTyzzAAWnwr9Te88n/RGJNA8=",
         "ref": "refs/heads/main",
-        "rev": "8c77079a5accf0fb13789738e3fe0485547e6b40",
-        "revCount": 79,
+        "rev": "317a8098984e920e69ef6835364d66ff29b27ec5",
+        "revCount": 114,
         "type": "git",
         "url": "ssh://git@code.grail.tiberius.com/abutt/watchman"
       },
