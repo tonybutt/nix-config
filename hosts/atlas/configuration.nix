@@ -64,6 +64,8 @@
     secrets = {
       forgejo-squire-read-token = { };
       notifier-slack-token.owner = "anthony";
+      watchman-forgejo-token.owner = "anthony";
+      watchman-approver-token.owner = "anthony";
     };
 
     templates."nix-daemon-private-modules.env".content =

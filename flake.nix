@@ -54,6 +54,15 @@
         git-hooks.follows = "pre-commit-hooks";
       };
     };
+    watchman = {
+      url = "git+ssh://git@code.grail.tiberius.com/abutt/watchman";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        treefmt-nix.follows = "treefmt-nix";
+        git-hooks.follows = "pre-commit-hooks";
+        home-manager.follows = "home-manager";
+      };
+    };
     superpowers = {
       url = "github:obra/superpowers";
       flake = false;

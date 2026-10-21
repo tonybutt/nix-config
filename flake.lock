@@ -960,7 +960,29 @@
         "superpowers": "superpowers",
         "team-claude-skills": "team-claude-skills",
         "treefmt-nix": "treefmt-nix",
+        "watchman": "watchman",
         "waybar-src": "waybar-src"
+      }
+    },
+    "rust-overlay": {
+      "inputs": {
+        "nixpkgs": [
+          "watchman",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1792395246,
+        "narHash": "sha256-SfVFE7TKuByeQRwhVbaVrvTV/lI41AYK9CYSfB+pIis=",
+        "owner": "oxalica",
+        "repo": "rust-overlay",
+        "rev": "550547cefc67e01a6fd11a09e4096a3c844ca840",
+        "type": "github"
+      },
+      "original": {
+        "owner": "oxalica",
+        "repo": "rust-overlay",
+        "type": "github"
       }
     },
     "sops-nix": {
@@ -1219,6 +1241,36 @@
         "owner": "numtide",
         "repo": "flake-utils",
         "type": "github"
+      }
+    },
+    "watchman": {
+      "inputs": {
+        "git-hooks": [
+          "pre-commit-hooks"
+        ],
+        "home-manager": [
+          "home-manager"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "rust-overlay": "rust-overlay",
+        "treefmt-nix": [
+          "treefmt-nix"
+        ]
+      },
+      "locked": {
+        "lastModified": 1792523089,
+        "narHash": "sha256-WRUQnJcLpFdGA0P1VIj/+ysRayKKSc6/xDJXIe4Mu84=",
+        "ref": "refs/heads/main",
+        "rev": "8c77079a5accf0fb13789738e3fe0485547e6b40",
+        "revCount": 79,
+        "type": "git",
+        "url": "ssh://git@code.grail.tiberius.com/abutt/watchman"
+      },
+      "original": {
+        "type": "git",
+        "url": "ssh://git@code.grail.tiberius.com/abutt/watchman"
       }
     },
     "waybar-src": {
