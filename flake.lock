@@ -1251,11 +1251,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1792603793,
-        "narHash": "sha256-VYBFb9RBWuJg+TLf3iFzr5U7qqg/P06z+NA0C/oYwN8=",
+        "lastModified": 1792612532,
+        "narHash": "sha256-/LbxWVjrxO4p1jpIB7n3hvh47l1tUQAQmDBvegkN4wE=",
         "ref": "feat/rfd-aligned-review-skills",
-        "rev": "8d444572b1698241131c62f37348a06c81152299",
-        "revCount": 70,
+        "rev": "8956a200c93eb3d7b52dca4d8c49eb8c4684d3a7",
+        "revCount": 71,
         "type": "git",
         "url": "ssh://git@code.grail.tiberius.com/grail/team-claude-skills"
       },
