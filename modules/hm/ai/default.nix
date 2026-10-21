@@ -10,6 +10,8 @@
   config = {
     home.file.".claude/CLAUDE.md".source = ./CLAUDE.md;
 
+    modules.ai.claude-settings.autoMemoryEnabled = false;
+
     modules.ai.claude-settings.permissions.allow = [
       "Bash(echo:*)"
       "Bash(cat:*)"
