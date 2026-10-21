@@ -61,4 +61,9 @@ in
       orgs = [ { name = "grail"; } ];
     };
   };
+
+  # The tokens are decrypted by the system sops into /run/secrets, so a
+  # rotation leaves this unit unchanged; key the restart to the encrypted
+  # file so switching picks up the new token
+  systemd.user.services.watchman.Unit.X-Restart-Triggers = [ "${../../secrets/secrets.yaml}" ];
 }
