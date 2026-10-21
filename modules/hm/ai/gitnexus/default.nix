@@ -26,12 +26,13 @@ in
 
     analyzeExtraFlags = mkOption {
       type = types.listOf types.str;
-      default = [ "--skip-agents-md" ];
+      default = [ "--no-stats" ];
       description = ''
         Flags appended to every `gitnexus analyze` invocation. The default
-        keeps analyze from regenerating the gitnexus section in CLAUDE.md /
-        AGENTS.md, which would clobber local customizations of that block
-        (and churn the volatile symbol counts).
+        drops the volatile symbol counts from the gitnexus section in
+        CLAUDE.md / AGENTS.md so analyze doesn't churn them. Pair it with a
+        `<!-- gitnexus:keep -->` marker inside that block to stop analyze
+        from replacing a customized block with the stock template.
       '';
     };
   };
