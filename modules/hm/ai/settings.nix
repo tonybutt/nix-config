@@ -23,7 +23,17 @@ in
       SETTINGS="$HOME/.claude/settings.json"
       NIX_SETTINGS='${builtins.toJSON cfg}'
       if [ -f "$SETTINGS" ]; then
-        ${lib.getExe pkgs.jq} -s '.[0] * .[1]' "$SETTINGS" <(echo "$NIX_SETTINGS") > "$SETTINGS.tmp"
+        # jq's `*` replaces arrays wholesale, which would wipe entries Claude
+        # adds at runtime (e.g. "always allow" MCP permissions); union them
+        ${lib.getExe pkgs.jq} -s '
+          def merge($a; $b):
+            if ($a | type) == "object" and ($b | type) == "object" then
+              reduce ($b | keys_unsorted[]) as $k ($a; .[$k] = merge($a[$k]; $b[$k]))
+            elif ($a | type) == "array" and ($b | type) == "array" then
+              $a + ($b - $a)
+            else $b end;
+          merge(.[0]; .[1])
+        ' "$SETTINGS" <(echo "$NIX_SETTINGS") > "$SETTINGS.tmp"
         mv "$SETTINGS.tmp" "$SETTINGS"
       else
         mkdir -p "$(dirname "$SETTINGS")"
