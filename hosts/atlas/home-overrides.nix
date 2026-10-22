@@ -2,7 +2,7 @@ let
   gatherUrl = "https://work.tiberius.com";
 in
 {
-  imports = [ ./watchman.nix ];
+  modules.watchman.enable = true;
 
   # Values are output names; an empty list means all outputs. [ "*" ] matches nothing.
   programs.waybar.settings.mainBar."hyprland/workspaces".persistent-workspaces = {

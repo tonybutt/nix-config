@@ -20,6 +20,7 @@ in
     ./ai
     ./obsidian.nix
     ./slack-gov.nix
+    ./watchman.nix
     ../stylix
   ];
   config = {
