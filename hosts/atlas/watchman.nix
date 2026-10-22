@@ -55,6 +55,7 @@ in
         "go-backend-pr"
         "frontend-pr"
         "test-check"
+        "coding-standards-go"
       ];
       ignored_authors = [ "renovate-bot" ];
       rfd_repo = "grail/rfd";
