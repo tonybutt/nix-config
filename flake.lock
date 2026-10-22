@@ -1251,11 +1251,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1792612532,
-        "narHash": "sha256-/LbxWVjrxO4p1jpIB7n3hvh47l1tUQAQmDBvegkN4wE=",
+        "lastModified": 1792676120,
+        "narHash": "sha256-TPq/V9i3DuH6azWa1/2nlQNq80sYarU+j8KJTOG8sqU=",
         "ref": "feat/rfd-aligned-review-skills",
-        "rev": "8956a200c93eb3d7b52dca4d8c49eb8c4684d3a7",
-        "revCount": 71,
+        "rev": "be869fb1545f574d41590f3cc483dfdb291a9fb3",
+        "revCount": 73,
         "type": "git",
         "url": "ssh://git@code.grail.tiberius.com/grail/team-claude-skills"
       },
@@ -1386,11 +1386,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1792615140,
-        "narHash": "sha256-np9qnAfblqk1Ij1OiFaPTyzzAAWnwr9Te88n/RGJNA8=",
+        "lastModified": 1792687210,
+        "narHash": "sha256-zmIkcZjGBZUqTqtJjsmjBI5wKYa/UEe+GqCy9FtZHMA=",
         "ref": "refs/heads/main",
-        "rev": "317a8098984e920e69ef6835364d66ff29b27ec5",
-        "revCount": 114,
+        "rev": "0d1f76050aa97e5f3a9aa25d03de0a0717dac0c7",
+        "revCount": 130,
         "type": "git",
         "url": "ssh://git@code.grail.tiberius.com/abutt/watchman"
       },
