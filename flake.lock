@@ -1386,11 +1386,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1792758644,
-        "narHash": "sha256-ZTedtQacMQn5NySRShUAnBRHP1qJzlYNkJgBWHfSBbo=",
+        "lastModified": 1792775017,
+        "narHash": "sha256-Yz8xJYEAMT7IYpyCWJ95HIh2Jfu11P7wwGqzAljmXaA=",
         "ref": "refs/heads/main",
-        "rev": "0383758ffc21776abc7191dcae46feda8554f579",
-        "revCount": 147,
+        "rev": "0e0019c972f505006923d2ae9141bc0655f4c2bf",
+        "revCount": 153,
         "type": "git",
         "url": "ssh://git@code.grail.tiberius.com/abutt/watchman"
       },
