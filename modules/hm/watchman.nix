@@ -65,6 +65,12 @@ in
         ];
         ignored_authors = [ "renovate-bot" ];
         rfd_repo = "grail/rfd";
+        repos = [
+          {
+            name = "grail/home";
+            generated = [ "**/*.gen.*" ];
+          }
+        ];
         orgs = [ { name = "grail"; } ];
       };
     };
