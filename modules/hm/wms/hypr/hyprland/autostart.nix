@@ -45,7 +45,6 @@ in
             hl.exec_cmd("hyprpaper")
             hl.exec_cmd("systemctl --user import-environment PATH && systemctl --user restart xdg-desktop-portal.service")
             hl.exec_cmd("${lib.getExe pkgs.networkmanagerapplet} --indicator")
-            hl.exec_cmd("${lib.getExe pkgs.trayscale} --hide-window")
             hl.exec_cmd("${spotify}", { workspace = "special:spotify silent" })
             hl.exec_cmd("${obs} --startvirtualcam", { workspace = "special:obs silent" })
             hl.exec_cmd("${slack}", { workspace = "special:chat silent" })

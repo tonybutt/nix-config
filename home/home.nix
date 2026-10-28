@@ -60,7 +60,6 @@ in
     yubioath-flutter
     signal-desktop
     ssm-session-manager-plugin
-    trayscale
     pcsc-tools
 
     # DevOpts

@@ -254,7 +254,6 @@ in
           reload = "exec zsh";
           gct = "git commit";
           wk = "PJ_VAULT=$HOME/workspace/work pj";
-          ts-login = "sudo tailscale up --login-server=https://headscale.tiberius.com --operator=$USER";
         }
         // lib.optionalAttrs (config.modules.themes.fastfetchLogoType == "pokeget") {
           fastfetch = "pokeget random --hide-name | ${lib.getExe pkgs.fastfetch} --logo-type file-raw --logo -";
