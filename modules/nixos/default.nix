@@ -91,10 +91,6 @@ in
       # Plymouth (Theming for booting screen and drive unlock screen)
       plymouth.enable = mkIf cfg.grub true;
       # Disable(quiet) most of the logging that happens during boot
-      initrd = {
-        verbose = false;
-        systemd.enable = mkIf (!cfg.grub) true;
-      };
       consoleLogLevel = 0;
       kernelParams = [
         "quiet"
