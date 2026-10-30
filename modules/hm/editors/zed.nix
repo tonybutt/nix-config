@@ -8,7 +8,6 @@
 let
   cfg = config.modules.editors;
   inherit (lib) mkIf mkEnableOption;
-  pkgs-color-lsp = import inputs.nixpkgs-color-lsp { inherit (pkgs.stdenv.hostPlatform) system; };
   agentPackages = inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system};
 
   # Workaround for Zed's managed Node.js not working on NixOS.
@@ -43,7 +42,7 @@ in
         package-version-server
         tailwindcss-language-server
         typescript-language-server
-        pkgs-color-lsp.color-lsp
+        color-lsp
         slint-lsp
         agentPackages.claude-agent-acp
         docker-language-server

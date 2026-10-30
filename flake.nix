@@ -8,7 +8,6 @@
     # No nixpkgs follows: tracks its own pin for the cached vendor kernel
     nixos-raspberrypi.url = "github:nvmd/nixos-raspberrypi/main";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs-color-lsp.url = "github:tonybutt/nixpkgs/color-lsp-init";
     # No nixpkgs follows: cache.numtide.com only holds builds against the
     # flake's own pin, so following ours turns every agent into a source build
     llm-agents = {

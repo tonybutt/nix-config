@@ -918,22 +918,6 @@
         "type": "github"
       }
     },
-    "nixpkgs-color-lsp": {
-      "locked": {
-        "lastModified": 1770733398,
-        "narHash": "sha256-LSOUkx6QmQW0+CR4DYIL4eFKcYrmfPN3q1J3U9SkK7I=",
-        "owner": "tonybutt",
-        "repo": "nixpkgs",
-        "rev": "21f5ffe36ce8a347f738b6c5244c1b0b4913826f",
-        "type": "github"
-      },
-      "original": {
-        "owner": "tonybutt",
-        "ref": "color-lsp-init",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "nixpkgs-lib": {
       "locked": {
         "lastModified": 1743296961,
@@ -1076,7 +1060,6 @@
         "nixos-hardware": "nixos-hardware",
         "nixos-raspberrypi": "nixos-raspberrypi",
         "nixpkgs": "nixpkgs_4",
-        "nixpkgs-color-lsp": "nixpkgs-color-lsp",
         "pre-commit-hooks": "pre-commit-hooks_2",
         "sops-nix": "sops-nix",
         "stylix": "stylix",
@@ -1386,11 +1369,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1792778941,
-        "narHash": "sha256-LmNDIpzq1+7RHfqAqbg3NM9kgq3zitSCLLUAwHsNrXU=",
+        "lastModified": 1793214348,
+        "narHash": "sha256-or+V00y1Ad/nC+Ra1hJNTMk5+FNgjrptvNDBrabd5RQ=",
         "ref": "refs/heads/main",
-        "rev": "7b114624e526db1a6898406a4a843d33cab25b76",
-        "revCount": 156,
+        "rev": "60a372a29ef9ea1ba8a9068bdf014e4098163568",
+        "revCount": 167,
         "type": "git",
         "url": "ssh://git@code.grail.tiberius.com/abutt/watchman"
       },
