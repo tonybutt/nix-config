@@ -1,6 +1,7 @@
 # Stopgap: waybar reads the numeric workspace `id` that Hyprland removed in
-# hyprwm/Hyprland#16140. Remove this overlay and the `waybar-src` input once the
-# fix lands in nixpkgs. Ref https://github.com/Alexays/Waybar/issues/5316
+# hyprwm/Hyprland#16140. Remove this overlay, the `waybar-src` input, and the
+# `waybar-release` hook in pre-commit.nix once the fix lands in nixpkgs.
+# Ref https://github.com/Alexays/Waybar/issues/5316
 { waybar-src }:
 _final: prev:
 let
