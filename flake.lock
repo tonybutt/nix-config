@@ -1196,18 +1196,18 @@
         ]
       },
       "locked": {
-        "lastModified": 1793420858,
-        "narHash": "sha256-j/yXxZODhd2w50wIeZfZf6/T2XKmkO4aa3E4umXxRDQ=",
+        "lastModified": 1793636958,
+        "narHash": "sha256-DXxiz9XhX4Z8LGvOe4naHCDcih/GpHMJpgs4NyPD8DA=",
         "ref": "feat/rust-port",
-        "rev": "a6ffbdca862eb01cd94507cd1ec2c256e357eb30",
-        "revCount": 68,
+        "rev": "ea4f9efa7f63d165728c2a5fbb6f4759ccda7168",
+        "revCount": 71,
         "type": "git",
-        "url": "file:///home/anthony/workspace/experiments/superlite"
+        "url": "ssh://git@code.grail.tiberius.com/abutt/superlite"
       },
       "original": {
         "ref": "feat/rust-port",
         "type": "git",
-        "url": "file:///home/anthony/workspace/experiments/superlite"
+        "url": "ssh://git@code.grail.tiberius.com/abutt/superlite"
       }
     },
     "superpowers": {
