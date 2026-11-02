@@ -204,6 +204,21 @@
         "type": "github"
       }
     },
+    "crane": {
+      "locked": {
+        "lastModified": 1792350552,
+        "narHash": "sha256-292lvpvxTGKryKxh3/3tcIVi85CwYGdl4oOi113Sob8=",
+        "owner": "ipetkov",
+        "repo": "crane",
+        "rev": "e675a36b7377bebe41d548388a2501cbb16d380d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ipetkov",
+        "repo": "crane",
+        "type": "github"
+      }
+    },
     "deploy-rs": {
       "inputs": {
         "flake-compat": "flake-compat",
@@ -1063,6 +1078,7 @@
         "pre-commit-hooks": "pre-commit-hooks_2",
         "sops-nix": "sops-nix",
         "stylix": "stylix",
+        "superlite": "superlite",
         "superpowers": "superpowers",
         "team-claude-skills": "team-claude-skills",
         "treefmt-nix": "treefmt-nix",
@@ -1071,6 +1087,27 @@
       }
     },
     "rust-overlay": {
+      "inputs": {
+        "nixpkgs": [
+          "superlite",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1792739799,
+        "narHash": "sha256-M2rr/yPbTHvgAzCyZ+zHJHflFM0XU7t42Sw2skA3TQM=",
+        "owner": "oxalica",
+        "repo": "rust-overlay",
+        "rev": "b0829a2cc9f7b596583331d78a942c1e5170d8a0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "oxalica",
+        "repo": "rust-overlay",
+        "type": "github"
+      }
+    },
+    "rust-overlay_2": {
       "inputs": {
         "nixpkgs": [
           "watchman",
@@ -1142,6 +1179,35 @@
         "owner": "danth",
         "repo": "stylix",
         "type": "github"
+      }
+    },
+    "superlite": {
+      "inputs": {
+        "crane": "crane",
+        "git-hooks": [
+          "pre-commit-hooks"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "rust-overlay": "rust-overlay",
+        "treefmt-nix": [
+          "treefmt-nix"
+        ]
+      },
+      "locked": {
+        "lastModified": 1793420858,
+        "narHash": "sha256-j/yXxZODhd2w50wIeZfZf6/T2XKmkO4aa3E4umXxRDQ=",
+        "ref": "feat/rust-port",
+        "rev": "a6ffbdca862eb01cd94507cd1ec2c256e357eb30",
+        "revCount": 68,
+        "type": "git",
+        "url": "file:///home/anthony/workspace/experiments/superlite"
+      },
+      "original": {
+        "ref": "feat/rust-port",
+        "type": "git",
+        "url": "file:///home/anthony/workspace/experiments/superlite"
       }
     },
     "superpowers": {
@@ -1363,7 +1429,7 @@
         "nixpkgs": [
           "nixpkgs"
         ],
-        "rust-overlay": "rust-overlay",
+        "rust-overlay": "rust-overlay_2",
         "treefmt-nix": [
           "treefmt-nix"
         ]

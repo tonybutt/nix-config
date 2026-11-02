@@ -2,6 +2,7 @@
   imports = [
     ./team-skills.nix
     ./superpowers.nix
+    ./superlite.nix
     ./mattpocock-skills.nix
     ./settings.nix
     ./gitnexus

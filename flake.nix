@@ -66,6 +66,14 @@
       url = "github:obra/superpowers";
       flake = false;
     };
+    superlite = {
+      url = "git+file:///home/anthony/workspace/experiments/superlite?ref=feat/rust-port";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        treefmt-nix.follows = "treefmt-nix";
+        git-hooks.follows = "pre-commit-hooks";
+      };
+    };
     mattpocock-skills = {
       url = "github:mattpocock/skills";
       flake = false;
