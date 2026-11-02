@@ -40,6 +40,7 @@ in
     ai.superpowers.enable = true;
     ai.mattpocock-skills.enable = true;
     ai.gitnexus.enable = true;
+    ai.rtk.enable = true;
     slack-gov.enable = true;
     terminals.ghostty.enable = true;
   };

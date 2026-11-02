@@ -3,13 +3,14 @@
     ./team-skills.nix
     ./superpowers.nix
     ./superlite.nix
+    ./rtk.nix
     ./mattpocock-skills.nix
     ./settings.nix
     ./gitnexus
   ];
 
   config = {
-    home.file.".claude/CLAUDE.md".source = ./CLAUDE.md;
+    home.file.".claude/CLAUDE.md".text = builtins.readFile ./CLAUDE.md;
 
     modules.ai.claude-settings.autoMemoryEnabled = false;
 
