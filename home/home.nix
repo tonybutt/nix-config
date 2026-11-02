@@ -37,7 +37,7 @@ in
   home.pointerCursor.enable = true;
   modules = {
     ai.team-skills.enable = true;
-    ai.superpowers.enable = true;
+    ai.superlite.enable = true;
     ai.mattpocock-skills.enable = true;
     ai.gitnexus.enable = true;
     ai.rtk.enable = true;

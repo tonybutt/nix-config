@@ -12,6 +12,10 @@ let
     mkEnableOption
     ;
   plugin = inputs.superlite.packages.${pkgs.stdenv.hostPlatform.system}.plugin;
+  sl = pkgs.runCommand "superlite-sl" { meta.mainProgram = "sl"; } ''
+    mkdir -p $out/bin
+    ln -s ${plugin}/bin/sl $out/bin/sl
+  '';
 in
 {
   options.modules.ai.superlite = {
@@ -26,7 +30,10 @@ in
       }
     ];
 
-    home.file.".claude/plugins/superlite".source = plugin;
+    home = {
+      packages = [ sl ];
+      file.".claude/plugins/superlite".source = plugin;
+    };
 
     modules.ai.claude-settings = {
       enabledPlugins."superlite@superlite-dev" = true;
