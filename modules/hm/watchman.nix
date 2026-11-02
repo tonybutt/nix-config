@@ -65,6 +65,7 @@ in
         ];
         ignored_authors = [ "renovate-bot" ];
         rfd_repo = "grail/rfd";
+        stale_days = 14;
         repos = [
           {
             name = "grail/home";
