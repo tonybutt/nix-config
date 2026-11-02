@@ -67,7 +67,7 @@
       flake = false;
     };
     superlite = {
-      url = "git+ssh://git@code.grail.tiberius.com/abutt/superlite?ref=feat/rust-port";
+      url = "git+ssh://git@code.grail.tiberius.com/abutt/superlite?ref=main";
       inputs = {
         nixpkgs.follows = "nixpkgs";
         treefmt-nix.follows = "treefmt-nix";
