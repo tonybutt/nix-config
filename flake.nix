@@ -46,7 +46,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     team-claude-skills = {
-      url = "git+ssh://git@code.grail.tiberius.com/grail/team-claude-skills?ref=feat/rfd-aligned-review-skills";
+      url = "git+ssh://git@code.grail.tiberius.com/grail/team-claude-skills?ref=main";
       inputs = {
         nixpkgs.follows = "nixpkgs";
         treefmt-nix.follows = "treefmt-nix";

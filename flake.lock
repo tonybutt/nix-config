@@ -1302,14 +1302,14 @@
       "locked": {
         "lastModified": 1793723859,
         "narHash": "sha256-IUV8OCXgwIQCBuqzoJk1eLEhibQ49V2/EpJaDIAtej0=",
-        "ref": "feat/rfd-aligned-review-skills",
+        "ref": "main",
         "rev": "75f219468fd5375a8d967a0d5ec5f6ea656922a1",
         "revCount": 80,
         "type": "git",
         "url": "ssh://git@code.grail.tiberius.com/grail/team-claude-skills"
       },
       "original": {
-        "ref": "feat/rfd-aligned-review-skills",
+        "ref": "main",
         "type": "git",
         "url": "ssh://git@code.grail.tiberius.com/grail/team-claude-skills"
       }
