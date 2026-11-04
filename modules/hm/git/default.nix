@@ -27,6 +27,8 @@ in
     xdg.configFile."forgejo-cli/client_ids".text = ''
       code.grail.tiberius.com d57cb8c4-630c-4168-8324-ec79935e18d4
     '';
+    # fj uses this host when -H is absent and no git remote names one.
+    home.sessionVariables.FJ_FALLBACK_HOST = "https://code.grail.tiberius.com";
     programs.git = {
       package = pkgs.gitFull;
       enable = true;
