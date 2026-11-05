@@ -1,6 +1,7 @@
 {
   imports = [
     ./team-skills.nix
+    ./coding-standards.nix
     ./superpowers.nix
     ./superlite.nix
     ./rtk.nix
