@@ -6,6 +6,7 @@
     ./superlite.nix
     ./rtk.nix
     ./mattpocock-skills.nix
+    ./security-audit.nix
     ./settings.nix
     ./gitnexus
   ];

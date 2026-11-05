@@ -40,6 +40,7 @@ in
     ai.coding-standards.enable = true;
     ai.superlite.enable = true;
     ai.mattpocock-skills.enable = true;
+    ai.security-audit.enable = true;
     ai.gitnexus.enable = true;
     ai.rtk.enable = true;
     slack-gov.enable = true;
