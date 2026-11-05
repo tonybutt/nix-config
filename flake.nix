@@ -74,8 +74,20 @@
         git-hooks.follows = "pre-commit-hooks";
       };
     };
+    standards = {
+      url = "git+ssh://git@github.com/tonybutt/standards?ref=main";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        treefmt-nix.follows = "treefmt-nix";
+        git-hooks.follows = "pre-commit-hooks";
+      };
+    };
     mattpocock-skills = {
       url = "github:mattpocock/skills";
+      flake = false;
+    };
+    security-audit-skill = {
+      url = "github:cloudflare/security-audit-skill";
       flake = false;
     };
     # Stopgap for Alexays/Waybar#5316 — see overlays/waybar-hyprland-ipc.nix
