@@ -62,6 +62,8 @@ in
           "frontend-pr"
           "test-check"
           "coding-standards-go"
+          "coding-standards-rust"
+          "coding-standards-core"
         ];
         ignored_authors = [ "renovate-bot" ];
         rfd_repo = "grail/rfd";
