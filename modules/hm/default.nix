@@ -31,9 +31,9 @@ in
       mimeApps = {
         enable = true;
         defaultApplications = {
-          "x-scheme-handler/https" = [ "brave-browser.desktop" ];
-          "x-scheme-handler/http" = [ "brave-browser.desktop" ];
-          "text/html" = [ "brave-browser.desktop" ];
+          "x-scheme-handler/https" = [ "chromium-browser.desktop" ];
+          "x-scheme-handler/http" = [ "chromium-browser.desktop" ];
+          "text/html" = [ "chromium-browser.desktop" ];
           "image/png" = [ "imv.desktop" ];
           "image/jpeg" = [ "imv.desktop" ];
           "image/gif" = [ "imv.desktop" ];

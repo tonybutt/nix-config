@@ -140,20 +140,20 @@ in
       scrollback_lines = 100000;
       copy_on_select = "clipboard";
     };
-    brave = {
+    chromium = {
       enable = true;
-      package = pkgs.brave;
+      package = pkgs.chromium;
       # Extensions are enforced by policy in modules/nixos/browser.nix.
     };
     zsh.sessionVariables = {
-      BROWSER = "brave";
+      BROWSER = "chromium";
       EDITOR = "vim";
     };
   };
   # Lets the Endpoint Verification extension query device attributes (serial,
   # disk encryption) via the native helper provided by modules/nixos/endpoint-
   # verification; /opt path is a tmpfiles symlink into the nix store.
-  xdg.configFile."BraveSoftware/Brave-Browser/NativeMessagingHosts/com.google.endpoint_verification.api_helper.json".text =
+  xdg.configFile."chromium/NativeMessagingHosts/com.google.endpoint_verification.api_helper.json".text =
     builtins.toJSON {
       name = "com.google.endpoint_verification.api_helper";
       description = "Google Endpoint Verification API Helper";

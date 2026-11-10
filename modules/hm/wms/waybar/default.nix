@@ -124,7 +124,7 @@ in
             format-window-separator = " ";
             window-rewrite-default = "";
             window-rewrite = {
-              "class<brave-browser>" = "<span color='#${colors.base09}'>󰖟</span>";
+              "class<chromium-browser>" = "<span color='#${colors.base09}'>󰖟</span>";
               "class<kitty>" = "<span color='#${colors.base0B}'>󰆍</span>";
               "class<com.mitchellh.ghostty>" = "<span color='#${colors.base0B}'></span>";
               "class<code>" = "<span color='#${colors.base0D}'>󰨞</span>";

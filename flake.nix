@@ -129,9 +129,9 @@
         inherit system;
         config.allowUnfree = true;
         overlays = [
-          (import ./overlays/brave-no-hw-encode.nix)
-          (import ./overlays/brave-endpoint-verification.nix)
-          (import ./overlays/brave-render-node.nix)
+          (import ./overlays/chromium-no-hw-encode.nix)
+          (import ./overlays/chromium-endpoint-verification.nix)
+          (import ./overlays/chromium-render-node.nix)
           (import ./overlays/waybar-nixpkgs-master.nix { inherit nixpkgs-master; })
           (import ./overlays/convco-libgit2.nix)
           (import ./overlays/flake-checker-zstd.nix)

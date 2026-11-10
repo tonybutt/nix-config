@@ -4,7 +4,7 @@ let
     name = "launch-webapp";
 
     runtimeInputs = with pkgs; [
-      brave
+      chromium
     ];
 
     text = builtins.readFile ./launch-webapp;

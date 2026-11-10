@@ -79,16 +79,16 @@ in
           match.title = "^(Sign in to Security Device)$";
           float = true;
         }
-        # Browser routing: regular Brave -> browser special workspace, Gather webapp -> workspace 6
+        # Browser routing: regular Chromium -> browser special workspace, Gather webapp -> workspace 6
         {
-          match.class = "^(brave-browser)$";
+          match.class = "^(chromium-browser)$";
           workspace = "special:browser silent";
         }
         {
-          match.class = "^(brave-(work\\.tiberius\\.com|app(\\.v2)?\\.gather\\.town).*)$";
+          match.class = "^(chrome-(work\\.tiberius\\.com|app(\\.v2)?\\.gather\\.town).*)$";
           workspace = "6 silent";
         }
-        # Screen-share indicator: must come after the brave class rules — later rules
+        # Screen-share indicator: must come after the chromium class rules — later rules
         # win, so this keeps the popup out of special:browser/workspace 6
         {
           match.title = "^(.+ is sharing (your screen|a window|a tab))(.*)$";

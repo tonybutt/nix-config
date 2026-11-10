@@ -1,8 +1,8 @@
-# Google Endpoint Verification native helper. The Brave extension talks to
+# Google Endpoint Verification native helper. The Chromium extension talks to
 # apihelper over native messaging (manifest installed by home-manager);
 # serial number and disk encryption are read by the browser's own enterprise
 # device-signals code, with the encryption probe redirected to /run/ev-dm by
-# the brave overlay (see overlays/brave-endpoint-verification.nix).
+# the chromium overlay (see overlays/chromium-endpoint-verification.nix).
 { pkgs, ... }:
 let
   endpoint-verification = pkgs.callPackage ./package.nix { };
@@ -20,11 +20,11 @@ let
 
     ${helperRoot}/bin/device_state.sh init > /var/lib/endpoint-verification/device_attrs
 
-    # Mirror the dm-crypt uuid of the device backing / to the path Brave is
+    # Mirror the dm-crypt uuid of the device backing / to the path Chromium is
     # patched to probe: /run/ev-dm/<major of stat("/")>:0/dm/uuid. Btrfs
     # roots stat as anonymous major 0, which Chromium's stock /sys probe
     # cannot resolve. If the backing device is not dm-crypt, no file is
-    # written and Brave keeps reporting unencrypted.
+    # written and Chromium keeps reporting unencrypted.
     chrome_major=$(stat -c %Hd /)
     src=$(findmnt -no SOURCE / | sed 's|\[.*||')
     if [ -b "$src" ]; then

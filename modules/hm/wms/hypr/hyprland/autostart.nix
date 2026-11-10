@@ -19,7 +19,7 @@ let
   '';
   slack = lib.getExe pkgs.slack;
   signal = lib.getExe pkgs.signal-desktop;
-  brave = lib.getExe pkgs.brave;
+  chromium = lib.getExe pkgs.chromium;
   # Obsidian is single-instance: a second invocation hands its URI to the
   # already-running process over the Electron singleton socket. Fired before
   # that socket exists the two race into separate instances, so open the work
@@ -49,7 +49,7 @@ in
             hl.exec_cmd("${obs} --startvirtualcam", { workspace = "special:obs silent" })
             hl.exec_cmd("${slack}", { workspace = "special:chat silent" })
             hl.exec_cmd("${signal}", { workspace = "special:chat silent" })
-            hl.exec_cmd("${brave}", { workspace = "special:browser silent" })
+            hl.exec_cmd("${chromium}", { workspace = "special:browser silent" })
             hl.exec_cmd("${obsidian}", { workspace = "special:notes silent" })
           end'')
       ];
