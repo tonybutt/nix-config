@@ -108,6 +108,7 @@ in
             "network"
             "bluetooth"
             "pulseaudio"
+            "pulseaudio#mic"
             "cpu"
             "memory"
             "temperature"
@@ -339,6 +340,15 @@ in
                 "󰕾"
               ];
             };
+          };
+
+          "pulseaudio#mic" = {
+            format = "{format_source}";
+            format-source = "󰍬";
+            format-source-muted = "󰍭";
+            on-click = "${lib.getExe' pkgs.wireplumber "wpctl"} set-mute @DEFAULT_AUDIO_SOURCE@ toggle";
+            on-click-right = lib.getExe pkgs.pavucontrol;
+            tooltip-format = "Mic at {source_volume}%";
           };
         };
       };

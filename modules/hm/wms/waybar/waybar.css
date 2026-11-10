@@ -155,7 +155,8 @@ tooltip label {
   color: @base08;
 }
 
-#pulseaudio.muted {
+#pulseaudio.muted,
+#pulseaudio.mic.source-muted {
   color: @base03;
 }
 
