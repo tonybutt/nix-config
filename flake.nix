@@ -90,11 +90,9 @@
       url = "github:cloudflare/security-audit-skill";
       flake = false;
     };
-    # Stopgap for Alexays/Waybar#5316 — see overlays/waybar-hyprland-ipc.nix
-    waybar-src = {
-      url = "github:tonybutt/Waybar/hyprland-addressable-workspaces";
-      flake = false;
-    };
+    # Stopgap: waybar 0.16.0 is on master but not yet nixos-unstable — see
+    # overlays/waybar-nixpkgs-master.nix
+    nixpkgs-master.url = "github:NixOS/nixpkgs/master";
   };
   nixConfig = {
     extra-substituters = [
@@ -122,7 +120,7 @@
       nixos-hardware,
       treefmt-nix,
       pre-commit-hooks,
-      waybar-src,
+      nixpkgs-master,
       ...
     }@inputs:
     let
@@ -134,7 +132,7 @@
           (import ./overlays/brave-no-hw-encode.nix)
           (import ./overlays/brave-endpoint-verification.nix)
           (import ./overlays/brave-render-node.nix)
-          (import ./overlays/waybar-hyprland-ipc.nix { inherit waybar-src; })
+          (import ./overlays/waybar-nixpkgs-master.nix { inherit nixpkgs-master; })
         ];
       };
       user = {

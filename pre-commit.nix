@@ -6,25 +6,30 @@
 let
   inherit (pkgs) lib;
 
-  waybar-release-check = pkgs.writeShellApplication {
-    name = "waybar-release-check";
+  waybar-unstable-check = pkgs.writeShellApplication {
+    name = "waybar-unstable-check";
     runtimeInputs = [
       pkgs.curl
-      pkgs.jq
+      pkgs.gnugrep
+      pkgs.gnused
       pkgs.coreutils
     ];
     text = ''
-      known=0.15.0
-      if ! release=$(curl -fsSL --max-time 10 https://api.github.com/repos/Alexays/Waybar/releases/latest); then
-        echo "waybar-release-check: GitHub unreachable, skipping" >&2
+      wanted=0.16.0
+      url=https://raw.githubusercontent.com/NixOS/nixpkgs/nixos-unstable/pkgs/by-name/wa/waybar/package.nix
+      if ! expr=$(curl -fsSL --max-time 10 "$url"); then
+        echo "waybar-unstable-check: GitHub unreachable, skipping" >&2
         exit 0
       fi
-      tag=$(jq -r .tag_name <<<"$release")
-      latest=''${tag#v}
-      newest=$(printf '%s\n%s\n' "$known" "$latest" | sort -V | tail -n1)
-      if [ "$newest" != "$known" ]; then
-        echo "Waybar $latest is out (newer than $known)." >&2
-        echo "If it carries the Alexays/Waybar#5316 fix, drop overlays/waybar-hyprland-ipc.nix and this hook." >&2
+      current=$(grep -m1 -E '^  version = "[0-9.]+";' <<<"$expr" | sed -E 's/.*"(.*)".*/\1/')
+      if [ -z "$current" ]; then
+        echo "waybar-unstable-check: could not read waybar version from nixos-unstable" >&2
+        exit 1
+      fi
+      newest=$(printf '%s\n%s\n' "$wanted" "$current" | sort -V | tail -n1)
+      if [ "$newest" = "$current" ]; then
+        echo "nixos-unstable now ships waybar $current (>= $wanted)." >&2
+        echo "Run nix flake update nixpkgs, then drop overlays/waybar-nixpkgs-master.nix, the nixpkgs-master input and this hook." >&2
         exit 1
       fi
     '';
@@ -40,10 +45,10 @@ pre-commit-hooks.lib.${pkgs.stdenv.hostPlatform.system}.run {
       pass_filenames = false;
     };
     convco.enable = true;
-    waybar-release = {
+    waybar-unstable = {
       enable = true;
-      name = "waybar-release";
-      entry = lib.getExe waybar-release-check;
+      name = "waybar-unstable";
+      entry = lib.getExe waybar-unstable-check;
       pass_filenames = false;
       always_run = true;
     };
