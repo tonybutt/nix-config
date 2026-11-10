@@ -43,7 +43,6 @@ in
         tailwindcss-language-server
         typescript-language-server
         color-lsp
-        slint-lsp
         agentPackages.claude-agent-acp
         docker-language-server
       ];
@@ -60,7 +59,6 @@ in
         "color-highlight"
         "scss"
         "typst"
-        "slint"
         "sql"
       ];
       userSettings = {
