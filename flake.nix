@@ -133,6 +133,8 @@
           (import ./overlays/brave-endpoint-verification.nix)
           (import ./overlays/brave-render-node.nix)
           (import ./overlays/waybar-nixpkgs-master.nix { inherit nixpkgs-master; })
+          (import ./overlays/convco-libgit2.nix)
+          (import ./overlays/flake-checker-zstd.nix)
         ];
       };
       user = {

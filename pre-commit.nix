@@ -38,13 +38,19 @@ in
 pre-commit-hooks.lib.${pkgs.stdenv.hostPlatform.system}.run {
   src = ./.;
   hooks = {
-    flake-checker.enable = true;
+    flake-checker = {
+      enable = true;
+      package = pkgs.flake-checker;
+    };
     treefmt-nix = {
       enable = true;
       entry = "${treefmtEval.config.build.wrapper}/bin/treefmt --ci";
       pass_filenames = false;
     };
-    convco.enable = true;
+    convco = {
+      enable = true;
+      package = pkgs.convco;
+    };
     waybar-unstable = {
       enable = true;
       name = "waybar-unstable";
