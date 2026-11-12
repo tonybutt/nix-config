@@ -1,6 +1,7 @@
 {
   inputs,
   config,
+  pkgs,
   lib,
   ...
 }:
@@ -17,6 +18,21 @@ in
   };
 
   config = mkIf cfg.enable {
+    # Binaries the skill relies on: node runs the findings and
+    # coverage-ledger validators; bubblewrap, nsjail, util-linux (unshare,
+    # prlimit) and coreutils (env -i, timeout) provide the OS-enforced
+    # sandbox it requires before executing target code.
+    home.packages = with pkgs; [
+      nodejs
+      bubblewrap
+      nsjail
+      util-linux
+      coreutils
+      git
+      ripgrep
+      jq
+    ];
+
     # Use cp -rL activation instead of home.file symlinks because
     # Claude Code's skill discovery does not follow symlinks.
     home.activation.security-audit-skill = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
