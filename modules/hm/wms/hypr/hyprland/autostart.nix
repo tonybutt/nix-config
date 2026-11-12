@@ -37,22 +37,25 @@ in
 {
   config = mkIf cfg.enable {
     # Autostart (formerly exec-once)
-    wayland.windowManager.hyprland.settings.on = {
-      _args = [
-        "hyprland.start"
-        (mkLuaInline ''
-          function()
-            hl.exec_cmd("hyprpaper")
-            hl.exec_cmd("systemctl --user import-environment PATH && systemctl --user restart xdg-desktop-portal.service")
-            hl.exec_cmd("${lib.getExe pkgs.networkmanagerapplet} --indicator")
-            hl.exec_cmd("${spotify}", { workspace = "special:spotify silent" })
-            hl.exec_cmd("${obs} --startvirtualcam", { workspace = "special:obs silent" })
-            hl.exec_cmd("${slack}", { workspace = "special:chat silent" })
-            hl.exec_cmd("${signal}", { workspace = "special:chat silent" })
-            hl.exec_cmd("${chromium}", { workspace = "special:browser silent" })
-            hl.exec_cmd("${obsidian}", { workspace = "special:notes silent" })
-          end'')
-      ];
-    };
+    # A list so other modules can add their own hl.on handlers
+    wayland.windowManager.hyprland.settings.on = [
+      {
+        _args = [
+          "hyprland.start"
+          (mkLuaInline ''
+            function()
+              hl.exec_cmd("hyprpaper")
+              hl.exec_cmd("systemctl --user import-environment PATH && systemctl --user restart xdg-desktop-portal.service")
+              hl.exec_cmd("${lib.getExe pkgs.networkmanagerapplet} --indicator")
+              hl.exec_cmd("${spotify}", { workspace = "special:spotify silent" })
+              hl.exec_cmd("${obs} --startvirtualcam", { workspace = "special:obs silent" })
+              hl.exec_cmd("${slack}", { workspace = "special:chat silent" })
+              hl.exec_cmd("${signal}", { workspace = "special:chat silent" })
+              hl.exec_cmd("${chromium}", { workspace = "special:browser silent" })
+              hl.exec_cmd("${obsidian}", { workspace = "special:notes silent" })
+            end'')
+        ];
+      }
+    ];
   };
 }
