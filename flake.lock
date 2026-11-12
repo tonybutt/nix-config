@@ -963,22 +963,6 @@
         "type": "github"
       }
     },
-    "nixpkgs-master": {
-      "locked": {
-        "lastModified": 1794328908,
-        "narHash": "sha256-uyyP+g9xToofR63BPOJChq+0rbW1IqiWeScWwXDms18=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "ea31a453ce088a27dfd3d750048b81d6eb0a9f2c",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "master",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "nixpkgs_2": {
       "locked": {
         "lastModified": 1793977579,
@@ -1013,11 +997,11 @@
     },
     "nixpkgs_4": {
       "locked": {
-        "lastModified": 1794042290,
-        "narHash": "sha256-ziZn2PvCJE5JEEpqTdxXwJpPB+L3YqoCpTAMCzyaP3U=",
+        "lastModified": 1794386569,
+        "narHash": "sha256-x9sADJvoVG0L6RejZB+/BB4YiGZFBZrfTlhF4uBq1tQ=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "f4a03c008967841f2a0b3cb7c436fc6fc31671f6",
+        "rev": "d4f25a3e562008648d45bcf2d70bcc7422cad84e",
         "type": "github"
       },
       "original": {
@@ -1106,7 +1090,6 @@
         "nixos-hardware": "nixos-hardware",
         "nixos-raspberrypi": "nixos-raspberrypi",
         "nixpkgs": "nixpkgs_4",
-        "nixpkgs-master": "nixpkgs-master",
         "pre-commit-hooks": "pre-commit-hooks_2",
         "security-audit-skill": "security-audit-skill",
         "sops-nix": "sops-nix",

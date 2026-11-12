@@ -90,9 +90,6 @@
       url = "github:cloudflare/security-audit-skill";
       flake = false;
     };
-    # Stopgap: waybar 0.16.0 is on master but not yet nixos-unstable — see
-    # overlays/waybar-nixpkgs-master.nix
-    nixpkgs-master.url = "github:NixOS/nixpkgs/master";
   };
   nixConfig = {
     extra-substituters = [
@@ -120,7 +117,6 @@
       nixos-hardware,
       treefmt-nix,
       pre-commit-hooks,
-      nixpkgs-master,
       ...
     }@inputs:
     let
@@ -132,7 +128,6 @@
           (import ./overlays/chromium-no-hw-encode.nix)
           (import ./overlays/chromium-endpoint-verification.nix)
           (import ./overlays/chromium-render-node.nix)
-          (import ./overlays/waybar-nixpkgs-master.nix { inherit nixpkgs-master; })
           (import ./overlays/convco-libgit2.nix)
           (import ./overlays/flake-checker-zstd.nix)
         ];
