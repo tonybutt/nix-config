@@ -7,6 +7,7 @@
 let
   cfg = config.modules.hyprland;
   inherit (lib) mkIf;
+  inherit (lib.generators) mkLuaInline;
 
   term = lib.getExe pkgs.ghostty;
   # Monitor scratchpad: btop for the system plus amdgpu_top for per-GPU
@@ -19,11 +20,19 @@ in
 {
   config = mkIf cfg.enable {
     wayland.windowManager.hyprland.settings = {
-      # Special workspaces
-      workspace_rule = [
+      # Launch the monitor scratchpad apps when special:monitor is created
+      # with no windows (replaces the deprecated on_created_empty rule)
+      on = [
         {
-          workspace = "special:monitor";
-          on_created_empty = "${monitors}";
+          _args = [
+            "workspace.created"
+            (mkLuaInline ''
+              function(ws)
+                if ws.name == "special:monitor" and ws.is_empty then
+                  hl.exec_cmd("${monitors}")
+                end
+              end'')
+          ];
         }
       ];
 

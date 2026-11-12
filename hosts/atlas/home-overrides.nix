@@ -1,8 +1,25 @@
+{ lib, ... }:
 let
   gatherUrl = "https://work.tiberius.com";
 in
 {
   modules.watchman.enable = true;
+
+  # Open the Gather webapp when workspace 6 is created with no windows
+  # (replaces the deprecated on_created_empty workspace rule)
+  wayland.windowManager.hyprland.settings.on = [
+    {
+      _args = [
+        "workspace.created"
+        (lib.generators.mkLuaInline ''
+          function(ws)
+            if ws.id == 6 and ws.is_empty then
+              hl.exec_cmd("launch-webapp ${gatherUrl}")
+            end
+          end'')
+      ];
+    }
+  ];
 
   # Values are output names; an empty list means all outputs. [ "*" ] matches nothing.
   programs.waybar.settings.mainBar."hyprland/workspaces".persistent-workspaces = {
@@ -25,13 +42,7 @@ in
       (onMonitor dell32 3)
       (onMonitor dell32 4)
       (onMonitor dell32 5)
-      (
-        onMonitor dell27 6
-        // {
-          default = true;
-          on_created_empty = "launch-webapp ${gatherUrl}";
-        }
-      )
+      (onMonitor dell27 6 // { default = true; })
       (onMonitor dell27 7)
       (onMonitor dell27 8)
       (onMonitor dell27 9)
