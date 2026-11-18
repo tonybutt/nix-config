@@ -119,6 +119,26 @@
   # Authorize Thunderbolt PCIe tunnels (dock Ethernet etc.) under "user" security
   services.hardware.bolt.enable = true;
 
+  # Turn Wi-Fi off while a wired (en*) link is up, back on when it drops
+  networking.networkmanager.dispatcherScripts = [
+    {
+      type = "basic";
+      source = pkgs.writeShellScript "wifi-wired-toggle" ''
+        iface="$1"
+        action="$2"
+        case "$iface" in en*) ;; *) exit 0 ;; esac
+        case "$action" in up | down) ;; *) exit 0 ;; esac
+
+        nmcli=${pkgs.networkmanager}/bin/nmcli
+        if $nmcli -t -f DEVICE,STATE device | ${pkgs.gnugrep}/bin/grep -q '^en[^:]*:connected$'; then
+          $nmcli radio wifi off
+        else
+          $nmcli radio wifi on
+        fi
+      '';
+    }
+  ];
+
   hardware.keyboard.zsa.enable = true;
 
   system.stateVersion = "25.05";
