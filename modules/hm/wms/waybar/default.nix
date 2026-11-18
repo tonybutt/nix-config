@@ -70,6 +70,19 @@ let
     TOOLTIP="''${TOOLTIP}\n  ''${COUNT} running"
     echo "{\"text\": \"󰡨\", \"tooltip\": \"''${TOOLTIP}\", \"class\": \"online\"}"
   '';
+
+  # Flip the Wi-Fi radio; the bar shows the wired icon either way, so
+  # confirm the new state with a notification
+  wifiToggle = pkgs.writeShellScript "wifi-toggle" ''
+    nmcli=${lib.getExe' pkgs.networkmanager "nmcli"}
+    if [ "$($nmcli radio wifi)" = "enabled" ]; then
+      $nmcli radio wifi off
+      ${lib.getExe pkgs.libnotify} -a waybar "Wi-Fi off"
+    else
+      $nmcli radio wifi on
+      ${lib.getExe pkgs.libnotify} -a waybar "Wi-Fi on"
+    fi
+  '';
 in
 {
   options = {
@@ -286,6 +299,7 @@ in
             interval = 3;
             spacing = 1;
             on-click = lib.getExe' pkgs.networkmanagerapplet "nm-connection-editor";
+            on-click-right = "${wifiToggle}";
           };
 
           battery = {
