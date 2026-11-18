@@ -38,6 +38,11 @@
     pkgs.nerd-fonts.jetbrains-mono
     pkgs.font-awesome
     pkgs.material-icons
+    # Microsoft fonts so LibreOffice lays out Office documents with their
+    # intended metrics: corefonts (Arial, Times New Roman, Verdana, ...) and
+    # vista-fonts (Calibri, Cambria, Consolas, ...)
+    pkgs.corefonts
+    pkgs.vista-fonts
   ];
 
   programs.steam = {

@@ -96,6 +96,11 @@ in
 
     # Chat
     slack
+
+    # Office
+    libreoffice
+    hunspell
+    hunspellDicts.en_US
   ];
 
   programs = {
