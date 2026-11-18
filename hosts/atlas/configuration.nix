@@ -116,6 +116,8 @@
   systemd.services.nix-daemon.serviceConfig.EnvironmentFile =
     config.sops.templates."nix-daemon-private-modules.env".path;
   services.fwupd.enable = true;
+  # Authorize Thunderbolt PCIe tunnels (dock Ethernet etc.) under "user" security
+  services.hardware.bolt.enable = true;
 
   hardware.keyboard.zsa.enable = true;
 
