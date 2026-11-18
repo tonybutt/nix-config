@@ -28,7 +28,6 @@ in
       nsjail
       util-linux
       coreutils
-      git
       ripgrep
       jq
     ];
