@@ -324,7 +324,9 @@
                   modules.themes.polarity = theme.polarity;
                   modules.themes.fastfetchLogo = theme.fastfetchLogo or null;
                   modules.themes.fastfetchLogoType = theme.fastfetchLogoType or null;
-                  modules.hyprpaper.wallpaper = builtins.toString theme.wallpaper;
+                  # Interpolate (not toString) so the image is copied into the
+                  # store and kept in the closure; a bare source path gets GC'd
+                  modules.hyprpaper.wallpaper = "${theme.wallpaper}";
                 }
               ];
             };
